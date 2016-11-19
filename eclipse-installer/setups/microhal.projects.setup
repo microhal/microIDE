@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:ProjectCatalog
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    name= "microHAL"
+    label="microHAL Projects">  
+  <project
+	href="microIDE/microhal.examples.setup#/"/>	
+  <project
+	href="microIDE/microhal.templates.setup#/"/>
+  <project
+	href="microIDE/microhal.lib.setup#/"/> 
+  <description>List of microHAL projects.</description>
+</setup:ProjectCatalog>
