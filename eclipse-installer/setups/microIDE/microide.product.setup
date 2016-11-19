@@ -25,10 +25,6 @@
     <requirement
         name="org.gna.eclox.feature.group"/>
     <requirement
-        name="org.eclipse.cdt.embsysregview_feature.feature.group"/>
-    <requirement
-        name="org.eclipse.cdt.embsysregview.data_feature.feature.group"/>
-    <requirement
         name="org.wangzw.cppstyle.feature.feature.group"/>
     <requirement
         name="ilg.gnuarmeclipse.managedbuild.cross.feature.group"/>
@@ -54,22 +50,12 @@
         name="ilg.gnuarmeclipse.packs.feature.group"/>
     <requirement
         name="ilg.gnuarmeclipse.debug.gdbjtag.pyocd.feature.group"/>
-    <requirement
-        name="org.eclipse.team.svn.feature.group"/>
-    <requirement
-        name="org.polarion.eclipse.team.svn.connector.svnkit18.feature.group"/>
-    <requirement
-        name="org.polarion.eclipse.team.svn.connector.feature.group"/>
     <repository
         url="http://download.gna.org/eclox/update"/>
-    <repository
-        url="http://embsysregview.sourceforge.net/update"/>
     <repository
         url="http://www.cppstyle.com/mars"/>
     <repository
         url="http://gnuarmeclipse.sourceforge.net/updates"/>
-    <repository
-        url="http://community.polarion.com/projects/subversive/download/eclipse/5.0/mars-site/"/>
     <description>all plugins required by microIDE</description>
   </setupTask>
   <setupTask
@@ -85,7 +71,7 @@
   <setupTask
       xsi:type="setup:StringSubstitutionTask"
       name="openocd_path"
-      value="${microIDE_tools_dir|file}\tools\openocd\openocd-0.9.0\bin"/>
+      value="${microIDE_tools_dir|file}/tools/openocd/openocd-0.9.0/bin"/>
   <setupTask
       xsi:type="setup:CompoundTask"
       name="User Preferences">
@@ -158,13 +144,13 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnuarmeclipse.managedbuild.cross/buildTools.path"
-          value="${microIDE_tools_dir|file}\tools\msys\bin">
+          value="">
         <description></description>
       </setupTask>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnuarmeclipse.managedbuild.cross/toolchain.path.1287942917"
-          value="${microIDE_tools_dir|file}\toolchains\arm-none-eabi-gcc\microhal\gcc-arm-none-eabi-5_3-2016q1\bin"/>
+          value="${microIDE_tools_dir|file}/toolchains/arm-none-eabi-gcc/microhal/gcc-arm-none-eabi-5_3-2016q1/bin"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
