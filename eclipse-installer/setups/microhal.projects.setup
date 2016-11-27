@@ -11,6 +11,6 @@
   <project
 	href="microIDE/microhal.templates.setup#/"/>
   <project
-	href="microIDE/microhal.lib.setup#/"/> 
+	href="microIDE/microhal.devices.examples.setup#/"/> 
   <description>List of microHAL projects.</description>
 </setup:ProjectCatalog>

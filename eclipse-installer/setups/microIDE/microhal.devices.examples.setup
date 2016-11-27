@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Project
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:predicates="http://www.eclipse.org/oomph/predicates/1.0"
+    xmlns:projectset="http://www.eclipse.org/oomph/setup/projectset/1.0"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    xmlns:setup.workingsets="http://www.eclipse.org/oomph/setup/workingsets/1.0"
+    xsi:schemaLocation="http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/projectset/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/ProjectSet.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore"
+    name="microhal.examples"
+    label="microhal devices examples">
+  <setupTask
+      xsi:type="setup:VariableTask"
+      name="eclipse.target.platform"
+      defaultValue="None"
+      storageURI="scope://Workspace"/>
+  <setupTask
+      xsi:type="projectset:ProjectSetImportTask"
+      filter=""
+      uRL="https://raw.githubusercontent.com/microHAL/microIDE/master/eclipse-installer/setups/microIDE/devices_example_projectSet.psf">
+    <description>Project set with examples for devices drivers</description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup.workingsets:WorkingSetTask">
+    <workingSet
+        name="microhal.drivers.examples"
+        id="">
+      <predicate
+          xsi:type="predicates:RepositoryPredicate"
+          project="lis302"/>
+    </workingSet>
+  </setupTask>
+  <stream name="master"
+      label="Master"/>
+  <logicalProjectContainer
+      xsi:type="setup:ProjectCatalog"
+      href="index:/org.eclipse.setup#//@projectCatalogs[name='microHAL']"/>
+  <description>This project provides example projects for device drivers developed with microhal library.</description>
+</setup:Project>
