@@ -8,7 +8,8 @@
     xmlns:projects="http://www.eclipse.org/oomph/setup/projects/1.0"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
     xmlns:setup.workingsets="http://www.eclipse.org/oomph/setup/workingsets/1.0"
-    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 index:/models/Git.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/projects/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore"
+    xmlns:workingsets="http://www.eclipse.org/oomph/workingsets/1.0"
+    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 index:/models/Git.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/projects/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"
     name="microhal.examples"
     label="microHAL examples">
   <setupTask
@@ -170,269 +171,113 @@
         name="microhal.examples"
         id="">
       <predicate
-          xsi:type="predicates:ImportedPredicate"
-          accessible="false"/>
+          xsi:type="predicates:NamePredicate"
+          pattern="diagnostic"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="externalInterrupt"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="gpio"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="os"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="serialPort"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="signal slot"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="ticToc"/>
+    </workingSet>
+    <workingSet
+        name="microhal.devices.examples">
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="bmp180"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="at45db"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="ds2782"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="ds2786"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="lepton"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="lis302dl"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="uCAM-II"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="tmp006"/>
+    </workingSet>
+    <workingSet
+        name="Other"
+        id="">
+      <predicate
+          xsi:type="workingsets:ExclusionPredicate"
+          excludedWorkingSet="//@setupTasks.2/@workingSets.1 //@setupTasks.2/@workingSets.0"/>
     </workingSet>
   </setupTask>
-  <project name="diagnostic"
-      label="">
-    <setupTask
-        xsi:type="git:GitCloneTask"
-        id="git.clone.example-diagnostic"
-        remoteURI="microHAL/example-${scope.project.name}"
-        pushURI=""
-        checkoutBranch="master"
-        recursive="true">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/InducedChoices">
-        <detail
-            key="inherit">
-          <value>github.remoteURIs</value>
-        </detail>
-        <detail
-            key="label">
-          <value>Github Access</value>
-        </detail>
-        <detail
-            key="target">
-          <value>remoteURI</value>
-        </detail>
-      </annotation>
-      <description>${scope.project.label}</description>
-    </setupTask>
+  <setupTask
+      xsi:type="git:GitCloneTask"
+      id="git.clone.microhal"
+      remoteURI="microHAL/microhal"
+      pushURI=""
+      checkoutBranch="master"
+      recursive="true">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/InducedChoices">
+      <detail
+          key="inherit">
+        <value>github.remoteURIs</value>
+      </detail>
+      <detail
+          key="label">
+        <value>Github Access</value>
+      </detail>
+      <detail
+          key="target">
+        <value>remoteURI</value>
+      </detail>
+    </annotation>
+    <description>${scope.project.label}</description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:CompoundTask"
+      id="examples"
+      name="examples">
     <setupTask
         xsi:type="projects:ProjectsImportTask"
         id="org.eclipse.example-diagnostic.project.import">
       <sourceLocator
-          rootFolder="${git.clone.example-diagnostic.location}"/>
+          rootFolder="${git.clone.microhal.location}/examples"
+          locateNestedProjects="true"/>
       <description>Import the diagnostic module example in the workspace</description>
     </setupTask>
-    <stream
-        name="master"
-        label="Master"/>
-  </project>
-  <project name="gpio">
-    <setupTask
-        xsi:type="git:GitCloneTask"
-        id="git.clone.example-gpio"
-        filter=""
-        remoteURI="microHAL/example-${scope.project.name}"
-        pushURI=""
-        checkoutBranch="master"
-        recursive="true">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/InducedChoices">
-        <detail
-            key="inherit">
-          <value>github.remoteURIs</value>
-        </detail>
-        <detail
-            key="label">
-          <value>Github Access</value>
-        </detail>
-        <detail
-            key="target">
-          <value>remoteURI</value>
-        </detail>
-      </annotation>
-      <description>${scope.project.label}</description>
-    </setupTask>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:CompoundTask"
+      name="devices.examples">
     <setupTask
         xsi:type="projects:ProjectsImportTask"
-        id="org.eclipse.example-gpio.project.import">
+        id="org.eclipse.deviceexample-bmp180.project.import">
       <sourceLocator
-          rootFolder="${git.clone.example-gpio.location}"/>
-      <description>Import the gpio example in the workspace</description>
+          rootFolder="${git.clone.microhal.location}/drivers"
+          locateNestedProjects="true"/>
+      <description></description>
     </setupTask>
-    <stream
-        name="master"
-        label="Master"/>
-  </project>
-  <project name="os">
-    <setupTask
-        xsi:type="git:GitCloneTask"
-        id="git.clone.example-os"
-        filter=""
-        remoteURI="microHAL/example-${scope.project.name}"
-        pushURI=""
-        checkoutBranch="master"
-        recursive="true">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/InducedChoices">
-        <detail
-            key="inherit">
-          <value>github.remoteURIs</value>
-        </detail>
-        <detail
-            key="label">
-          <value>Github Access</value>
-        </detail>
-        <detail
-            key="target">
-          <value>remoteURI</value>
-        </detail>
-      </annotation>
-      <description>${scope.project.label}</description>
-    </setupTask>
-    <setupTask
-        xsi:type="projects:ProjectsImportTask"
-        id="org.eclipse.example-os.project.import">
-      <sourceLocator
-          rootFolder="${git.clone.example-os.location}"/>
-      <description>Import the gpio example in the workspace</description>
-    </setupTask>
-    <stream
-        name="master"
-        label="Master"/>
-  </project>
-  <project name="serialPort">
-    <setupTask
-        xsi:type="git:GitCloneTask"
-        id="git.clone.example-serialPort"
-        filter=""
-        remoteURI="microHAL/example-${scope.project.name}"
-        pushURI=""
-        checkoutBranch="master"
-        recursive="true">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/InducedChoices">
-        <detail
-            key="inherit">
-          <value>github.remoteURIs</value>
-        </detail>
-        <detail
-            key="label">
-          <value>Github Access</value>
-        </detail>
-        <detail
-            key="target">
-          <value>remoteURI</value>
-        </detail>
-      </annotation>
-      <description>${scope.project.label}</description>
-    </setupTask>
-    <setupTask
-        xsi:type="projects:ProjectsImportTask"
-        id="org.eclipse.example-serialPort.project.import">
-      <sourceLocator
-          rootFolder="${git.clone.example-serialPort.location}"/>
-      <description>Import the gpio example in the workspace</description>
-    </setupTask>
-    <stream
-        name="master"
-        label="Master"/>
-  </project>
-  <project name="signalSlot">
-    <setupTask
-        xsi:type="git:GitCloneTask"
-        id="git.clone.example-signalSlot"
-        filter=""
-        remoteURI="microHAL/example-${scope.project.name}"
-        pushURI=""
-        checkoutBranch="master"
-        recursive="true">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/InducedChoices">
-        <detail
-            key="inherit">
-          <value>github.remoteURIs</value>
-        </detail>
-        <detail
-            key="label">
-          <value>Github Access</value>
-        </detail>
-        <detail
-            key="target">
-          <value>remoteURI</value>
-        </detail>
-      </annotation>
-      <description>${scope.project.label}</description>
-    </setupTask>
-    <setupTask
-        xsi:type="projects:ProjectsImportTask"
-        id="org.eclipse.example-signalSlot.project.import">
-      <sourceLocator
-          rootFolder="${git.clone.example-signalSlot.location}"/>
-      <description>Import the gpio example in the workspace</description>
-    </setupTask>
-    <stream
-        name="master"
-        label="Master"/>
-  </project>
-  <project name="ticToc">
-    <setupTask
-        xsi:type="git:GitCloneTask"
-        id="git.clone.example-ticToc"
-        filter=""
-        remoteURI="microHAL/example-${scope.project.name}"
-        pushURI=""
-        checkoutBranch="master"
-        recursive="true">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/InducedChoices">
-        <detail
-            key="inherit">
-          <value>github.remoteURIs</value>
-        </detail>
-        <detail
-            key="label">
-          <value>Github Access</value>
-        </detail>
-        <detail
-            key="target">
-          <value>remoteURI</value>
-        </detail>
-      </annotation>
-      <description>${scope.project.label}</description>
-    </setupTask>
-    <setupTask
-        xsi:type="projects:ProjectsImportTask"
-        id="org.eclipse.example-ticToc.project.import">
-      <sourceLocator
-          rootFolder="${git.clone.example-ticToc.location}"/>
-      <description>Import the gpio example in the workspace</description>
-    </setupTask>
-    <stream
-        name="master"
-        label="Master"/>
-  </project>
-  <project name="externalInterrupt">
-    <setupTask
-        xsi:type="git:GitCloneTask"
-        id="git.clone.example-externalInterrupt"
-        filter=""
-        remoteURI="microHAL/example-${scope.project.name}"
-        pushURI=""
-        checkoutBranch="master"
-        recursive="true">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/InducedChoices">
-        <detail
-            key="inherit">
-          <value>github.remoteURIs</value>
-        </detail>
-        <detail
-            key="label">
-          <value>Github Access</value>
-        </detail>
-        <detail
-            key="target">
-          <value>remoteURI</value>
-        </detail>
-      </annotation>
-      <description>${scope.project.label}</description>
-    </setupTask>
-    <setupTask
-        xsi:type="projects:ProjectsImportTask"
-        id="org.eclipse.example-externalInterrupt.project.import">
-      <sourceLocator
-          rootFolder="${git.clone.example-externalInterrupt.location}"/>
-      <description>Import the gpio example in the workspace</description>
-    </setupTask>
-    <stream
-        name="master"
-        label="Master"/>
-  </project>
+  </setupTask>
+  <stream name="master"
+      label="Master"/>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
       href="index:/org.eclipse.setup#//@projectCatalogs[name='com.github']"/>

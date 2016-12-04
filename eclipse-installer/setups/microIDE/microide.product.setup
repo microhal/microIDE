@@ -20,6 +20,47 @@
     <description></description>
   </setupTask>
   <setupTask
+      xsi:type="setup:CompoundTask"
+      name="Configuration">
+    <setupTask
+        xsi:type="setup:VariableTask"
+        type="URI"
+        name="microhal"
+        value="${installation.location|uri}"
+        defaultValue=""
+        storageURI="scope://Installation"
+        label="">
+      <description></description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        type="URI"
+        name="ARM_GCC_TOOLCHAIN_LOCATION"
+        value="${microide}/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-5_3-2016q1"
+        defaultValue=""
+        storageURI="scope://Installation"/>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="CLANG_TOOLCHAIN_LOCATION"
+        value="${microide}/toolchains/LLVM/3.8.0"
+        defaultValue=""
+        storageURI="scope://Installation"/>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="OPENOCD_LOCATION "
+        value="${microide}/tools/openocd/0.10.0"
+        defaultValue=""
+        storageURI="scope://Installation"/>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="MINGW_TOOLCHAIN_LOCATION"
+        value="${microide}/toolchains/mingw-w64/5.3.0"/>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="MSYS_LOCATION"
+        value="${microide}/tools/msys"/>
+  </setupTask>
+  <setupTask
       xsi:type="setup.p2:P2Task"
       label="">
     <requirement
@@ -150,7 +191,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnuarmeclipse.managedbuild.cross/toolchain.path.1287942917"
-          value="${microIDE_tools_dir|file}/toolchains/arm-none-eabi-gcc/microhal/gcc-arm-none-eabi-5_3-2016q1/bin"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -170,7 +211,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/value"
-          value="${microIDE_tools_dir|file}\toolchains\mingw-w64\5.3.0">
+          value="MINGW_TOOLCHAIN_LOCATION">
         <description></description>
       </setupTask>
       <setupTask
@@ -382,13 +423,13 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.wangzw.cppstyle/cppstyle.clangformat.path"
-          value="${microIDE_tools_dir|file}\toolchains\LLVM\3.8.0\bin\clang-format.exe">
+          value="${CLANG_TOOLCHAIN_LOCATION|file}\bin\clang-format.exe">
         <description></description>
       </setupTask>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.wangzw.cppstyle/cppstyle.cpplint.path"
-          value="${microIDE_tools_dir|file}\tools\cpplint\runCPPlint.bat">
+          value="">
         <description></description>
       </setupTask>
       <setupTask
@@ -398,7 +439,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.wangzw.cppstyle/cppstyle.enable.cpplint.on.save"
-          value="true"/>
+          value="false"/>
     </setupTask>
   </setupTask>
   <version name="oxygen"
