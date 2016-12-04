@@ -25,7 +25,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         type="URI"
-        name="microhal"
+        name="microide"
         value="${installation.location|uri}"
         defaultValue=""
         storageURI="scope://Installation"
@@ -37,28 +37,34 @@
         type="URI"
         name="ARM_GCC_TOOLCHAIN_LOCATION"
         value="${microide}/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-5_3-2016q1"
-        defaultValue=""
-        storageURI="scope://Installation"/>
+        defaultValue=""/>
     <setupTask
         xsi:type="setup:VariableTask"
+        type="URI"
         name="CLANG_TOOLCHAIN_LOCATION"
         value="${microide}/toolchains/LLVM/3.8.0"
-        defaultValue=""
-        storageURI="scope://Installation"/>
+        defaultValue="">
+      <description></description>
+    </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
+        type="URI"
         name="OPENOCD_LOCATION "
         value="${microide}/tools/openocd/0.10.0"
         defaultValue=""
-        storageURI="scope://Installation"/>
+        label=""/>
     <setupTask
         xsi:type="setup:VariableTask"
+        type="URI"
         name="MINGW_TOOLCHAIN_LOCATION"
         value="${microide}/toolchains/mingw-w64/5.3.0"/>
     <setupTask
         xsi:type="setup:VariableTask"
+        type="URI"
         name="MSYS_LOCATION"
-        value="${microide}/tools/msys"/>
+        value="${microide}/tools/msys">
+      <description></description>
+    </setupTask>
   </setupTask>
   <setupTask
       xsi:type="setup.p2:P2Task"
@@ -184,8 +190,7 @@
         name="ilg.gnuarmeclipse.managedbuild.cross">
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/ilg.gnuarmeclipse.managedbuild.cross/buildTools.path"
-          value="">
+          key="/instance/ilg.gnuarmeclipse.managedbuild.cross/buildTools.path">
         <description></description>
       </setupTask>
       <setupTask
