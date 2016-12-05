@@ -5,6 +5,7 @@
 #define UNZIP_7Z_PATH "tools\7z1604-extra"
 
 #define ARM_GCC_TOOLCHAIN_URL "https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-win32.exe"
+#define ARM_GCC_TOOLCHAIN_LICENSE_URL "https://launchpadlibrarian.net/251686212/license.txt"
 #define ARM_GCC_TOOLCHAIN_FILENAME "gcc-arm-none-eabi-5_3-2016q1-20160330-win32.exe"
 #define ARM_GCC_TOOLCHAIN_VERSION "5.3.0"
 #define ARM_GCC_TOOLCHAIN_SIZE 442470400
@@ -50,7 +51,6 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 
 [Components]
 Name: "eclipse"; Description: "Eclipse"; Types: user devel custom; Flags: fixed; ExtraDiskSpaceRequired: 51720192
-;Name: "python"; Description: "Python 2.7.3"; Types: devel custom; ExtraDiskSpaceRequired: 76718080
 Name: "toolchains"; Description: "Toolchains"; Types: user devel custom; 
 Name: "toolchains\arm"; Description: "gcc-arm-none-eabi {#ARM_GCC_TOOLCHAIN_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#ARM_GCC_TOOLCHAIN_SIZE}  
 Name: "toolchains\clang"; Description: "clang/llvm"; Types: user devel custom; ExtraDiskSpaceRequired: {#CLANG_TOOLCHAIN_SIZE} 
@@ -58,16 +58,11 @@ Name: "toolchains\mingw"; Description: "minGW-w64"; Types: user devel custom; Ex
 Name: "tools"; Description: "Programming tools"; Types: user devel custom;
 Name: "tools\openocd"; Description: "openOCD {#OPENOCD_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#OPENOCD_SIZE}
 Name: "tools\msys"; Description: "msys"; Types: user devel custom; ExtraDiskSpaceRequired: 416485376
-;Name: "tools\cpplint"; Description: "CPPlint"; Types: devel custom;
 Name: "tools\doxygen"; Description: "Doxygen 1.8.11"; Types: devel custom; ExtraDiskSpaceRequired: 49614848  
 Name: "tools\graphiz"; Description: "Graphiz 2.38"; Types: devel custom; ExtraDiskSpaceRequired: 204574720 
 
 [Files]
 Source: "{#UNZIP_7Z_PATH}\*"; DestDir: "{tmp}\tools\7z"; Flags: recursesubdirs
-;gcc-arm-none-eabi patch, unpack to tmp directory and after running installer copy files to toolchain directory
-;Source: "toolchains\gcc-arm-none-eabi-5_3-patch\*"; DestDir: "{tmp}\toolchains\gcc-arm-none-eabi_patch"; Components: toolchains\arm; Flags: recursesubdirs
-;Source: "tools\openocd\openocd-0.9.0.7z"; DestDir: "{tmp}\tools"; Components: tools\openocd;
-;Source: "tools\cpplint\*"; DestDir: "{app}\tools\cpplint"; Components: tools\cpplint; Flags: recursesubdirs; AfterInstall: CreateCPPlintRunFile;  
 Source: "eclipse-installer\*"; DestDir: "{app}\eclipse-installer"; Flags: recursesubdirs; BeforeInstall: CreateNoticeFile
 Source: "launch\*"; DestDir: "{app}"; Flags: recursesubdirs;
 
@@ -100,9 +95,8 @@ Filename: "{#DOWNLOAD_DIR}\{#CLANG_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#CL
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\x86_64-5.3.0-release-posix-seh-rt_v4-rev0.7z -o{app}\toolchains\mingw-w64 -y"; Components: toolchains\mingw; BeforeInstall: UpdateInstallProgress('Installing mingw toolchain.',40) 
 Filename: "cmd.exe"; Parameters: "/c rename {app}\toolchains\mingw-w64\mingw64 5.3.0"; Components: toolchains\mingw ; BeforeInstall: UpdateInstallProgress('Installing mingw toolchain.',55)
 ; tools installer
-;Filename: "{#DOWNLOAD_DIR}\{#OPENOCD_FILENAME}"; Parameters: "/S /D={app}\tools\openocd\{#OPENOCD_VERSION}"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.',56)
-Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#OPENOCD_FILENAME} -o{#OPENOCD_LOCATION} -y"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.',56)
-;Filename: "xcopy.exe"; Parameters: "/s /y {tmp}\tools\openocd {#OPENOCD_LOCATION}\"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.',60)
+Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#OPENOCD_FILENAME} -o{app}\tools\openocd -y"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.',56)
+Filename: "cmd.exe"; Parameters: "/c rename {app}\tools\openocd\openocd-0.10.0-dev-00247-g73b676c {#OPENOCD_VERSION}"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.',60)
 ; extract msys
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\msys-rev13.7z -o{app}\tools\ -y"; Components: tools\msys; BeforeInstall: UpdateInstallProgress('Installing msys.',62)
 ; install doxygen  
@@ -110,13 +104,12 @@ Filename: "{#DOWNLOAD_DIR}\doxygen-1.8.11-setup.exe"; Parameters: "/SILENT /DIR=
 ; unpack graphiz
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\graphviz-2.38.zip -o{app}\tools\ -y"; Components: tools\graphiz; BeforeInstall: UpdateInstallProgress('Installing graphiz.',85)
 Filename: "cmd.exe"; Parameters: "/c rename {app}\tools\release graphiz"; Components: tools\graphiz; BeforeInstall: UpdateInstallProgress('Installing graphiz.',95)
-;python
-;Filename: "msiexec"; Parameters: "/i {userdocs}\microIDE_installer\python-2.7.11.msi /qr"; Components: python and tools\openocd
 ;---- eclipse installer
 ; copy oomph setup files
 Filename: "xcopy.exe"; Parameters: "/s /y {tmp}\microIDE-master\eclipse-installer\setups {app}\eclipse-installer\setups\"; Components: eclipse; Flags: runhidden; BeforeInstall: UpdateInstallProgress('Preparing eclipse instalation.',97)                   
 Filename: "notepad.exe"; Parameters: "{tmp}\eclipse-notice.txt"; Components: eclipse; BeforeInstall: UpdateInstallProgress('Preparing eclipse instalation.',99); AfterInstall: DisplayInstallProgress(False, ''); 
 Filename: "{app}\eclipse-installer\eclipse-inst.exe"; Components: eclipse 
+
 
 [UninstallRun]
 Filename: "{#CLANG_TOOLCHAIN_LOCATION}\Uninstall.exe"; Parameters: "/S"
@@ -126,12 +119,13 @@ Filename: "{app}\tools\doxygen\1.8.11\system\unins000.exe"; Parameters: "/SILENT
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\eclipse";
 Type: filesandordirs; Name: "{app}\toolchains\mingw-w64"; Components: toolchains\mingw
-;Type: filesandordirs; Name: "{app}\tools\cpplint"; Components: tools\cpplint
 Type: filesandordirs; Name: "{app}\tools\graphiz"; Components: tools\graphiz
 Type: filesandordirs; Name: "{app}\tools\msys"; Components: tools\msys
 Type: filesandordirs; Name: "{app}\tools\openocd"; Components: tools\openocd
 
+Type: dirifempty; Name: "{app}\toolchains\gcc-arm-none-eabi\microhal";
 Type: dirifempty; Name: "{app}\toolchains\gcc-arm-none-eabi";
+Type: dirifempty; Name: "{app}\toolchains\LLVM";
 Type: dirifempty; Name: "{app}\toolchains";
 Type: dirifempty; Name: "{app}\tools";
 
@@ -204,63 +198,11 @@ begin
 end;
 
 // functions responsible for license acceptance
-// this function show license text
-procedure ShowLicenseWizard(LicsenseText: AnsiString);
-var
-  LicensePage: TSetupForm;          
-  OKButton: TNewButton;
-  RichEditViewer: TRichEditViewer; 
-begin  
-  LicensePage := CreateCustomForm();
-  try
-    LicensePage.ClientWidth := WizardForm.Width;
-    LicensePage.ClientHeight := WizardForm.Height;
-    LicensePage.Caption := 'License';
-    LicensePage.CenterInsideControl(WizardForm, False); 
-  
-    RichEditViewer := TRichEditViewer.Create(LicensePage);
-    RichEditViewer.Top := 5;
-    RichEditViewer.Left := 5;
-    RichEditViewer.Width := LicensePage.ClientWidth - 10;
-    RichEditViewer.Height := LicensePage.ClientHeight - 50;
-    RichEditViewer.Parent := LicensePage;
-    RichEditViewer.ScrollBars := ssVertical;
-    RichEditViewer.UseRichEdit := True;
-    RichEditViewer.RTFText := LicsenseText;
-    RichEditViewer.ReadOnly := True;
-
-    OKButton := TNewButton.Create(LicensePage);
-    OKButton.Parent := LicensePage;
-    OKButton.Width := ScaleX(75);
-    OKButton.Height := ScaleY(23);
-    OKButton.Left := LicensePage.ClientWidth - ScaleX(75 + 5);
-    OKButton.Top := LicensePage.ClientHeight - ScaleY(23 + 10);
-    OKButton.Caption := 'OK';
-    OKButton.ModalResult := mrOk;
-    OKButton.Default := True;
-                                
-    LicensePage.ShowModal();      
-  finally
-    LicensePage.Free();
-  end;
-end;  
-
-//procedure Show_python_license(Sender: TObject);
-//var 
-//  ErrorCode: Integer;
-//begin
-//  ShellExecAsOriginalUser('open', 'http://docs.python.org/3/license.html', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
-//end;
-
 procedure Show_GCCARM_license(Sender: TObject);
 var
-  LicsenseText: AnsiString;
-begin
-  // Load the licsense text into the new page
-  ExtractTemporaryFile('GCC-ARM.txt');
-  LoadStringFromFile(ExpandConstant('{tmp}/GCC-ARM.txt'), LicsenseText);
-
-  ShowLicenseWizard(LicsenseText);
+  ErrorCode: Integer;
+begin      
+  ShellExecAsOriginalUser('open', '{#ARM_GCC_TOOLCHAIN_LICENSE_URL}', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode); 
 end;
 
 procedure Show_mingw_license(Sender: TObject);
@@ -272,46 +214,30 @@ end;
 
 procedure Show_openocd_license(Sender: TObject);
 var
-  LicsenseText: AnsiString;
+  ErrorCode: Integer;
 begin
-  // Load the licsense text into the new page
-  ExtractTemporaryFile('openocd.txt');
-  LoadStringFromFile(ExpandConstant('{tmp}/openocd.txt'), LicsenseText);
-
-  ShowLicenseWizard(LicsenseText);
+  ShellExecAsOriginalUser('open', 'http://openocd.org/doc/html/License.html', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);  
 end;
 
 procedure Show_doxygen_license(Sender: TObject);
 var
-  LicsenseText: AnsiString;
-begin
-  // Load the licsense text into the new page
-  ExtractTemporaryFile('doxygen.txt');
-  LoadStringFromFile(ExpandConstant('{tmp}/doxygen.txt'), LicsenseText);
-
-  ShowLicenseWizard(LicsenseText);
+  ErrorCode: Integer;
+begin    
+  ShellExecAsOriginalUser('open', 'http://www.stack.nl/~dimitri/doxygen/index.html', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
 end;
 
 procedure Show_graphiz_license(Sender: TObject);
 var
-  LicsenseText: AnsiString;
-begin
-  // Load the licsense text into the new page
-  ExtractTemporaryFile('Graphiz.rtf');
-  LoadStringFromFile(ExpandConstant('{tmp}/Graphiz.rtf'), LicsenseText);
-
-  ShowLicenseWizard(LicsenseText);
+   ErrorCode: Integer;
+begin    
+  ShellExecAsOriginalUser('open', 'http://www.graphviz.org/License.php', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
 end;
 
 procedure Show_clang_license(Sender: TObject);
 var
-  LicsenseText: AnsiString;
+  ErrorCode: Integer;
 begin
-  // Load the licsense text into the new page
-  ExtractTemporaryFile('llvm.txt');
-  LoadStringFromFile(ExpandConstant('{tmp}/llvm.txt'), LicsenseText);
-
-  ShowLicenseWizard(LicsenseText);
+  ShellExecAsOriginalUser('open', 'http://llvm.org/releases/{#CLANG_TOOLCHAIN_VERSION}/LICENSE.TXT', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
 end;
 //------------------------------------------------------------
 procedure URLLabelOnClick(Sender: TObject);
@@ -324,8 +250,7 @@ begin
     'openOCD': ShellExecAsOriginalUser('open', 'http://openocd.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
     'Doxygen': ShellExecAsOriginalUser('open', 'http://www.doxygen.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
     'Graphiz': ShellExecAsOriginalUser('open', 'http://www.graphviz.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
-//    'Python': ShellExecAsOriginalUser('open', 'http://www.python.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
-    'clang': ShellExecAsOriginalUser('open', 'http://clang.llvm.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
+    'Clang': ShellExecAsOriginalUser('open', 'http://clang.llvm.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
   end;
 end;      
 
@@ -343,13 +268,6 @@ begin
   end;
   
   WizardForm.NextButton.Enabled := True; 
-end;
-
-// on license acceptance changed procedures
-procedure PythonLicenseChecked(Sender: TObject);
-begin
-  LicenceAccepted[5] := TNewCheckBox(Sender).Checked;
-  CheckIfAllLicenseAccepted;
 end;
 
 procedure AcceptARMLicenseChecked(Sender: TObject);
@@ -399,7 +317,6 @@ begin
   ComponentName[2] := 'tools\openocd';
   ComponentName[3] := 'tools\doxygen';
   ComponentName[4] := 'tools\graphiz';
- // ComponentName[5] := 'python';
   ComponentName[5] := 'toolchains\clang';
   
   for i:=0 to 5 do
@@ -438,7 +355,6 @@ begin
   WebAddress[2] := 'openOCD';
   WebAddress[3] := 'Doxygen';
   WebAddress[4] := 'Graphiz';
-//  WebAddress[5] := 'Python'; 
   WebAddress[5] := 'Clang'; 
 
   CheckboxEventsFunctions[0] := @AcceptARMLicenseChecked;
@@ -446,7 +362,6 @@ begin
   CheckboxEventsFunctions[2] := @openOCDLicenseChecked;
   CheckboxEventsFunctions[3] := @DoxygenLicenseChecked;
   CheckboxEventsFunctions[4] := @GraphizLicenseChecked;
-//  CheckboxEventsFunctions[5] := @PythonLicenseChecked;
   CheckboxEventsFunctions[5] := @ClangLicenseChecked;
 
   ShowLicenseEventsFunctions[0] := @Show_GCCARM_license;
@@ -454,7 +369,6 @@ begin
   ShowLicenseEventsFunctions[2] := @Show_openocd_license;
   ShowLicenseEventsFunctions[3] := @Show_doxygen_license;
   ShowLicenseEventsFunctions[4] := @Show_graphiz_license;
-//  ShowLicenseEventsFunctions[5] := @Show_python_license;
   ShowLicenseEventsFunctions[5] := @Show_clang_license
 
   longestComponnentName := 0;   
@@ -536,10 +450,6 @@ begin
   if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\{#OPENOCD_FILENAME}')) then
     idpAddFileComp('{#OPENOCD_URL}',  ExpandConstant('{#DOWNLOAD_DIR}\{#OPENOCD_FILENAME}'),  'tools\openocd');    
  
-
- // if not FileExists(ExpandConstant('{userdocs}\microIDE_installer\python-2.7.11.msi')) then
-  //  idpAddFileComp('https://www.python.org/ftp/python/2.7.11/python-2.7.11.msi',  ExpandConstant('{userdocs}\microIDE_installer\python-2.7.11.msi'),  'python');    
- 
   idpDownloadAfter(wpReady);
   License_InitializeWizard();  
   Progress_InitializeWizard();                                                                
@@ -553,9 +463,3 @@ begin
                                                                'You also have to uncheck "create start menu entry" and "create desktop shortcut".', False);
 end;
 
-//procedure CreateCPPlintRunFile();
-//begin
-  //SaveStringToFile(ExpandConstant('{app}\tools\cpplint\runCPPlint.bat'), 'C:\Python27\python ' + ExpandConstant('{app}') + '\tools\cpplint\cpplint.py %1', False);
-//end;   
-
-//---------------------------------------
