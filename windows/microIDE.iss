@@ -1,5 +1,5 @@
 #define AppName "microIDE"
-#define AppVersion "0.2.2"
+#define AppVersion "0.3.0"
 
 #define DOWNLOAD_DIR "{userdocs}\microIDE_installer"
 #define UNZIP_7Z_PATH "tools\7z1604-extra"
@@ -65,15 +65,6 @@ Name: "tools\graphiz"; Description: "Graphiz 2.38"; Types: devel custom; ExtraDi
 Source: "{#UNZIP_7Z_PATH}\*"; DestDir: "{tmp}\tools\7z"; Flags: recursesubdirs
 Source: "eclipse-installer\*"; DestDir: "{app}\eclipse-installer"; Flags: recursesubdirs; BeforeInstall: CreateNoticeFile
 Source: "launch\*"; DestDir: "{app}"; Flags: recursesubdirs;
-
-;Source: licsenses\GCC-ARM.txt; DestDir: {app}; Flags: ignoreversion dontcopy
-;Source: licsenses\openocd.txt; DestDir: {app}; Flags: ignoreversion dontcopy
-;Source: licsenses\Graphiz.rtf; DestDir: {app}; Flags: ignoreversion dontcopy
-;Source: licsenses\doxygen.txt; DestDir: {app}; Flags: ignoreversion dontcopy
-;Source: licsenses\llvm.txt; DestDir: {app}; Flags: ignoreversion dontcopy
-
-[Dirs] 
-;Name: "{app}\eclipse"
 
 [Icons]
 Name: {commondesktop}\microIDE; Filename: {app}\launch.bat; WorkingDir: {app}; Tasks: desktopicon 
