@@ -7,6 +7,10 @@ To install microide on Windows operating system you should go to our Source Forg
 ###Linux
 To install microide on Linux operating system download <b>linux/microide_install.sh</b> file from this repository and run it in directory where you want to install microide.
 
+##Importing microhal examples
+Microhal is integrated with microide, to import microhal examples you should follow importing tutorial on our website:
+http://microhal.org/quickstartguide
+
 ###About microide
 Microide is dedicated for embedded development, its integrate tools like:
  - Eclipse CDT for C/C++ development
