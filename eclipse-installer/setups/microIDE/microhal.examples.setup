@@ -264,7 +264,7 @@
         id="">
       <predicate
           xsi:type="workingsets:ExclusionPredicate"
-          excludedWorkingSet="//@setupTasks.2/@workingSets.1 //@setupTasks.2/@workingSets.0"/>
+          excludedWorkingSet="//@setupTasks.2/@workingSets.1 //@setupTasks.2/@workingSets.0 //@setupTasks.2/@workingSets.2"/>
     </workingSet>
   </setupTask>
   <setupTask
