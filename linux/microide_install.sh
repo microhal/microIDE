@@ -23,13 +23,13 @@ OPENOCD_LOCATION=tools/openocd/0.10.0
 
 
 download() {
-wget https://github.com/microHAL/microIDE/archive/master.zip
+wget --directory-prefix=$DOWNLOAD_DIR https://github.com/microHAL/microIDE/archive/master.zip
 echo 'Downloading ARM toolchain ...'
-wget $ARM_GCC_TOOLCHAIN_URL
+wget --directory-prefix=$DOWNLOAD_DIR $ARM_GCC_TOOLCHAIN_URL
 echo 'Downloading openOCD...'
-wget -O $OPENOCD_FILENAME $OPENOCD_URL
+wget -O $DOWNLOAD_DIR/$OPENOCD_FILENAME $OPENOCD_URL
 echo 'Downloading Eclipse...'
-wget http://mirrors.nic.cz/eclipse/oomph/products/eclipse-inst-linux64.tar.gz
+wget --directory-prefix=$DOWNLOAD_DIR http://mirrors.nic.cz/eclipse/oomph/products/eclipse-inst-linux64.tar.gz
 }
 
 
@@ -37,7 +37,7 @@ mkdir -p microide
 cd microide
 #------------------------------------- toolchains -----------------------------
 echo 'Downloading files'
-#download
+download
 echo 'Unpacking toolchain patch and eclipse installer setup configuration.'
 unzip $DOWNLOAD_DIR/master.zip 
 echo 'Installing ARM Toolchain...'
@@ -72,6 +72,7 @@ mkdir -p eclipse-installer/setups
 cp -r microIDE-master/eclipse-installer/setups/* eclipse-installer/setups
 rm -r microIDE-master
 rm -r tmp
+rm -r $DOWNLOAD_DIR/master.zip 
 
 echo '-----------------------------------------------------------------------------'
 echo 'Please install eclipse in following directory:'
