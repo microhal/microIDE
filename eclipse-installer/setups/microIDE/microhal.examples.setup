@@ -272,7 +272,6 @@
       id="git.clone.microhal"
       remoteURI="microHAL/microhal"
       pushURI=""
-      checkoutBranch="master"
       recursive="true">
     <annotation
         source="http://www.eclipse.org/oomph/setup/InducedChoices">
@@ -324,6 +323,26 @@
   </setupTask>
   <stream name="master"
       label="Master"/>
+  <stream name="devel"
+      label="Devel"/>
+  <stream name="port-stm32l4xx"
+      label="Port-stm32l4xx"/>
+  <stream name="port-stm32f3xx"
+      label="Port-stm32f3xx">
+    <description></description>
+  </stream>
+  <stream name="port-stm32f4xx"
+      label="Port-stm32f4xx">
+    <description></description>
+  </stream>
+  <stream name="crc"
+      label="CRC">
+    <description></description>
+  </stream>
+  <stream name="api-gpio"
+      label="GPIO">
+    <description></description>
+  </stream>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
       href="index:/org.eclipse.setup#//@projectCatalogs[name='com.github']"/>
