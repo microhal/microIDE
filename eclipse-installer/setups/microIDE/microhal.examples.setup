@@ -343,6 +343,14 @@
       label="GPIO">
     <description></description>
   </stream>
+  <stream name="api-i2cDevice"
+      label="api-I2CDevice">
+    <description></description>
+  </stream>
+  <stream name="1-Wire"
+      label="1-Wire">
+    <description></description>
+  </stream>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
       href="index:/org.eclipse.setup#//@projectCatalogs[name='com.github']"/>

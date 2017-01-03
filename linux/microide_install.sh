@@ -15,8 +15,8 @@ ARM_GCC_TOOLCHAIN_VERSION=5.3.0
 ARM_GCC_TOOLCHAIN_SIZE=442470400
 ARM_GCC_TOOLCHAIN_LOCATION=toolchains/gcc-arm-none-eabi/microhal
 
-OPENOCD_URL=https://sourceforge.net/projects/openocd/files/openocd/0.9.0/openocd-0.9.0.tar.bz2/download
-OPENOCD_FILENAME=openocd-0.9.0.tar.bz2
+OPENOCD_URL=https://sourceforge.net/projects/openocd/files/openocd/0.10.0-rc1/openocd-0.10.0-rc1.tar.gz/download
+OPENOCD_FILENAME=openocd-0.10.0-rc1.tar.gz
 OPENOCD_VERSION=0.10.0
 OPENOCD_SIZE=2333886
 OPENOCD_LOCATION=tools/openocd/0.10.0
@@ -50,13 +50,14 @@ cp -r microIDE-master/toolchains/gcc-arm-none-eabi-patch/$ARM_GCC_TOOLCHAIN_VERS
 # ------------------------------------ tools ---------------------------------
 echo 'Installing tools'
 echo 'Installing openOCD'
+sudo apt-get install libusb-1.0-0-dev
 mkdir -p tools/openocd
 echo 'Extracting OpenOCD...'
 mkdir -p tmp
-tar --extract --bzip2 --file=$DOWNLOAD_DIR/$OPENOCD_FILENAME -C tmp
+tar --extract --file=$DOWNLOAD_DIR/$OPENOCD_FILENAME -C tmp
 echo 'Compilling OpenOCD'
-cd tmp/openocd-0.9.0
-./configure --prefix=$MICROIDE_DIR/tools/openocd/0.10.0
+cd tmp/openocd-0.10.0-rc1
+./configure --enable-stlink --enable-jlink --prefix=$MICROIDE_DIR/tools/openocd/0.10.0
 make
 make install
 cd ../../
