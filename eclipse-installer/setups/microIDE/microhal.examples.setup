@@ -14,6 +14,129 @@
     label="microHAL examples">
   <setupTask
       xsi:type="setup:CompoundTask"
+      name="User Preferences">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/UserPreferences">
+      <detail
+          key="/instance/org.eclipse.cdt.core/indexer/skipMacroReferences">
+        <value>record</value>
+      </detail>
+      <detail
+          key="/instance/org.eclipse.cdt.core/indexer/skipTypeReferences">
+        <value>record</value>
+      </detail>
+      <detail
+          key="/instance/org.eclipse.cdt.core/indexer/skipFilesLargerThanMB">
+        <value>record</value>
+      </detail>
+      <detail
+          key="/instance/org.eclipse.cdt.core/indexer/indexOnOpen">
+        <value>record</value>
+      </detail>
+      <detail
+          key="/instance/org.eclipse.cdt.core/indexer/indexUnusedHeadersWithDefaultLang">
+        <value>record</value>
+      </detail>
+      <detail
+          key="/instance/org.eclipse.cdt.core/indexer/skipIncludedFilesLargerThanMB">
+        <value>record</value>
+      </detail>
+      <detail
+          key="/instance/org.eclipse.cdt.core/indexer/indexerId">
+        <value>record</value>
+      </detail>
+      <detail
+          key="/instance/org.eclipse.cdt.core/indexer/skipReferences">
+        <value>record</value>
+      </detail>
+      <detail
+          key="/instance/org.eclipse.cdt.core/indexer/skipImplicitReferences">
+        <value>record</value>
+      </detail>
+      <detail
+          key="/instance/org.eclipse.cdt.core/indexer/indexAllVersionsSpecificHeaders">
+        <value>record</value>
+      </detail>
+      <detail
+          key="/instance/org.eclipse.cdt.core/indexer/updatePolicy">
+        <value>record</value>
+      </detail>
+      <detail
+          key="/instance/org.eclipse.cdt.core/indexer/indexAllHeaderVersions">
+        <value>record</value>
+      </detail>
+      <detail
+          key="/instance/org.eclipse.cdt.core/indexer/indexAllFiles">
+        <value>record</value>
+      </detail>
+      <detail
+          key="/instance/org.eclipse.cdt.core/indexer/useHeuristicIncludeResolution">
+        <value>record</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.cdt.core">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/indexer/indexAllFiles"
+          value="true"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/indexer/indexAllHeaderVersions"
+          value="false"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/indexer/indexAllVersionsSpecificHeaders"
+          value=""/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/indexer/indexerId"
+          value="org.eclipse.cdt.core.fastIndexer"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/indexer/indexOnOpen"
+          value="false"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/indexer/indexUnusedHeadersWithDefaultLang"
+          value="true"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/indexer/skipFilesLargerThanMB"
+          value="8"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/indexer/skipImplicitReferences"
+          value="false"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/indexer/skipIncludedFilesLargerThanMB"
+          value="16"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/indexer/skipMacroReferences"
+          value="false"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/indexer/skipReferences"
+          value="false"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/indexer/skipTypeReferences"
+          value="false"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/indexer/updatePolicy"
+          value="0"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/indexer/useHeuristicIncludeResolution"
+          value="true"/>
+    </setupTask>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:CompoundTask"
       name="Global Variables">
     <setupTask
         xsi:type="setup:VariableTask"
@@ -248,6 +371,21 @@
       <predicate
           xsi:type="predicates:NamePredicate"
           pattern="uCAM-II"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="ws2812"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="pcf8563"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="mpl115a2"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="m24c16"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="hx711"/>
     </workingSet>
     <workingSet
         name="microhal.components.examples"
@@ -264,7 +402,7 @@
         id="">
       <predicate
           xsi:type="workingsets:ExclusionPredicate"
-          excludedWorkingSet="//@setupTasks.2/@workingSets.1 //@setupTasks.2/@workingSets.0 //@setupTasks.2/@workingSets.2"/>
+          excludedWorkingSet="//@setupTasks.3/@workingSets.1 //@setupTasks.3/@workingSets.0 //@setupTasks.3/@workingSets.2"/>
     </workingSet>
   </setupTask>
   <setupTask
@@ -337,10 +475,6 @@
   </stream>
   <stream name="crc"
       label="CRC">
-    <description></description>
-  </stream>
-  <stream name="api-gpio"
-      label="GPIO">
     <description></description>
   </stream>
   <stream name="api-i2cDevice"

@@ -118,7 +118,7 @@
   <setupTask
       xsi:type="setup:StringSubstitutionTask"
       name="openocd_path"
-      value="${microIDE_tools_dir|file}/tools/openocd/0.10.0/bin"/>
+      value="${microIDE_tools_dir|file}/tools/openocd/openocd-0.9.0/bin"/>
   <setupTask
       xsi:type="setup:CompoundTask"
       name="User Preferences">

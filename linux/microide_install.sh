@@ -41,6 +41,8 @@ download
 echo 'Unpacking toolchain patch and eclipse installer setup configuration.'
 unzip $DOWNLOAD_DIR/master.zip 
 echo 'Installing ARM Toolchain...'
+sudo apt-get update
+sudo apt-get install lib32z1 lib32ncurses5 lib32bz2-1.0 lib32stdc++6
 mkdir -p $ARM_GCC_TOOLCHAIN_LOCATION
 tar --extract --bzip2 --file=$DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME -C $ARM_GCC_TOOLCHAIN_LOCATION
 #installing microhal patch to toolchain, this will allow to use standart operating system library with FreeRTOS
@@ -50,7 +52,7 @@ cp -r microIDE-master/toolchains/gcc-arm-none-eabi-patch/$ARM_GCC_TOOLCHAIN_VERS
 # ------------------------------------ tools ---------------------------------
 echo 'Installing tools'
 echo 'Installing openOCD'
-sudo apt-get install libusb-1.0-0-dev
+sudo apt-get install libusb-1.0-0-dev libtool pkg-config
 mkdir -p tools/openocd
 echo 'Extracting OpenOCD...'
 mkdir -p tmp
@@ -60,6 +62,8 @@ cd tmp/openocd-0.10.0-rc1
 ./configure --enable-stlink --enable-jlink --prefix=$MICROIDE_DIR/tools/openocd/0.10.0
 make
 make install
+sudo cp contrib/60-openocd.rules /etc/udev/rules.d/
+sudo usermod -aG plugdev $USER
 cd ../../
 # ---------------------------------- eclipse ---------------------------------
 echo 'Installing Eclipse'

@@ -7,10 +7,10 @@
     name= "microHAL"
     label="microHAL Projects">  
   <project
-	href="microIDE/microhal.examples.setup#/"/>	
+	href="microIDE/microhal.examples.setup#/"/>
+  <project
+	href="microIDE/microhal.project.propellerTester.setup#/"/>
   <project
 	href="microIDE/microhal.templates.setup#/"/>
-  <project
-	href="microIDE/microhal.devices.examples.setup#/"/> 
   <description>List of microHAL projects.</description>
 </setup:ProjectCatalog>
