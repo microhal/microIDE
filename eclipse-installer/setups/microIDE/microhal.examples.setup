@@ -334,7 +334,13 @@
           pattern="isl29023"/>
       <predicate
           xsi:type="predicates:NamePredicate"
-          pattern="lepton"/>
+          pattern="leptonPCSerialReceiver"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="leptonSDCardWrite"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="leptonSerialTransmitter"/>
       <predicate
           xsi:type="predicates:NamePredicate"
           pattern="lis2dh12"/>

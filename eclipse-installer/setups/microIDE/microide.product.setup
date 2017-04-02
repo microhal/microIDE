@@ -118,7 +118,7 @@
   <setupTask
       xsi:type="setup:StringSubstitutionTask"
       name="openocd_path"
-      value="${microIDE_tools_dir|file}/tools/openocd/openocd-0.9.0/bin"/>
+      value="${OPENOCD_LOCATION |file}/bin"/>
   <setupTask
       xsi:type="setup:CompoundTask"
       name="User Preferences">
@@ -216,7 +216,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/value"
-          value="MINGW_TOOLCHAIN_LOCATION">
+          value="${MINGW_TOOLCHAIN_LOCATION|file}">
         <description></description>
       </setupTask>
       <setupTask
