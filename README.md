@@ -1,17 +1,17 @@
-##Microide is eclipse based IDE dedicated for embedded development. 
+## Microide is eclipse based IDE dedicated for embedded development. 
 
-###Windows
+### Windows
 To install microide on Windows operating system you should go to our Source Forge project site and download windows binary installer.
 
 [![Download microHAL](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/microhal/files/latest/download)
-###Linux
+### Linux
 To install microide on Linux operating system download <b>linux/microide_install.sh</b> file from this repository and run it in directory where you want to install microide.
 
-##Importing microhal examples
+## Importing microhal examples
 Microhal is integrated with microide, to import microhal examples you should follow importing tutorial on our website:
 http://microhal.org/quickstartguide
 
-###About microide
+### About microide
 Microide is dedicated for embedded development, its integrate tools like:
  - Eclipse CDT for C/C++ development
  - ARM Toolchain
