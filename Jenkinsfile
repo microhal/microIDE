@@ -10,19 +10,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-               	checkout scm
-                sh 'git submodule update --init'               
+               	checkout scm          
             }
-        }
-        stage('Download') {
-            steps {
-                sh ./download.sh
-            }
-        }
-    }	
-    post {
-        always {
-            deleteDir()
-        }
-    }
+        }        
+    }	   
 }
