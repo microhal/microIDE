@@ -18,6 +18,12 @@ pipeline {
                	sh './download.sh'
             }
         }    
-    }	   
+    }
+    post {
+        always {
+            deleteDir()
+        }
+    }
 }
+
 
