@@ -12,6 +12,12 @@ pipeline {
             steps {
                	checkout scm          
             }
-        }        
+        }   
+        stage('Download') {
+            steps {
+               	sh './download.sh'
+            }
+        }    
     }	   
 }
+
