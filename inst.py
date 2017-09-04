@@ -58,7 +58,7 @@ def generateLinuxInstaller():
 
 	content = content.replace("#replace this text with instalation files information", text)
 
-	with open('linux/microide_install2.sh', 'w') as file:
+	with open('linux/microide_install.sh', 'w') as file:
 		file.write(content)
 
 
