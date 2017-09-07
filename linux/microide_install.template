@@ -91,11 +91,16 @@ tar --extract --file=$DOWNLOAD_DIR/$ECLIPSE_FILENAME
 cd eclipse-installer
 echo '-Doomph.redirection.setups=http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/->setups/' >> eclipse-inst.ini
 cd ../
-mkdir -p eclipse-installer/setups
+mv eclipse-installer/setups/microIDE/microide.product.setup.linux eclipse-installer/setups/microIDE/microide.product.setup
+mkdir -p eclipse-installer/setups/
 cp -r microIDE-master/eclipse-installer/setups/* eclipse-installer/setups
+rm eclipse-installer/setups/microIDE/microide.product.setup.windows
 rm -r microIDE-master
 rm -r tmp
-rm -r $DOWNLOAD_DIR/master.zip 
+rm -r $DOWNLOAD_DIR/master.zip
+#install clang-format
+sudo apt-get install clang-format
+
 
 echo '-----------------------------------------------------------------------------'
 echo 'Please install eclipse in following directory:'

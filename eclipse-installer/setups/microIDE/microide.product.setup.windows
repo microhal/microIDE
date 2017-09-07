@@ -20,6 +20,13 @@
     <description></description>
   </setupTask>
   <setupTask
+      xsi:type="setup.p2:P2Task">
+    <requirement
+        name="org.eclipse.oomph.setup.feature.group"/>
+    <repository
+        url="${oomph.update.url}"/>
+  </setupTask>
+  <setupTask
       xsi:type="setup:CompoundTask"
       name="Configuration">
     <setupTask
@@ -98,7 +105,7 @@
     <requirement
         name="ilg.gnuarmeclipse.debug.gdbjtag.pyocd.feature.group"/>
     <repository
-        url="http://download.gna.org/eclox/update"/>
+        url="http://anb0s.github.io/eclox"/>
     <repository
         url="http://www.cppstyle.com/mars"/>
     <repository
@@ -454,7 +461,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/oxygenm2</value>
+        <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/oxygenr</value>
       </detail>
     </annotation>
     <setupTask
@@ -514,6 +521,10 @@
       <requirement
           name="org.eclipse.rse.feature.group"/>
       <requirement
+          name="org.eclipse.tm.terminal.connector.cdtserial.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.tm.terminal.feature.feature.group"/>
+      <requirement
           name="org.eclipse.tracecompass.gdbtrace.feature.group"/>
       <requirement
           name="org.eclipse.tracecompass.lttng2.control.feature.group"/>
@@ -522,9 +533,9 @@
       <requirement
           name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
       <repository
-          url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+          url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
       <repository
-          url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+          url="http://download.eclipse.org/releases/oxygen/201706281000"/>
     </setupTask>
   </version>
   <description>An IDE for C/C++ embedded developers with microHAL integration.</description>

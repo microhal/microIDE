@@ -2,6 +2,7 @@
 
 import os
 import hashlib
+import shutil
 
 armGccToolchain = {
     'filename' : 'gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2',
@@ -31,11 +32,6 @@ eclipse = {
     'installationLocation' : 'eclipse'
 }
 
-#ECLIPSE_URL=https://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R/eclipse-inst-linux64.tar.gz\&r=1
-#ECLIPSE_SHA512=2bbb38475b3f3b13b9c6c5db5895fe25ce24b4a8df6a24c6822a348a9652dc8df49ca19152495f34156c39022b8c2ed6b5bb1e84db3edc751302d73bdc1d56da
-#ECLIPSE_FILENAME=eclipse-inst-linux64.tar.gz
-#ECLIPSE_FILENAME=eclipse
-
 def download(filename, url, checksum):
 	parameters = "wget -O ./" + filename + ' ' + url
 	os.system(parameters)
@@ -61,8 +57,37 @@ def generateLinuxInstaller():
 	with open('linux/microide_install.sh', 'w') as file:
 		file.write(content)
 
+def createToolchainPatch():
+	os.system("tar --extract --file=" +  armGccToolchain['filename'] +' -C toolchains/gcc-arm-none-eabi-patch')
+	for root, subdirs, files in os.walk('toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-6-2017-q2-update', topdown=False):
+		for filename in files:
+			file_path = os.path.join(root, filename)
+	#		print('\t- file %s (full path: %s)' % (filename, file_path))
+			if filename not in ['gthr.h', 'condition_variable', 'mutex', 'thread']:
+				os.remove(file_path)
 
-status = download(armGccToolchain['filename'], armGccToolchain['url'], armGccToolchain['checksum'])
+		for subdir in subdirs:
+			#print('\t- subdirectory ' + subdir)
+			if os.path.isdir(subdir):
+				if not os.listdir(subdir):
+					os.rmdir(subdir)
+
+		if not os.listdir(root):
+			os.rmdir(root)
+
+def replaceGthr():
+	for root, subdirs, files in os.walk('toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-6-2017-q2-update'):
+		for filename in files:
+			file_path = os.path.join(root, filename)	
+			if filename == 'gthr.h':
+				shutil.copy('gthr.h', file_path)
+
+
+#createToolchainPatch()
+replaceGthr()
+
+status = [False, False]
+#status = download(armGccToolchain['filename'], armGccToolchain['url'], armGccToolchain['checksum'])
 if status[0] == True:
 	armGccToolchain['size'] = status[1]
 	if armGccToolchain['checksum'].has_key('md5') == False:
@@ -71,7 +96,7 @@ else:
 	print "An error occurred"
 	exit() 
 
-status = download(openOCD['filename'], openOCD['url'], openOCD['checksum'])
+#status = download(openOCD['filename'], openOCD['url'], openOCD['checksum'])
 if status[0] == True:
 	openOCD['size'] = status[1]
 	if openOCD['checksum'].has_key('md5') == False:
@@ -81,7 +106,7 @@ else:
 	exit() 
 
 
-status = download(eclipse['filename'], eclipse['url'], eclipse['checksum'])
+#status = download(eclipse['filename'], eclipse['url'], eclipse['checksum'])
 if status[0] == True:
 	eclipse['size'] = status[1]
 	if eclipse['checksum'].has_key('md5') == False:
@@ -90,7 +115,7 @@ else:
 	print "An error occurred"
 	exit() 
 
-generateLinuxInstaller()
+#generateLinuxInstaller()
 
 
 
