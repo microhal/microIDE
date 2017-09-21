@@ -4,6 +4,7 @@ import os
 import hashlib
 import shutil
 import re
+import argparse
 
 #armGccToolchain = {
 #    'filename' : 'gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2',
@@ -106,37 +107,55 @@ def replaceGthr():
 #createToolchainPatch()
 #replaceGthr()
 
-status = [False, False]
-status = download(armGccToolchain['filename'], armGccToolchain['url'], armGccToolchain['checksum'])
-if status[0] == True:
-	armGccToolchain['size'] = status[1]
-	if armGccToolchain['checksum'].has_key('md5') == False:
-		armGccToolchain['checksum']['md5'] = hashlib.md5(open('./' + armGccToolchain['filename'],'rb').read()).hexdigest()	
-else:
-	print "An error occurred"
-	exit() 
-
-status = download(openOCD['filename'], openOCD['url'], openOCD['checksum'])
-if status[0] == True:
-	openOCD['size'] = status[1]
-	if openOCD['checksum'].has_key('md5') == False:
-		openOCD['checksum']['md5'] = hashlib.md5(open('./' + openOCD['filename'],'rb').read()).hexdigest()	
-else:
-	print "An error occurred"
-	exit() 
 
 
-status = download(eclipse['filename'], eclipse['url'], eclipse['checksum'])
-if status[0] == True:
-	eclipse['size'] = status[1]
-	if eclipse['checksum'].has_key('md5') == False:
-		eclipse['checksum']['md5'] = hashlib.md5(open('./' + eclipse['filename'], 'rb').read()).hexdigest()	
-else:
-	print "An error occurred"
-	exit() 
 
-generateLinuxProductSetup()
-generateLinuxInstaller()
+def getFiles():
+	status = [False, False]
+	status = download(armGccToolchain['filename'], armGccToolchain['url'], armGccToolchain['checksum'])
+	if status[0] == True:
+		armGccToolchain['size'] = status[1]
+		if armGccToolchain['checksum'].has_key('md5') == False:
+			armGccToolchain['checksum']['md5'] = hashlib.md5(open('./' + armGccToolchain['filename'],'rb').read()).hexdigest()	
+	else:
+		print "An error occurred"
+		exit(-1) 
+
+	status = download(openOCD['filename'], openOCD['url'], openOCD['checksum'])
+	if status[0] == True:
+		openOCD['size'] = status[1]
+		if openOCD['checksum'].has_key('md5') == False:
+			openOCD['checksum']['md5'] = hashlib.md5(open('./' + openOCD['filename'],'rb').read()).hexdigest()	
+	else:
+		print "An error occurred"
+		exit(-1) 
+
+
+	status = download(eclipse['filename'], eclipse['url'], eclipse['checksum'])
+	if status[0] == True:
+		eclipse['size'] = status[1]
+		if eclipse['checksum'].has_key('md5') == False:
+			eclipse['checksum']['md5'] = hashlib.md5(open('./' + eclipse['filename'], 'rb').read()).hexdigest()	
+	else:
+		print "An error occurred"
+		exit(-1) 
+
+
+def main():
+	parser = argparse.ArgumentParser()
+	parser.add_argument('--onlyDownload', nargs='?', type=bool, const=True, help='Checking if all files can be download from internet.')
+	args = parser.parse_args()
+
+	getFiles()
+	if args.onlyDownload == None:
+		print "Generating instalation files..."		
+		generateLinuxProductSetup()
+		generateLinuxInstaller()
+
+	
+
+if __name__ == "__main__":
+    main()
 
 
 

@@ -69,7 +69,7 @@ mkdir -p $ARM_GCC_TOOLCHAIN_LOCATION
 tar --extract --bzip2 --file=$DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME -C $ARM_GCC_TOOLCHAIN_LOCATION
 #installing microhal patch to toolchain, this will allow to use standart operating system library with FreeRTOS
 echo 'Patching ARM Toolchain.'
-cp -r microIDE-master/toolchains/gcc-arm-none-eabi-patch/$ARM_GCC_TOOLCHAIN_VERSION/* $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-*-linux.tar.bz2}
+cp -r microIDE-$BRANCH_NAME/toolchains/gcc-arm-none-eabi-patch/$ARM_GCC_TOOLCHAIN_VERSION/* $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-*-linux.tar.bz2}
 
 # ------------------------------------ tools ---------------------------------
 echo 'Installing tools'
