@@ -55,8 +55,17 @@ def download(filename, url, checksum):
         return [True, os.stat('./' + filename).st_size]
 	
 
+def generateLinuxProductSetup():
+	with open('templates/microide.product.setup.linux.template', 'r') as file:
+		content = file.read()
+	toolchainPatch = armGccToolchain['installationLocation'] + '/' + os.path.splitext(os.path.splitext(armGccToolchain['filename'])[0])[0]
+	content = content.replace("##microideToolchainPatch##", toolchainPatch)
+
+	with open('eclipse-installer/setups/microIDE/microide.product.setup.linux', 'w') as file:
+		file.write(content)
+
 def generateLinuxInstaller():
-	with open('linux/microide_install.template', 'r') as file:
+	with open('templates/microide_install.template', 'r') as file:
 		content = file.read()
 	text = 'ARM_GCC_TOOLCHAIN_URL=' + armGccToolchain['url'] + '\nARM_GCC_TOOLCHAIN_LICENSE_URL=' + armGccToolchain['licenseUrl'] + '\nARM_GCC_TOOLCHAIN_FILENAME=' + armGccToolchain['filename'] + '\nARM_GCC_TOOLCHAIN_VERSION=' + armGccToolchain['version'] + '\nARM_GCC_TOOLCHAIN_SIZE=' + str(armGccToolchain['size']) + '\nARM_GCC_TOOLCHAIN_CHECKSUM=' + armGccToolchain['checksum']['md5'] + '\nARM_GCC_TOOLCHAIN_LOCATION=' + armGccToolchain['installationLocation']
 	text = text + '\n\nOPENOCD_URL=' + openOCD['url'] + '\nOPENOCD_FILENAME=' + openOCD['filename'] + '\nOPENOCD_VERSION=' + openOCD['version'] + '\nOPENOCD_SIZE=' + str(openOCD['size']) + '\nOPENOCD_CHECKSUM=' + openOCD['checksum']['md5'] + '\nOPENOCD_LOCATION=' + openOCD['installationLocation'] 
@@ -125,6 +134,7 @@ else:
 	print "An error occurred"
 	exit() 
 
+generateLinuxProductSetup()
 generateLinuxInstaller()
 
 
