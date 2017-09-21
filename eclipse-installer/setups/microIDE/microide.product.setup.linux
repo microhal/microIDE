@@ -43,16 +43,8 @@
         xsi:type="setup:VariableTask"
         type="URI"
         name="ARM_GCC_TOOLCHAIN_LOCATION"
-        value="${microide}/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-6-2017-q2-update"
-        defaultValue=""/>
-    <setupTask
-        xsi:type="setup:VariableTask"
-        type="URI"
-        name="CLANG_TOOLCHAIN_LOCATION"
-        value="/usr/bin"
-        defaultValue="">
-      <description></description>
-    </setupTask>
+        value="${microide}/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-5_3-2016q1-20160330-linux"
+        defaultValue=""/>   
     <setupTask
         xsi:type="setup:VariableTask"
         type="URI"
@@ -435,7 +427,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.wangzw.cppstyle/cppstyle.clangformat.path"
-          value="${CLANG_TOOLCHAIN_LOCATION|file}\clang-format">
+          value="/usr/bin/clang-format">
         <description></description>
       </setupTask>
       <setupTask
