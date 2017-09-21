@@ -3,6 +3,7 @@
 import os
 import hashlib
 import shutil
+import re
 
 #armGccToolchain = {
 #    'filename' : 'gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2',
@@ -58,7 +59,7 @@ def download(filename, url, checksum):
 def generateLinuxProductSetup():
 	with open('templates/microide.product.setup.linux.template', 'r') as file:
 		content = file.read()
-	toolchainPatch = armGccToolchain['installationLocation'] + '/' + os.path.splitext(os.path.splitext(armGccToolchain['filename'])[0])[0]
+	toolchainPatch = armGccToolchain['installationLocation'] + '/' + re.sub('-\d{8}-linux.tar.bz2', '', armGccToolchain['filename'])
 	content = content.replace("##microideToolchainPatch##", toolchainPatch)
 
 	with open('eclipse-installer/setups/microIDE/microide.product.setup.linux', 'w') as file:
