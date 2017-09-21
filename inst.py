@@ -4,13 +4,23 @@ import os
 import hashlib
 import shutil
 
+#armGccToolchain = {
+#    'filename' : 'gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2',
+#    'size' : '0',
+#    'version' : '6-2017-q2',
+#    'url' : 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/6-2017q2/gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2?product=GNU%20ARM%20Embedded%20Toolchain,64-bit,,Linux,6-2017-q2-update', 
+#    'checksum' : {'md5' : '13747255194398ee08b3ba42e40e9465'},
+#    'licenseUrl' : 'https://developer.arm.com/GetEula?Id=2d916619-954e-4adb-895d-b1ec657ae305',
+#    'installationLocation' : 'toolchains/gcc-arm-none-eabi/microhal'
+#}
+
 armGccToolchain = {
-    'filename' : 'gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2',
+    'filename' : 'gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2',
     'size' : '0',
-    'version' : '6-2017-q2',
-    'url' : 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/6-2017q2/gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2?product=GNU%20ARM%20Embedded%20Toolchain,64-bit,,Linux,6-2017-q2-update', 
-    'checksum' : {'md5' : '13747255194398ee08b3ba42e40e9465'},
-    'licenseUrl' : 'https://developer.arm.com/GetEula?Id=2d916619-954e-4adb-895d-b1ec657ae305',
+    'version' : '5.3.0',
+    'url' : 'https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2', 
+    'checksum' : {'md5' : '5a261cac18c62d8b7e8c70beba2004bd'},
+    'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
     'installationLocation' : 'toolchains/gcc-arm-none-eabi/microhal'
 }
 
@@ -84,10 +94,10 @@ def replaceGthr():
 
 
 #createToolchainPatch()
-replaceGthr()
+#replaceGthr()
 
 status = [False, False]
-#status = download(armGccToolchain['filename'], armGccToolchain['url'], armGccToolchain['checksum'])
+status = download(armGccToolchain['filename'], armGccToolchain['url'], armGccToolchain['checksum'])
 if status[0] == True:
 	armGccToolchain['size'] = status[1]
 	if armGccToolchain['checksum'].has_key('md5') == False:
@@ -96,7 +106,7 @@ else:
 	print "An error occurred"
 	exit() 
 
-#status = download(openOCD['filename'], openOCD['url'], openOCD['checksum'])
+status = download(openOCD['filename'], openOCD['url'], openOCD['checksum'])
 if status[0] == True:
 	openOCD['size'] = status[1]
 	if openOCD['checksum'].has_key('md5') == False:
@@ -106,7 +116,7 @@ else:
 	exit() 
 
 
-#status = download(eclipse['filename'], eclipse['url'], eclipse['checksum'])
+status = download(eclipse['filename'], eclipse['url'], eclipse['checksum'])
 if status[0] == True:
 	eclipse['size'] = status[1]
 	if eclipse['checksum'].has_key('md5') == False:
@@ -115,7 +125,7 @@ else:
 	print "An error occurred"
 	exit() 
 
-#generateLinuxInstaller()
+generateLinuxInstaller()
 
 
 

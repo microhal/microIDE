@@ -11,9 +11,10 @@ DOWNLOAD_DIR=./downloads
 #links to installation files
 
 #replace this text with instalation files information
+BRANCH_NAME=devel
 
 download() {
-wget --directory-prefix=$DOWNLOAD_DIR https://github.com/microHAL/microIDE/archive/master.zip
+wget --directory-prefix=$DOWNLOAD_DIR https://github.com/microHAL/microIDE/archive/$BRANCH_NAME.zip
 echo 'Downloading ARM toolchain ...'
 wget -O $DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME $ARM_GCC_TOOLCHAIN_URL
 md5_local=$(md5sum "$DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME" | awk '{print $1}')
@@ -91,13 +92,13 @@ tar --extract --file=$DOWNLOAD_DIR/$ECLIPSE_FILENAME
 cd eclipse-installer
 echo '-Doomph.redirection.setups=http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/->setups/' >> eclipse-inst.ini
 cd ../
-mv eclipse-installer/setups/microIDE/microide.product.setup.linux eclipse-installer/setups/microIDE/microide.product.setup
 mkdir -p eclipse-installer/setups/
 cp -r microIDE-master/eclipse-installer/setups/* eclipse-installer/setups
+mv eclipse-installer/setups/microIDE/microide.product.setup.linux eclipse-installer/setups/microIDE/microide.product.setup
 rm eclipse-installer/setups/microIDE/microide.product.setup.windows
 rm -r microIDE-master
 rm -r tmp
-rm -r $DOWNLOAD_DIR/master.zip
+rm -r $DOWNLOAD_DIR/$BRANCH_NAME.zip
 #install clang-format
 sudo apt-get install clang-format
 

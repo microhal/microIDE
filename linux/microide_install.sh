@@ -10,12 +10,12 @@ DOWNLOAD_DIR=./downloads
 
 #links to installation files
 
-ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/6-2017q2/gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2?product=GNU%20ARM%20Embedded%20Toolchain,64-bit,,Linux,6-2017-q2-update
-ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=2d916619-954e-4adb-895d-b1ec657ae305
-ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2
-ARM_GCC_TOOLCHAIN_VERSION=6-2017-q2
-ARM_GCC_TOOLCHAIN_SIZE=100554551
-ARM_GCC_TOOLCHAIN_CHECKSUM=13747255194398ee08b3ba42e40e9465
+ARM_GCC_TOOLCHAIN_URL=https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2
+ARM_GCC_TOOLCHAIN_LICENSE_URL=https://launchpadlibrarian.net/251686212/license.txt
+ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2
+ARM_GCC_TOOLCHAIN_VERSION=5.3.0
+ARM_GCC_TOOLCHAIN_SIZE=93090908
+ARM_GCC_TOOLCHAIN_CHECKSUM=5a261cac18c62d8b7e8c70beba2004bd
 ARM_GCC_TOOLCHAIN_LOCATION=toolchains/gcc-arm-none-eabi/microhal
 
 OPENOCD_URL=https://sourceforge.net/projects/openocd/files/openocd/0.10.0/openocd-0.10.0.tar.gz/download
@@ -31,9 +31,10 @@ ECLIPSE_VERSION=oxygen
 ECLIPSE_SIZE=48022873
 ECLIPSE_CHECKSUM=4def0d0f49662a4b53d3a503161bce58
 ECLIPSE_LOCATION=eclipse
+BRANCH_NAME=devel
 
 download() {
-wget --directory-prefix=$DOWNLOAD_DIR https://github.com/microHAL/microIDE/archive/master.zip
+wget --directory-prefix=$DOWNLOAD_DIR https://github.com/microHAL/microIDE/archive/$BRANCH_NAME.zip
 echo 'Downloading ARM toolchain ...'
 wget -O $DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME $ARM_GCC_TOOLCHAIN_URL
 md5_local=$(md5sum "$DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME" | awk '{print $1}')
@@ -111,13 +112,13 @@ tar --extract --file=$DOWNLOAD_DIR/$ECLIPSE_FILENAME
 cd eclipse-installer
 echo '-Doomph.redirection.setups=http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/->setups/' >> eclipse-inst.ini
 cd ../
-mv eclipse-installer/setups/microIDE/microide.product.setup.linux eclipse-installer/setups/microIDE/microide.product.setup
 mkdir -p eclipse-installer/setups/
 cp -r microIDE-master/eclipse-installer/setups/* eclipse-installer/setups
+mv eclipse-installer/setups/microIDE/microide.product.setup.linux eclipse-installer/setups/microIDE/microide.product.setup
 rm eclipse-installer/setups/microIDE/microide.product.setup.windows
 rm -r microIDE-master
 rm -r tmp
-rm -r $DOWNLOAD_DIR/master.zip
+rm -r $DOWNLOAD_DIR/$BRANCH_NAME.zip
 #install clang-format
 sudo apt-get install clang-format
 
