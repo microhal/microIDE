@@ -57,7 +57,11 @@ cd microide
 echo 'Downloading files'
 download
 echo 'Unpacking toolchain patch and eclipse installer setup configuration.'
-unzip $DOWNLOAD_DIR/master.zip 
+if ! unzip $DOWNLOAD_DIR/$BRANCH_NAME.zip; then
+    echo 'Unable to unzip repozitory files'
+    echo 'Aborting...'
+    exit 1
+fi 
 echo 'Installing ARM Toolchain...'
 sudo apt-get update
 sudo apt-get install lib32z1 lib32ncurses5 libbz2-1.0:i386 lib32stdc++6
@@ -93,10 +97,10 @@ cd eclipse-installer
 echo '-Doomph.redirection.setups=http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/->setups/' >> eclipse-inst.ini
 cd ../
 mkdir -p eclipse-installer/setups/
-cp -r microIDE-master/eclipse-installer/setups/* eclipse-installer/setups
+cp -r microIDE-$BRANCH_NAME/eclipse-installer/setups/* eclipse-installer/setups
 mv eclipse-installer/setups/microIDE/microide.product.setup.linux eclipse-installer/setups/microIDE/microide.product.setup
 rm eclipse-installer/setups/microIDE/microide.product.setup.windows
-rm -r microIDE-master
+rm -r microIDE-$BRANCH_NAME
 rm -r tmp
 rm -r $DOWNLOAD_DIR/$BRANCH_NAME.zip
 #install clang-format
