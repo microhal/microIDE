@@ -51,11 +51,8 @@ fi
 }
 
 
-mkdir -p microide
-cd microide
+instal() {
 #------------------------------------- toolchains -----------------------------
-echo 'Downloading files'
-download
 echo 'Unpacking toolchain patch and eclipse installer setup configuration.'
 if ! unzip $DOWNLOAD_DIR/$BRANCH_NAME.zip; then
     echo 'Unable to unzip repozitory files'
@@ -113,6 +110,23 @@ echo $MICROIDE_DIR
 
 #starting eclipse installer
 ./eclipse-installer/eclipse-inst
+}
+
+
+
+
+# script starting point
+mkdir -p microide
+cd microide
+
+if [ "$1" = "--checkDownload" ]; then
+	echo "Selected download checking mode."
+	download
+else
+	echo "Starting normal install."
+	download
+	instal
+fi
 
 
 
