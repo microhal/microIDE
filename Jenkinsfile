@@ -13,9 +13,9 @@ pipeline {
                	checkout scm          
             }
         }   
-        stage('Download') {
+        stage('Check linux download') {
             steps {
-               	sh './download.sh'
+               	sh 'linux/microide_install.sh --checkDownload'
             }
         }    
     }

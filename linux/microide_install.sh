@@ -71,11 +71,8 @@ fi
 }
 
 
-mkdir -p microide
-cd microide
+instal() {
 #------------------------------------- toolchains -----------------------------
-echo 'Downloading files'
-download
 echo 'Unpacking toolchain patch and eclipse installer setup configuration.'
 if ! unzip $DOWNLOAD_DIR/$BRANCH_NAME.zip; then
     echo 'Unable to unzip repozitory files'
@@ -89,7 +86,7 @@ mkdir -p $ARM_GCC_TOOLCHAIN_LOCATION
 tar --extract --bzip2 --file=$DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME -C $ARM_GCC_TOOLCHAIN_LOCATION
 #installing microhal patch to toolchain, this will allow to use standart operating system library with FreeRTOS
 echo 'Patching ARM Toolchain.'
-cp -r microIDE-master/toolchains/gcc-arm-none-eabi-patch/$ARM_GCC_TOOLCHAIN_VERSION/* $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-*-linux.tar.bz2}
+cp -r microIDE-$BRANCH_NAME/toolchains/gcc-arm-none-eabi-patch/$ARM_GCC_TOOLCHAIN_VERSION/* $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-*-linux.tar.bz2}
 
 # ------------------------------------ tools ---------------------------------
 echo 'Installing tools'
@@ -133,6 +130,23 @@ echo $MICROIDE_DIR
 
 #starting eclipse installer
 ./eclipse-installer/eclipse-inst
+}
+
+
+
+
+# script starting point
+mkdir -p microide
+cd microide
+
+if [ "$1" = "--checkDownload" ]; then
+	echo "Selected download checking mode."
+	download
+else
+	echo "Starting normal install."
+	download
+	instal
+fi
 
 
 
