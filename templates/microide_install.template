@@ -11,7 +11,7 @@ DOWNLOAD_DIR=./downloads
 #links to installation files
 
 #replace this text with instalation files information
-BRANCH_NAME=devel
+BRANCH_NAME=master
 
 download() {
 wget --directory-prefix=$DOWNLOAD_DIR https://github.com/microHAL/microIDE/archive/$BRANCH_NAME.zip

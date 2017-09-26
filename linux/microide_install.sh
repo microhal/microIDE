@@ -31,7 +31,7 @@ ECLIPSE_VERSION=oxygen
 ECLIPSE_SIZE=48022873
 ECLIPSE_CHECKSUM=4def0d0f49662a4b53d3a503161bce58
 ECLIPSE_LOCATION=eclipse
-BRANCH_NAME=devel
+BRANCH_NAME=master
 
 download() {
 wget --directory-prefix=$DOWNLOAD_DIR https://github.com/microHAL/microIDE/archive/$BRANCH_NAME.zip
