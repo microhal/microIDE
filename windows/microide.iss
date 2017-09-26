@@ -1,5 +1,5 @@
 #define AppName "microIDE"
-#define AppVersion "0.3.0"
+#define AppVersion "0.3.1"
 
 #define DOWNLOAD_DIR "{userdocs}\microIDE_installer"
 #define UNZIP_7Z_PATH "tools\7z1604-extra"
@@ -8,26 +8,24 @@
 #define ARM_GCC_TOOLCHAIN_LICENSE_URL "https://launchpadlibrarian.net/251686212/license.txt"
 #define ARM_GCC_TOOLCHAIN_FILENAME "gcc-arm-none-eabi-5_3-2016q1-20160330-win32.exe"
 #define ARM_GCC_TOOLCHAIN_VERSION "5.3.0"
-#define ARM_GCC_TOOLCHAIN_SIZE 442470400
+#define ARM_GCC_TOOLCHAIN_SIZE 0
 #define ARM_GCC_TOOLCHAIN_LOCATION "{app}\toolchains\gcc-arm-none-eabi\microhal\gcc-arm-none-eabi-5_3-2016q1"
-
 #define CLANG_TOOLCHAIN_URL "http://llvm.org/releases/3.8.0/LLVM-3.8.0-win64.exe"
 #define CLANG_TOOLCHAIN_FILENAME "LLVM-3.8.0-win64.exe"
 #define CLANG_TOOLCHAIN_VERSION "3.8.0"
-#define CLANG_TOOLCHAIN_SIZE 631264097
-#define CLANG_TOOLCHAIN_LOCATION "{app}\toolchains\LLVM\3.8.0"  
-
+#define CLANG_TOOLCHAIN_SIZE 0
+#define CLANG_TOOLCHAIN_LOCATION "{app}\toolchains\LLVM\3.8.0"
 #define OPENOCD_URL "http://www.freddiechopin.info/en/download/category/10-openocd-dev?download=140%3Aopenocd-0.10.0-dev-00247-g73b676c"
 #define OPENOCD_FILENAME "openocd-0.10.0-dev-00247-g73b676c.7z"
 #define OPENOCD_VERSION "0.10.0"
-#define OPENOCD_SIZE 2333886
+#define OPENOCD_SIZE 0
 #define OPENOCD_LOCATION "{app}\tools\openocd\0.10.0"
 
 
 [Setup]
 AppName=microIDE
 AppVersion={#AppVersion}
-AppCopyright="Copyright © 2016 Pawel Okas"
+AppCopyright="Copyright © 2017 Pawel Okas"
 AppPublisher=microHAL
 AppPublisherURL=www.microhal.org
 ;AppSupportURL=www.microhal.org

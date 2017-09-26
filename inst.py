@@ -44,14 +44,58 @@ eclipse = {
     'installationLocation' : 'eclipse'
 }
 
+# ------------------------------------- windows version
+winArmGccToolchain = {
+    'filename' : 'gcc-arm-none-eabi-5_3-2016q1-20160330-win32.exe',
+    'size' : '0',
+    'version' : '5.3.0',
+    'url' : 'https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-win32.exe', 
+    'checksum' : {'md5' : ''},
+    'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
+    'installationLocation' : '{app}\\toolchains\\gcc-arm-none-eabi\\microhal\\gcc-arm-none-eabi-5_3-2016q1'
+}
+
+winClangToolchain = {
+    'filename' : 'LLVM-3.8.0-win64.exe',
+    'size' : '0',
+    'version' : '3.8.0',
+    'url' : 'http://llvm.org/releases/3.8.0/LLVM-3.8.0-win64.exe', 
+    'checksum' : {'md5' : ''},
+    'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
+    'installationLocation' : '{app}\\toolchains\\LLVM\\3.8.0'
+}
+
+winOpenOCD = {
+    'filename' : 'openocd-0.10.0.7z',
+    'size' : '0',
+    'version' : '0.10.0',
+    'url' : 'http://www.freddiechopin.info/en/download/category/4-openocd?download=154%3Aopenocd-0.10.0',             
+    'checksum' : {'SHA256' : 'f46687cd783a7a86716c78474e8132e32de84b773914f23f2226f81509ffcfca'},
+    'installationLocation' : "{app}\\tools\\openocd\\0.10.0"
+}
+
+winEclipse = {
+    'filename' : 'eclipse-inst-win64.exe',
+    'size' : '0',
+    'version' : 'oxygen',
+    'url' : 'https://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R/eclipse-inst-win64.exe\&r=1',
+    'checksum' : {'SHA512' : 'c585b52bf9da53812a14c9cbf48fa6beb0af983f52aa45e589c7e9cc4edce2a1819ebc87ccb4cd39104515a6d4e6adc6a4d2681d9744a041e9f0883d995349ea'},
+    'installationLocation' : 'eclipse'
+}
+
+# ------------------------------------ end of file declaration
+
 def download(filename, url, checksum):
 	parameters = "wget -O ./" + filename + ' ' + url
-	os.system(parameters)
+	os.system(parameters  + " >> output.log")
 	if checksum.has_key('md5') == True:
 		if hashlib.md5(open('./' + filename,'rb').read()).hexdigest() != checksum['md5']:
 			return [False, 0]
 	if checksum.has_key('SHA512') == True:
 		if hashlib.sha512(open('./' + filename,'rb').read()).hexdigest() != checksum['SHA512']:
+			return [False, 0]
+	if checksum.has_key('SHA256') == True:
+		if hashlib.sha256(open('./' + filename,'rb').read()).hexdigest() != checksum['SHA256']:
 			return [False, 0]
 
         return [True, os.stat('./' + filename).st_size]
@@ -67,7 +111,7 @@ def generateLinuxProductSetup():
 		file.write(content)
 
 def generateLinuxInstaller():
-	with open('templates/microide_install.template', 'r') as file:
+	with open('templates/microide.iss.template', 'r') as file:
 		content = file.read()
 	text = 'ARM_GCC_TOOLCHAIN_URL=' + armGccToolchain['url'] + '\nARM_GCC_TOOLCHAIN_LICENSE_URL=' + armGccToolchain['licenseUrl'] + '\nARM_GCC_TOOLCHAIN_FILENAME=' + armGccToolchain['filename'] + '\nARM_GCC_TOOLCHAIN_VERSION=' + armGccToolchain['version'] + '\nARM_GCC_TOOLCHAIN_SIZE=' + str(armGccToolchain['size']) + '\nARM_GCC_TOOLCHAIN_CHECKSUM=' + armGccToolchain['checksum']['md5'] + '\nARM_GCC_TOOLCHAIN_LOCATION=' + armGccToolchain['installationLocation']
 	text = text + '\n\nOPENOCD_URL=' + openOCD['url'] + '\nOPENOCD_FILENAME=' + openOCD['filename'] + '\nOPENOCD_VERSION=' + openOCD['version'] + '\nOPENOCD_SIZE=' + str(openOCD['size']) + '\nOPENOCD_CHECKSUM=' + openOCD['checksum']['md5'] + '\nOPENOCD_LOCATION=' + openOCD['installationLocation'] 
@@ -76,7 +120,7 @@ def generateLinuxInstaller():
 	content = content.replace("#replace this text with instalation files information", text)
 
 	with open('linux/microide_install.sh', 'w') as file:
-		file.write(content)
+		file.write(content)	
 
 def createToolchainPatch():
 	os.system("tar --extract --file=" +  armGccToolchain['filename'] +' -C toolchains/gcc-arm-none-eabi-patch')
@@ -105,9 +149,6 @@ def replaceGthr():
 
 
 #createToolchainPatch()
-#replaceGthr()
-
-
 
 
 def getFiles():
@@ -140,17 +181,77 @@ def getFiles():
 		print "An error occurred"
 		exit(-1) 
 
+def generateInnoSetupFile():
+	with open('templates/microide.iss.template', 'r') as file:
+		content = file.read()
+
+	text = '#define ARM_GCC_TOOLCHAIN_URL "' + winArmGccToolchain['url'] + '"\n'
+	text = text + '#define ARM_GCC_TOOLCHAIN_LICENSE_URL "' + winArmGccToolchain['licenseUrl'] + '"\n'
+	text = text + '#define ARM_GCC_TOOLCHAIN_FILENAME "' + winArmGccToolchain['filename'] + '"\n'
+	text = text + '#define ARM_GCC_TOOLCHAIN_VERSION "' + winArmGccToolchain['version'] + '"\n'
+	text = text + '#define ARM_GCC_TOOLCHAIN_SIZE ' + str(winArmGccToolchain['size']) + '\n'
+	text = text + '#define ARM_GCC_TOOLCHAIN_LOCATION "' + winArmGccToolchain['installationLocation'] + '"\n'
+
+	text = text + '#define CLANG_TOOLCHAIN_URL "' + winClangToolchain['url'] + '"\n'
+	text = text + '#define CLANG_TOOLCHAIN_FILENAME "' + winClangToolchain['filename'] + '"\n'
+	text = text + '#define CLANG_TOOLCHAIN_VERSION "' + winClangToolchain['version'] + '"\n'
+	text = text + '#define CLANG_TOOLCHAIN_SIZE ' + str(winClangToolchain['size']) + '\n'
+	text = text + '#define CLANG_TOOLCHAIN_LOCATION "' + winClangToolchain['installationLocation'] + '"\n'  
+
+	text = text + '#define OPENOCD_URL "' + winOpenOCD['url'] + '"\n'
+	text = text + '#define OPENOCD_FILENAME "' + winOpenOCD['filename'] +'"\n'
+	text = text + '#define OPENOCD_VERSION "' + winOpenOCD['version'] + '"\n'
+	text = text + '#define OPENOCD_SIZE ' + str(winOpenOCD['size']) + '\n'
+	text = text + '#define OPENOCD_LOCATION "' + winOpenOCD['installationLocation'] + '"\n'
+
+	content = content.replace("#replace this text with instalation files information", text)
+
+	with open('windows/microide.iss', 'w') as file:
+		file.write(content)
+
+def download7zipStandaloneConsoleVersion():
+	filename = '7z1604-extra.7z'
+	download(filename, 'http://www.7-zip.org/a/7z1604-extra.7z', {})
+
+	os.system("mkdir -p windows/tools/7z1604-extra >> output.log")
+	parameters = '7za x ' + filename + ' -y -owindows/tools/7z1604-extra'
+	os.system(parameters + " >> output.log")
+
+def compileWindowsInstaller():
+	parameters = './iscc.sh windows/microide.iss'
+	os.system(parameters  + " >> output.log")
+
+
 
 def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--onlyDownload', nargs='?', type=bool, const=True, help='Checking if all files can be download from internet.')
+	parser.add_argument('--replaceGthr', nargs='?', type=bool, const=True, help='Part of toolchain patching, replacing gthr.h file into microhal version.')
+	parser.add_argument('--makeLinuxInstaller', nargs='?', type=bool, const=True, help='Creating windows installation files.')
+	parser.add_argument('--makeWindowsInstaller', nargs='?', type=bool, const=True, help='Creating windows installation files. This will work on linux with wine where Inno Setup and Inno Download Plugin was installed')
 	args = parser.parse_args()
 
-	getFiles()
-	if args.onlyDownload == None:
+	if args.onlyDownload == True:
+		getFiles()
+	if args.makeLinuxInstaller == True:
 		print "Generating instalation files..."		
+		getFiles()
 		generateLinuxProductSetup()
 		generateLinuxInstaller()
+	if args.replaceGthr == True:
+		print "Replacing gthr.h files..."
+		replaceGthr()
+	if args.makeWindowsInstaller == True:
+		print "Generating windows instalation files..."
+		generateInnoSetupFile()
+		download7zipStandaloneConsoleVersion()
+		download(winEclipse['filename'], winEclipse['url'], winEclipse['checksum'])
+		#extracting files
+		command = '7za x ' + winEclipse['filename'] + ' -y -owindows/eclipse-installer'
+		os.system(command)
+		with open('windows/eclipse-installer/eclipse-inst.ini', 'a') as iniFile:
+			iniFile.write('-Doomph.redirection.setups=http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/->setups/')
+		compileWindowsInstaller()
 
 	
 
