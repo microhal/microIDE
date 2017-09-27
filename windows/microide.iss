@@ -9,17 +9,23 @@
 #define ARM_GCC_TOOLCHAIN_FILENAME "gcc-arm-none-eabi-5_3-2016q1-20160330-win32.exe"
 #define ARM_GCC_TOOLCHAIN_VERSION "5.3.0"
 #define ARM_GCC_TOOLCHAIN_SIZE 0
-#define ARM_GCC_TOOLCHAIN_LOCATION "{app}\toolchains\gcc-arm-none-eabi\microhal\gcc-arm-none-eabi-5_3-2016q1"
+#define ARM_GCC_TOOLCHAIN_LOCATION "{app}\toolchains\gcc-arm-none-eabi\microhal"
 #define CLANG_TOOLCHAIN_URL "http://llvm.org/releases/3.8.0/LLVM-3.8.0-win64.exe"
 #define CLANG_TOOLCHAIN_FILENAME "LLVM-3.8.0-win64.exe"
 #define CLANG_TOOLCHAIN_VERSION "3.8.0"
 #define CLANG_TOOLCHAIN_SIZE 0
 #define CLANG_TOOLCHAIN_LOCATION "{app}\toolchains\LLVM\3.8.0"
-#define OPENOCD_URL "http://www.freddiechopin.info/en/download/category/10-openocd-dev?download=140%3Aopenocd-0.10.0-dev-00247-g73b676c"
-#define OPENOCD_FILENAME "openocd-0.10.0-dev-00247-g73b676c.7z"
+#define OPENOCD_URL "http://www.freddiechopin.info/en/download/category/4-openocd?download=154%3Aopenocd-0.10.0"
+#define OPENOCD_FILENAME "openocd-0.10.0.7z"
 #define OPENOCD_VERSION "0.10.0"
 #define OPENOCD_SIZE 0
 #define OPENOCD_LOCATION "{app}\tools\openocd\0.10.0"
+#define DOXYGEN_URL "http://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.13-setup.exe"
+#define DOXYGEN_LICENSE_URL "http://www.stack.nl/~dimitri/doxygen/index.html"
+#define DOXYGEN_FILENAME "doxygen-1.8.13-setup.exe"
+#define DOXYGEN_VERSION "1.8.13"
+#define DOXYGEN_SIZE 0
+#define DOXYGEN_LOCATION "{app}\tools\1.8.13"
 
 
 [Setup]
@@ -56,7 +62,7 @@ Name: "toolchains\mingw"; Description: "minGW-w64"; Types: user devel custom; Ex
 Name: "tools"; Description: "Programming tools"; Types: user devel custom;
 Name: "tools\openocd"; Description: "openOCD {#OPENOCD_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#OPENOCD_SIZE}
 Name: "tools\msys"; Description: "msys"; Types: user devel custom; ExtraDiskSpaceRequired: 416485376
-Name: "tools\doxygen"; Description: "Doxygen 1.8.11"; Types: devel custom; ExtraDiskSpaceRequired: 49614848  
+Name: "tools\doxygen"; Description: "Doxygen {#DOXYGEN_VERSION}"; Types: devel custom; ExtraDiskSpaceRequired: {#DOXYGEN_SIZE}  
 Name: "tools\graphiz"; Description: "Graphiz 2.38"; Types: devel custom; ExtraDiskSpaceRequired: 204574720 
 
 [Files]
@@ -85,17 +91,17 @@ Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\x86_64-5.3.0-
 Filename: "cmd.exe"; Parameters: "/c rename {app}\toolchains\mingw-w64\mingw64 5.3.0"; Components: toolchains\mingw ; BeforeInstall: UpdateInstallProgress('Installing mingw toolchain.',55)
 ; tools installer
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#OPENOCD_FILENAME} -o{app}\tools\openocd -y"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.',56)
-Filename: "cmd.exe"; Parameters: "/c rename {app}\tools\openocd\openocd-0.10.0-dev-00247-g73b676c {#OPENOCD_VERSION}"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.',60)
+;Filename: "cmd.exe"; Parameters: "/c rename {app}\tools\openocd\openocd-0.10.0-dev-00247-g73b676c {#OPENOCD_VERSION}"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.',60)
 ; extract msys
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\msys-rev13.7z -o{app}\tools\ -y"; Components: tools\msys; BeforeInstall: UpdateInstallProgress('Installing msys.',62)
 ; install doxygen  
-Filename: "{#DOWNLOAD_DIR}\doxygen-1.8.11-setup.exe"; Parameters: "/SILENT /DIR={app}\tools\doxygen\1.8.11"; Components: tools\doxygen; BeforeInstall: UpdateInstallProgress('Installing doxygen.',75)
+Filename: "{#DOWNLOAD_DIR}\{#DOXYGEN_FILENAME}"; Parameters: "/SILENT /DIR={#DOXYGEN_LOCATION}"; Components: tools\doxygen; BeforeInstall: UpdateInstallProgress('Installing doxygen.',75)
 ; unpack graphiz
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\graphviz-2.38.zip -o{app}\tools\ -y"; Components: tools\graphiz; BeforeInstall: UpdateInstallProgress('Installing graphiz.',85)
 Filename: "cmd.exe"; Parameters: "/c rename {app}\tools\release graphiz"; Components: tools\graphiz; BeforeInstall: UpdateInstallProgress('Installing graphiz.',95)
 ;---- eclipse installer
 ; copy oomph setup files
-Filename: "xcopy.exe"; Parameters: "/s /y {tmp}\microIDE-master\eclipse-installer\setups {app}\eclipse-installer\setups\"; Components: eclipse; Flags: runhidden; BeforeInstall: UpdateInstallProgress('Preparing eclipse instalation.',97)                   
+;Filename: "xcopy.exe"; Parameters: "/s /y {tmp}\microIDE-master\eclipse-installer\setups {app}\eclipse-installer\setups\"; Components: eclipse; Flags: runhidden; BeforeInstall: UpdateInstallProgress('Preparing eclipse instalation.',97)                   
 Filename: "notepad.exe"; Parameters: "{tmp}\eclipse-notice.txt"; Components: eclipse; BeforeInstall: UpdateInstallProgress('Preparing eclipse instalation.',99); AfterInstall: DisplayInstallProgress(False, ''); 
 Filename: "{app}\eclipse-installer\eclipse-inst.exe"; Components: eclipse 
 
@@ -103,7 +109,7 @@ Filename: "{app}\eclipse-installer\eclipse-inst.exe"; Components: eclipse
 [UninstallRun]
 Filename: "{#CLANG_TOOLCHAIN_LOCATION}\Uninstall.exe"; Parameters: "/S"
 Filename: "{#ARM_GCC_TOOLCHAIN_LOCATION}\uninstall.exe"; Parameters: "/S"
-Filename: "{app}\tools\doxygen\1.8.11\system\unins000.exe"; Parameters: "/SILENT"                      
+Filename: "{#DOXYGEN_LOCATION}\system\unins000.exe"; Parameters: "/SILENT"                      
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\eclipse";
@@ -212,7 +218,7 @@ procedure Show_doxygen_license(Sender: TObject);
 var
   ErrorCode: Integer;
 begin    
-  ShellExecAsOriginalUser('open', 'http://www.stack.nl/~dimitri/doxygen/index.html', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
+  ShellExecAsOriginalUser('open', '{#DOXYGEN_LICENSE_URL}', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
 end;
 
 procedure Show_graphiz_license(Sender: TObject);
@@ -430,8 +436,8 @@ begin
   if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\msys-rev13.7z')) then
     idpAddFileComp('http://downloads.sourceforge.net/project/mingwbuilds/external-binary-packages/msys%2B7za%2Bwget%2Bsvn%2Bgit%2Bmercurial%2Bcvs-rev13.7z',  ExpandConstant('{#DOWNLOAD_DIR}\msys-rev13.7z'),  'tools\msys');
   
-  if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\doxygen-1.8.11-setup.exe')) then
-    idpAddFileComp('http://sourceforge.net/projects/doxygen/files/rel-1.8.11/doxygen-1.8.11-setup.exe/download',  ExpandConstant('{#DOWNLOAD_DIR}\doxygen-1.8.11-setup.exe'), 'tools\doxygen');    
+  if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\{#DOXYGEN_FILENAME}')) then
+    idpAddFileComp('{#DOXYGEN_URL}',  ExpandConstant('{#DOWNLOAD_DIR}\{#DOXYGEN_FILENAME}'), 'tools\doxygen');    
   
   if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\graphviz-2.38.zip')) then
     idpAddFileComp('http://www.graphviz.org/pub/graphviz/stable/windows/graphviz-2.38.zip',  ExpandConstant('{#DOWNLOAD_DIR}\graphviz-2.38.zip'),  'tools\graphiz');  

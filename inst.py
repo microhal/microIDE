@@ -6,16 +6,6 @@ import shutil
 import re
 import argparse
 
-#armGccToolchain = {
-#    'filename' : 'gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2',
-#    'size' : '0',
-#    'version' : '6-2017-q2',
-#    'url' : 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/6-2017q2/gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2?product=GNU%20ARM%20Embedded%20Toolchain,64-bit,,Linux,6-2017-q2-update', 
-#    'checksum' : {'md5' : '13747255194398ee08b3ba42e40e9465'},
-#    'licenseUrl' : 'https://developer.arm.com/GetEula?Id=2d916619-954e-4adb-895d-b1ec657ae305',
-#    'installationLocation' : 'toolchains/gcc-arm-none-eabi/microhal'
-#}
-
 armGccToolchain = {
     'filename' : 'gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2',
     'size' : '0',
@@ -52,7 +42,7 @@ winArmGccToolchain = {
     'url' : 'https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-win32.exe', 
     'checksum' : {'md5' : ''},
     'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
-    'installationLocation' : '{app}\\toolchains\\gcc-arm-none-eabi\\microhal\\gcc-arm-none-eabi-5_3-2016q1'
+    'installationLocation' : '{app}\\toolchains\\gcc-arm-none-eabi\\microhal'
 }
 
 winClangToolchain = {
@@ -65,6 +55,17 @@ winClangToolchain = {
     'installationLocation' : '{app}\\toolchains\\LLVM\\3.8.0'
 }
 
+
+winMinGwToolchain = {
+    'filename' : '',
+    'size' : '0',
+    'version' : '',
+    'url' : 'https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.1.0/threads-win32/seh/x86_64-7.1.0-release-win32-seh-rt_v5-rev2.7z', 
+    'checksum' : {'md5' : ''},
+    'licenseUrl' : '',
+    'installationLocation' : ''
+}
+
 winOpenOCD = {
     'filename' : 'openocd-0.10.0.7z',
     'size' : '0',
@@ -74,12 +75,22 @@ winOpenOCD = {
     'installationLocation' : "{app}\\tools\\openocd\\0.10.0"
 }
 
+winDoxygen = {
+    'filename' : 'doxygen-1.8.13-setup.exe',
+    'size' : '0',
+    'version' : '1.8.13',
+    'url' : 'http://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.13-setup.exe',
+    'checksum' : {'SHA256' : ''},
+    'licenseUrl' : 'http://www.stack.nl/~dimitri/doxygen/index.html',
+    'installationLocation' : "{app}\\tools\\doxygen\\1.8.13"
+}
+
 winEclipse = {
     'filename' : 'eclipse-inst-win64.exe',
     'size' : '0',
     'version' : 'oxygen',
-    'url' : 'https://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R/eclipse-inst-win64.exe\&r=1',
-    'checksum' : {'SHA512' : 'c585b52bf9da53812a14c9cbf48fa6beb0af983f52aa45e589c7e9cc4edce2a1819ebc87ccb4cd39104515a6d4e6adc6a4d2681d9744a041e9f0883d995349ea'},
+    'url' : 'http://www.eclipse.org/downloads/download.php?file=/oomph/products/latest/eclipse-inst-win64.exe\&r=1',
+    'checksum' : {'SHA512' : '20b2512d6086ac46dac52642f1ed010bca74328652072145f6f85aa1c50034cb11abf8cd2955ab064f0da250e9809f2847c7708b43ef2f7745515416d948f032'},
     'installationLocation' : 'eclipse'
 }
 
@@ -102,12 +113,25 @@ def download(filename, url, checksum):
 	
 
 def generateLinuxProductSetup():
-	with open('templates/microide.product.setup.linux.template', 'r') as file:
+	with open('templates/microide.product.setup.template', 'r') as file:
 		content = file.read()
 	toolchainPatch = armGccToolchain['installationLocation'] + '/' + re.sub('-\d{8}-linux.tar.bz2', '', armGccToolchain['filename'])
 	content = content.replace("##microideToolchainPatch##", toolchainPatch)
+	content = content.replace("##clangFormatLocation##", "/usr/bin/clang-format")
 
 	with open('eclipse-installer/setups/microIDE/microide.product.setup.linux', 'w') as file:
+		file.write(content)
+
+def generateWindowsProductSetup():
+	with open('templates/microide.product.setup.template', 'r') as file:
+		content = file.read()
+	toolchainPatch = winArmGccToolchain['installationLocation'].replace('{app}', '') + '\\' + re.sub('-\d{8}-win32.exe', '', winArmGccToolchain['filename'])
+	content = content.replace("##microideToolchainPatch##", toolchainPatch.replace('/', '\\'))
+	clangPath = winClangToolchain['installationLocation']
+	clangPath = clangPath.replace('{app}', '${microide|file}') + '/bin/clang-format.exe'
+	content = content.replace("##clangFormatLocation##", clangPath.replace('/', '\\' ))	
+
+	with open('eclipse-installer/setups/microIDE/microide.product.setup.windows', 'w') as file:
 		file.write(content)
 
 def generateLinuxInstaller():
@@ -146,9 +170,6 @@ def replaceGthr():
 			file_path = os.path.join(root, filename)	
 			if filename == 'gthr.h':
 				shutil.copy('gthr.h', file_path)
-
-
-#createToolchainPatch()
 
 
 def getFiles():
@@ -204,6 +225,14 @@ def generateInnoSetupFile():
 	text = text + '#define OPENOCD_SIZE ' + str(winOpenOCD['size']) + '\n'
 	text = text + '#define OPENOCD_LOCATION "' + winOpenOCD['installationLocation'] + '"\n'
 
+	text = text + '#define DOXYGEN_URL "' + winDoxygen['url'] + '"\n'
+	text = text + '#define DOXYGEN_LICENSE_URL "' + winDoxygen['licenseUrl'] + '"\n'
+	text = text + '#define DOXYGEN_FILENAME "' + winDoxygen['filename'] +'"\n'
+	text = text + '#define DOXYGEN_VERSION "' + winDoxygen['version'] + '"\n'
+	text = text + '#define DOXYGEN_SIZE ' + str(winDoxygen['size']) + '\n'
+	text = text + '#define DOXYGEN_LOCATION "' + winDoxygen['installationLocation'] + '"\n'
+
+
 	content = content.replace("#replace this text with instalation files information", text)
 
 	with open('windows/microide.iss', 'w') as file:
@@ -217,7 +246,26 @@ def download7zipStandaloneConsoleVersion():
 	parameters = '7za x ' + filename + ' -y -owindows/tools/7z1604-extra'
 	os.system(parameters + " >> output.log")
 
-def compileWindowsInstaller():
+def compileWindowsInstaller():	
+	# do some clenup
+	shutil.rmtree('windows/eclipse-installer')
+
+	# prepare installer
+	download7zipStandaloneConsoleVersion() # needed to unpack repositorys while installing on windows
+	download(winEclipse['filename'], winEclipse['url'], winEclipse['checksum']) # we need to download and include pathed version of eclipse installer into microide installer
+	#extracting eclipse files
+	command = '7za x ' + winEclipse['filename'] + ' -y -owindows/eclipse-installer'
+	os.system(command)
+	os.remove('windows/eclipse-installer/extractor.exe')
+	#pathing eclipse installer
+	with open('windows/eclipse-installer/eclipse-inst.ini', 'a') as iniFile:
+		iniFile.write('-Doomph.redirection.setups=http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/->setups/')	
+	generateWindowsProductSetup() # generate oomph setup files for windows
+	# copying oomph setup files
+	shutil.copytree('eclipse-installer/setups', 'windows/eclipse-installer/setups')
+	os.remove('windows/eclipse-installer/setups/microIDE/microide.product.setup.linux')
+	os.rename('windows/eclipse-installer/setups/microIDE/microide.product.setup.windows', 'windows/eclipse-installer/setups/microIDE/microide.product.setup')
+	generateInnoSetupFile()
 	parameters = './iscc.sh windows/microide.iss'
 	os.system(parameters  + " >> output.log")
 
@@ -242,15 +290,7 @@ def main():
 		print "Replacing gthr.h files..."
 		replaceGthr()
 	if args.makeWindowsInstaller == True:
-		print "Generating windows instalation files..."
-		generateInnoSetupFile()
-		download7zipStandaloneConsoleVersion()
-		download(winEclipse['filename'], winEclipse['url'], winEclipse['checksum'])
-		#extracting files
-		command = '7za x ' + winEclipse['filename'] + ' -y -owindows/eclipse-installer'
-		os.system(command)
-		with open('windows/eclipse-installer/eclipse-inst.ini', 'a') as iniFile:
-			iniFile.write('-Doomph.redirection.setups=http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/->setups/')
+		print "Generating windows instalation files..."		
 		compileWindowsInstaller()
 
 	

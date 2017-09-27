@@ -20,6 +20,13 @@ Microide is dedicated for embedded development, its integrate tools like:
  - OpenOCD Debbuger
  - Doxygen for generate documentation from code
  - Graphiz is component required by Doxygen
- - GNU ARM Eclipse plugin that can integrate eclipse with OpenOCD and ARM Toolchain
+ - GNU MCU Eclipse plugin that can integrate eclipse with OpenOCD and ARM Toolchain
  
 All packages are preconfigured and IDE is redy for use after installing. This installer contain script that will download and install all comptonents.
+
+### Changelog
+
+#### 0.3.1
+- updated Eclipse to newest version (oxygen)
+- updated OpenOCD to 0.10.0 Release 
+- replaced GNU ARM Eclipse plugin with GNU MCU Eclipse

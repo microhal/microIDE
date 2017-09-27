@@ -43,16 +43,8 @@
         xsi:type="setup:VariableTask"
         type="URI"
         name="ARM_GCC_TOOLCHAIN_LOCATION"
-        value="${microide}/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-5_3-2016q1"
+        value="${microide}/\toolchains\gcc-arm-none-eabi\microhal\gcc-arm-none-eabi-5_3-2016q1"
         defaultValue=""/>
-    <setupTask
-        xsi:type="setup:VariableTask"
-        type="URI"
-        name="CLANG_TOOLCHAIN_LOCATION"
-        value="${microide}/toolchains/LLVM/3.8.0"
-        defaultValue="">
-      <description></description>
-    </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         type="URI"
@@ -81,35 +73,37 @@
     <requirement
         name="org.wangzw.cppstyle.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.managedbuild.cross.feature.group"/>
+        name="ilg.gnumcueclipse.templates.ad.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.debug.gdbjtag.jlink.feature.group"/>
+        name="ilg.gnumcueclipse.managedbuild.cross.arm.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.debug.gdbjtag.openocd.feature.group"/>
+        name="ilg.gnumcueclipse.codered.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.templates.ad.feature.group"/>
+        name="ilg.gnumcueclipse.doc.user.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.codered.feature.group"/>
+        name="ilg.gnumcueclipse.templates.freescale.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.doc.user.feature.group"/>
+        name="ilg.gnumcueclipse.templates.cortexm.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.templates.freescale.feature.group"/>
+        name="ilg.gnumcueclipse.debug.gdbjtag.jlink.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.templates.cortexm.feature.group"/>
+        name="ilg.gnumcueclipse.debug.gdbjtag.openocd.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.debug.gdbjtag.qemu.feature.group"/>
+        name="ilg.gnumcueclipse.packs.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.templates.stm.feature.group"/>
+        name="ilg.gnumcueclipse.debug.gdbjtag.pyocd.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.packs.feature.group"/>
+        name="ilg.gnumcueclipse.debug.gdbjtag.qemu.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.debug.gdbjtag.pyocd.feature.group"/>
+        name="ilg.gnumcueclipse.managedbuild.cross.riscv.feature.feature.group"/>
+    <requirement
+        name="ilg.gnumcueclipse.templates.stm.feature.feature.group"/>
     <repository
         url="http://anb0s.github.io/eclox"/>
     <repository
         url="http://www.cppstyle.com/mars"/>
     <repository
-        url="http://gnuarmeclipse.sourceforge.net/updates"/>
+        url="http://gnu-mcu-eclipse.netlify.com/v4-neon-updates"/>
     <description>all plugins required by microIDE</description>
   </setupTask>
   <setupTask
@@ -131,14 +125,6 @@
       name="User Preferences">
     <annotation
         source="http://www.eclipse.org/oomph/setup/UserPreferences">
-      <detail
-          key="/instance/ilg.gnuarmeclipse.managedbuild.cross/buildTools.path">
-        <value>record</value>
-      </detail>
-      <detail
-          key="/instance/ilg.gnuarmeclipse.managedbuild.cross/toolchain.path.1287942917">
-        <value>record</value>
-      </detail>
       <detail
           key="/instance/org.eclipse.core.resources/pathvariable.microHAL_DIR">
         <value>record</value>
@@ -194,16 +180,227 @@
     </annotation>
     <setupTask
         xsi:type="setup:CompoundTask"
-        name="ilg.gnuarmeclipse.managedbuild.cross">
+        name="ilg.gnumcueclipse.debug.gdbjtag.openocd">
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/ilg.gnuarmeclipse.managedbuild.cross/buildTools.path">
-        <description></description>
-      </setupTask>
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/executable.name"
+          value="openocd.exe"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/ilg.gnuarmeclipse.managedbuild.cross/toolchain.path.1287942917"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/executable.name.linux"
+          value="openocd"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/executable.name.osx"
+          value="openocd"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/executable.name.windows"
+          value="openocd.exe"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/folder.strict"
+          value="true"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.client.commands"
+          value="set mem inaccessible-by-default off"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.client.executable"
+          value="$$$${cross_prefix}gdb$$$${cross_suffix}"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.client.other"
+          value=""/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.openocd.doDebugInRam"
+          value="false"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.openocd.doInitialReset"
+          value="true"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.openocd.doPreRunReset"
+          value="true"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.openocd.enableSemihosting"
+          value="true"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.openocd.init.other"
+          value=""/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.openocd.initialReset.type"
+          value="init"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.openocd.preRun.other"
+          value=""/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.openocd.preRunReset.type"
+          value="halt"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.server.doStart"
+          value="true"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.server.executable"
+          value="$$$${openocd_path}/$$$${openocd_executable}"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.server.other"
+          value=""/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/search.path"
+          value="$$$${user.home}/AppData/Local/GNU MCU Eclipse/OpenOCD;$$$${user.home}/opt/GNU MCU Eclipse/OpenOCD;$$$${user.home}/opt/gnu-mcu-eclipse/openocd;$$$${user.home}/local/GNU MCU Eclipse/OpenOCD;$$$${user.home}/local/gnu-mcu-eclipse/openocd;C:/opt/GNU MCU Eclipse/OpenOCD;C:/opt/gnu-mcu-eclipse/openocd;C:/Program Files/GNU MCU Eclipse/OpenOCD;C:/Program Files (x86)/GNU MCU Eclipse/OpenOCD;D:/Program Files/GNU MCU Eclipse/OpenOCD;D:/Program Files (x86)/GNU MCU Eclipse/OpenOCD"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/search.path.linux"
+          value="$$$${user.home}/opt/gnu-mcu-eclipse/openocd:$$$${user.home}/opt/gnuarmeclipse/openocd:$$$${user.home}/local/gnu-mcu-eclipse/openocd:$$$${user.home}/local/gnuarmeclipse/openocd:/usr/local/gnu-mcu-eclipse/openocd:/usr/local/gnuarmeclipse/openocd:/usr/local:/opt/gnu-mcu-eclipse/openocd:/opt/gnuarmeclipse/openocd:/opt"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/search.path.osx"
+          value="$$$${user.home}/opt/gnu-mcu-eclipse/openocd:$$$${user.home}/opt/gnuarmeclipse/openocd:$$$${user.home}/local/gnu-mcu-eclipse/openocd:$$$${user.home}/local/gnuarmeclipse/openocd:$$$${user.home}/Applications/GNU MCU Eclipse/OpenOCD:$$$${user.home}/Applications/GNU ARM Eclipse/OpenOCD:/Applications/GNU MCU Eclipse/OpenOCD:/Applications/GNU ARM Eclipse/OpenOCD:/usr/local/gnu-mcu-eclipse/openocd:/usr/local/gnuarmeclipse/openocd:/usr/local:/opt/gnu-mcu-eclipse/openocd:/opt/gnuarmeclipse/openocd:/opt"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/search.path.windows"
+          value="$$$${user.home}/AppData/Local/GNU MCU Eclipse/OpenOCD;$$$${user.home}/opt/GNU MCU Eclipse/OpenOCD;$$$${user.home}/opt/gnu-mcu-eclipse/openocd;$$$${user.home}/local/GNU MCU Eclipse/OpenOCD;$$$${user.home}/local/gnu-mcu-eclipse/openocd;C:/opt/GNU MCU Eclipse/OpenOCD;C:/opt/gnu-mcu-eclipse/openocd;C:/Program Files/GNU MCU Eclipse/OpenOCD;C:/Program Files (x86)/GNU MCU Eclipse/OpenOCD;D:/Program Files/GNU MCU Eclipse/OpenOCD;D:/Program Files (x86)/GNU MCU Eclipse/OpenOCD"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/tab.main.checkProgram"
+          value="false"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="ilg.gnumcueclipse.managedbuild.cross">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross/buildTools.search.path"
+          value="$$$${user.home}/AppData/Local/GNU MCU Eclipse/Build Tools;$$$${user.home}/opt/GNU MCU Eclipse/Build Tools;$$$${user.home}/opt/gnu-mcu-eclipse/build-tools;$$$${user.home}/local/GNU MCU Eclipse/Build Tools;$$$${user.home}/local/gnu-mcu-eclipse/build-tools;C:/opt/GNU MCU Eclipse/Build Tools;C:/opt/gnu-mcu-eclipse/build-tools;C:/Program Files/GNU MCU Eclipse/Build Tools;C:/Program Files (x86)/GNU MCU Eclipse/Build Tools;D:/Program Files/GNU MCU Eclipse/Build Tools;D:/Program Files (x86)/GNU MCU Eclipse/Build Tools;C:/Program Files/GNU ARM Eclipse/Build Tools;C:/Program Files (x86)/GNU ARM Eclipse/Build Tools;D:/Program Files/GNU ARM Eclipse/Build Tools;D:/Program Files (x86)/GNU ARM Eclipse/Build Tools"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross/buildTools.search.path.windows"
+          value="$$$${user.home}/AppData/Local/GNU MCU Eclipse/Build Tools;$$$${user.home}/opt/GNU MCU Eclipse/Build Tools;$$$${user.home}/opt/gnu-mcu-eclipse/build-tools;$$$${user.home}/local/GNU MCU Eclipse/Build Tools;$$$${user.home}/local/gnu-mcu-eclipse/build-tools;C:/opt/GNU MCU Eclipse/Build Tools;C:/opt/gnu-mcu-eclipse/build-tools;C:/Program Files/GNU MCU Eclipse/Build Tools;C:/Program Files (x86)/GNU MCU Eclipse/Build Tools;D:/Program Files/GNU MCU Eclipse/Build Tools;D:/Program Files (x86)/GNU MCU Eclipse/Build Tools;C:/Program Files/GNU ARM Eclipse/Build Tools;C:/Program Files (x86)/GNU ARM Eclipse/Build Tools;D:/Program Files/GNU ARM Eclipse/Build Tools;D:/Program Files (x86)/GNU ARM Eclipse/Build Tools"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross/global.buildTools.path.strict"
+          value="true"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross/workspace.buildTools.path.strict"
+          value="true"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="ilg.gnumcueclipse.managedbuild.cross.arm">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/global.buildTools.path.strict"
+          value="true"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/global.toolchain.path.strict"
+          value="true"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.name"
+          value="GNU Tools for ARM Embedded Processors"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.1287942917"
           value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.1341156853"
+          value="$$$${user.home}/AppData/Local/Programs/Linaro;$$$${user.home}/AppData/Local/Programs;$$$${user.home}/opt/Linaro;$$$${user.home}/local/Linaro;$$$${user.home}/opt;$$$${user.home}/local;C:/Program Files/Linaro;C:/Program Files (x86)/Linaro;D:/Program Files/Linaro;D:/Program Files (x86)/Linaro"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.1733862821"
+          value="$$$${user.home}/AppData/Local/Programs/Linaro;$$$${user.home}/opt/Linaro;$$$${user.home}/local/Linaro;$$$${user.home}/opt;$$$${user.home}/local;C:/Program Files/Linaro;C:/Program Files (x86)/Linaro;D:/Program Files/Linaro;D:/Program Files (x86)/Linaro"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.280381241"
+          value="$$$${user.home}/AppData/Local/Programs/Linaro;$$$${user.home}/AppData/Local/Programs;$$$${user.home}/opt/Linaro;$$$${user.home}/local/Linaro;$$$${user.home}/opt;$$$${user.home}/local;C:/Program Files/Linaro;C:/Program Files (x86)/Linaro;D:/Program Files/Linaro;D:/Program Files (x86)/Linaro"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.976189281"
+          value="$$$${user.home}/AppData/Local/Programs/Linaro;$$$${user.home}/AppData/Local/Programs;$$$${user.home}/opt/Linaro;$$$${user.home}/local/Linaro;$$$${user.home}/opt;$$$${user.home}/local;$$$${user.home}/opt/GNU Tools ARM Embedded;$$$${user.home}/local/GNU Tools ARM Embedded;$$$${user.home}/AppData/Local/Programs/GNU Tools ARM Embedded;C:/Program Files/GNU Tools ARM Embedded;C:/Program Files (x86)/GNU Tools ARM Embedded;D:/Program Files/GNU Tools ARM Embedded;D:/Program Files (x86)/GNU Tools ARM Embedded"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.linux.1287942917"
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.linux.1341156853"
+          value="$$$${user.home}/opt/Linaro:$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.linux.1733862821"
+          value="$$$${user.home}/opt/Linaro:$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.linux.280381241"
+          value="$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.linux.976189281"
+          value="$$$${user.home}/opt/Linaro:$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.osx.1287942917"
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.osx.1341156853"
+          value="$$$${user.home}/Applications/Linaro:$$$${user.home}/opt/Linaro:$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.osx.1733862821"
+          value="$$$${user.home}/opt/Linaro:$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.osx.280381241"
+          value="$$$${user.home}/opt/Linaro:$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.osx.976189281"
+          value="$$$${user.home}/opt/Linaro:$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.windows.1287942917"
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.windows.1341156853"
+          value="$$$${user.home}/AppData/Local/Programs/Linaro;$$$${user.home}/AppData/Local/Programs;$$$${user.home}/opt/Linaro;$$$${user.home}/local/Linaro;$$$${user.home}/opt;$$$${user.home}/local;C:/Program Files/Linaro;C:/Program Files (x86)/Linaro;D:/Program Files/Linaro;D:/Program Files (x86)/Linaro"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.windows.1733862821"
+          value="$$$${user.home}/AppData/Local/Programs/Linaro;$$$${user.home}/opt/Linaro;$$$${user.home}/local/Linaro;$$$${user.home}/opt;$$$${user.home}/local;C:/Program Files/Linaro;C:/Program Files (x86)/Linaro;D:/Program Files/Linaro;D:/Program Files (x86)/Linaro"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.windows.280381241"
+          value="$$$${user.home}/AppData/Local/Programs/Linaro;$$$${user.home}/AppData/Local/Programs;$$$${user.home}/opt/Linaro;$$$${user.home}/local/Linaro;$$$${user.home}/opt;$$$${user.home}/local;C:/Program Files/Linaro;C:/Program Files (x86)/Linaro;D:/Program Files/Linaro;D:/Program Files (x86)/Linaro"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.windows.976189281"
+          value="$$$${user.home}/AppData/Local/Programs/Linaro;$$$${user.home}/AppData/Local/Programs;$$$${user.home}/opt/Linaro;$$$${user.home}/local/Linaro;$$$${user.home}/opt;$$$${user.home}/local;$$$${user.home}/opt/GNU Tools ARM Embedded;$$$${user.home}/local/GNU Tools ARM Embedded;$$$${user.home}/AppData/Local/Programs/GNU Tools ARM Embedded;C:/Program Files/GNU Tools ARM Embedded;C:/Program Files (x86)/GNU Tools ARM Embedded;D:/Program Files/GNU Tools ARM Embedded;D:/Program Files (x86)/GNU Tools ARM Embedded"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/workspace.buildTools.path.strict"
+          value="true"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/workspace.toolchain.path.strict"
+          value="true"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -435,7 +632,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.wangzw.cppstyle/cppstyle.clangformat.path"
-          value="${CLANG_TOOLCHAIN_LOCATION|file}\bin\clang-format.exe">
+          value="${microide|file}\toolchains\LLVM\3.8.0\bin\clang-format.exe">
         <description></description>
       </setupTask>
       <setupTask
