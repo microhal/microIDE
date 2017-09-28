@@ -40,7 +40,7 @@ winArmGccToolchain = {
     'size' : '0',
     'version' : '5.3.0',
     'url' : 'https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-win32.exe', 
-    'checksum' : {'md5' : ''},
+    'checksum' : {'' : ''},
     'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
     'installationLocation' : '{app}\\toolchains\\gcc-arm-none-eabi\\microhal'
 }
@@ -50,20 +50,20 @@ winClangToolchain = {
     'size' : '0',
     'version' : '3.8.0',
     'url' : 'http://llvm.org/releases/3.8.0/LLVM-3.8.0-win64.exe', 
-    'checksum' : {'md5' : ''},
+    'checksum' : {'' : ''},
     'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
     'installationLocation' : '{app}\\toolchains\\LLVM\\3.8.0'
 }
 
 
 winMinGwToolchain = {
-    'filename' : '',
+    'filename' : 'x86_64-7.1.0-release-win32-seh-rt_v5-rev2.7z',
     'size' : '0',
     'version' : '',
     'url' : 'https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.1.0/threads-win32/seh/x86_64-7.1.0-release-win32-seh-rt_v5-rev2.7z', 
-    'checksum' : {'md5' : ''},
-    'licenseUrl' : '',
-    'installationLocation' : ''
+    'checksum' : {'md5' : 'bd537f46793fc11b7b161f071e9ef31e'},
+    'licenseUrl' : 'http://sourceforge.net/projects/mingw-w64/',
+    'installationLocation' : '{app}\\toolchains\\mingw-w64'
 }
 
 winOpenOCD = {
@@ -80,7 +80,7 @@ winDoxygen = {
     'size' : '0',
     'version' : '1.8.13',
     'url' : 'http://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.13-setup.exe',
-    'checksum' : {'SHA256' : ''},
+    'checksum' : {'' : ''},
     'licenseUrl' : 'http://www.stack.nl/~dimitri/doxygen/index.html',
     'installationLocation' : "{app}\\tools\\doxygen\\1.8.13"
 }
@@ -90,7 +90,7 @@ winEclipse = {
     'size' : '0',
     'version' : 'oxygen',
     'url' : 'http://www.eclipse.org/downloads/download.php?file=/oomph/products/latest/eclipse-inst-win64.exe\&r=1',
-    'checksum' : {'SHA512' : '20b2512d6086ac46dac52642f1ed010bca74328652072145f6f85aa1c50034cb11abf8cd2955ab064f0da250e9809f2847c7708b43ef2f7745515416d948f032'},
+    'checksum' : {'' : ''},
     'installationLocation' : 'eclipse'
 }
 
@@ -127,9 +127,15 @@ def generateWindowsProductSetup():
 		content = file.read()
 	toolchainPatch = winArmGccToolchain['installationLocation'].replace('{app}', '') + '\\' + re.sub('-\d{8}-win32.exe', '', winArmGccToolchain['filename'])
 	content = content.replace("##microideToolchainPatch##", toolchainPatch.replace('/', '\\'))
+	
 	clangPath = winClangToolchain['installationLocation']
 	clangPath = clangPath.replace('{app}', '${microide|file}') + '/bin/clang-format.exe'
-	content = content.replace("##clangFormatLocation##", clangPath.replace('/', '\\' ))	
+	content = content.replace("##clangFormatLocation##", clangPath.replace('/', '\\' ))
+
+	mingwPath = winMinGwToolchain['installationLocation']
+	mingwPath = mingwPath.replace('{app}', '${microide}') 
+	content = content.replace("##MinGWToolchainPatch##", mingwPath.replace('/', '\\' ))
+
 
 	with open('eclipse-installer/setups/microIDE/microide.product.setup.windows', 'w') as file:
 		file.write(content)
@@ -232,6 +238,13 @@ def generateInnoSetupFile():
 	text = text + '#define DOXYGEN_SIZE ' + str(winDoxygen['size']) + '\n'
 	text = text + '#define DOXYGEN_LOCATION "' + winDoxygen['installationLocation'] + '"\n'
 
+	text = text + '#define MINGW_URL "' + winMinGwToolchain['url'] + '"\n'
+	text = text + '#define MINGW_LICENSE_URL "' + winMinGwToolchain['licenseUrl'] + '"\n'
+	text = text + '#define MINGW_FILENAME "' + winMinGwToolchain['filename'] +'"\n'
+	text = text + '#define MINGW_VERSION "' + winMinGwToolchain['version'] + '"\n'
+	text = text + '#define MINGW_SIZE ' + str(winMinGwToolchain['size']) + '\n'
+	text = text + '#define MINGW_LOCATION "' + winMinGwToolchain['installationLocation'] + '"\n'
+
 
 	content = content.replace("#replace this text with instalation files information", text)
 
@@ -269,11 +282,20 @@ def compileWindowsInstaller():
 	parameters = './iscc.sh windows/microide.iss'
 	os.system(parameters  + " >> output.log")
 
+def verifyWindowsDownloads():
+	files = [ winArmGccToolchain, winClangToolchain, winMinGwToolchain, winOpenOCD, winDoxygen, winEclipse ]
+	for file in files:
+		status = download(file['filename'], file['url'], file['checksum'])	
+		if status[0] == False:
+			print "An error occurred"
+			exit(-1) 
+
 
 
 def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--onlyDownload', nargs='?', type=bool, const=True, help='Checking if all files can be download from internet.')
+	parser.add_argument('--verifyWindowsDownload', nargs='?', type=bool, const=True, help='Checking if all files required for windows installation can be download from internet.')
 	parser.add_argument('--replaceGthr', nargs='?', type=bool, const=True, help='Part of toolchain patching, replacing gthr.h file into microhal version.')
 	parser.add_argument('--makeLinuxInstaller', nargs='?', type=bool, const=True, help='Creating windows installation files.')
 	parser.add_argument('--makeWindowsInstaller', nargs='?', type=bool, const=True, help='Creating windows installation files. This will work on linux with wine where Inno Setup and Inno Download Plugin was installed')
@@ -281,6 +303,8 @@ def main():
 
 	if args.onlyDownload == True:
 		getFiles()
+	if args.verifyWindowsDownload == True:
+		verifyWindowsDownloads()
 	if args.makeLinuxInstaller == True:
 		print "Generating instalation files..."		
 		getFiles()

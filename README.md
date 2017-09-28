@@ -30,3 +30,4 @@ All packages are preconfigured and IDE is redy for use after installing. This in
 - updated Eclipse to newest version (oxygen)
 - updated OpenOCD to 0.10.0 Release 
 - replaced GNU ARM Eclipse plugin with GNU MCU Eclipse
+- updated MinGW-w64 to 7.1.0

@@ -56,7 +56,7 @@
         xsi:type="setup:VariableTask"
         type="URI"
         name="MINGW_TOOLCHAIN_LOCATION"
-        value="${microide}/toolchains/mingw-w64/5.3.0"/>
+        value="${microide}\toolchains\minGW"/>
     <setupTask
         xsi:type="setup:VariableTask"
         type="URI"
@@ -320,7 +320,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.1341156853"
-          value="$$$${user.home}/AppData/Local/Programs/Linaro;$$$${user.home}/AppData/Local/Programs;$$$${user.home}/opt/Linaro;$$$${user.home}/local/Linaro;$$$${user.home}/opt;$$$${user.home}/local;C:/Program Files/Linaro;C:/Program Files (x86)/Linaro;D:/Program Files/Linaro;D:/Program Files (x86)/Linaro"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.1733862821"
@@ -328,11 +328,11 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.280381241"
-          value="$$$${user.home}/AppData/Local/Programs/Linaro;$$$${user.home}/AppData/Local/Programs;$$$${user.home}/opt/Linaro;$$$${user.home}/local/Linaro;$$$${user.home}/opt;$$$${user.home}/local;C:/Program Files/Linaro;C:/Program Files (x86)/Linaro;D:/Program Files/Linaro;D:/Program Files (x86)/Linaro"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.976189281"
-          value="$$$${user.home}/AppData/Local/Programs/Linaro;$$$${user.home}/AppData/Local/Programs;$$$${user.home}/opt/Linaro;$$$${user.home}/local/Linaro;$$$${user.home}/opt;$$$${user.home}/local;$$$${user.home}/opt/GNU Tools ARM Embedded;$$$${user.home}/local/GNU Tools ARM Embedded;$$$${user.home}/AppData/Local/Programs/GNU Tools ARM Embedded;C:/Program Files/GNU Tools ARM Embedded;C:/Program Files (x86)/GNU Tools ARM Embedded;D:/Program Files/GNU Tools ARM Embedded;D:/Program Files (x86)/GNU Tools ARM Embedded"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.linux.1287942917"
@@ -340,19 +340,19 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.linux.1341156853"
-          value="$$$${user.home}/opt/Linaro:$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.linux.1733862821"
-          value="$$$${user.home}/opt/Linaro:$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.linux.280381241"
-          value="$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.linux.976189281"
-          value="$$$${user.home}/opt/Linaro:$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.osx.1287942917"
@@ -360,19 +360,19 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.osx.1341156853"
-          value="$$$${user.home}/Applications/Linaro:$$$${user.home}/opt/Linaro:$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.osx.1733862821"
-          value="$$$${user.home}/opt/Linaro:$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.osx.280381241"
-          value="$$$${user.home}/opt/Linaro:$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.osx.976189281"
-          value="$$$${user.home}/opt/Linaro:$$$${user.home}/local/Linaro:$$$${user.home}/opt:$$$${user.home}/local:/usr/local:/opt"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.windows.1287942917"
@@ -384,15 +384,15 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.windows.1733862821"
-          value="$$$${user.home}/AppData/Local/Programs/Linaro;$$$${user.home}/opt/Linaro;$$$${user.home}/local/Linaro;$$$${user.home}/opt;$$$${user.home}/local;C:/Program Files/Linaro;C:/Program Files (x86)/Linaro;D:/Program Files/Linaro;D:/Program Files (x86)/Linaro"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.windows.280381241"
-          value="$$$${user.home}/AppData/Local/Programs/Linaro;$$$${user.home}/AppData/Local/Programs;$$$${user.home}/opt/Linaro;$$$${user.home}/local/Linaro;$$$${user.home}/opt;$$$${user.home}/local;C:/Program Files/Linaro;C:/Program Files (x86)/Linaro;D:/Program Files/Linaro;D:/Program Files (x86)/Linaro"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.search.path.windows.976189281"
-          value="$$$${user.home}/AppData/Local/Programs/Linaro;$$$${user.home}/AppData/Local/Programs;$$$${user.home}/opt/Linaro;$$$${user.home}/local/Linaro;$$$${user.home}/opt;$$$${user.home}/local;$$$${user.home}/opt/GNU Tools ARM Embedded;$$$${user.home}/local/GNU Tools ARM Embedded;$$$${user.home}/AppData/Local/Programs/GNU Tools ARM Embedded;C:/Program Files/GNU Tools ARM Embedded;C:/Program Files (x86)/GNU Tools ARM Embedded;D:/Program Files/GNU Tools ARM Embedded;D:/Program Files (x86)/GNU Tools ARM Embedded"/>
+          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/workspace.buildTools.path.strict"

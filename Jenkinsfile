@@ -13,9 +13,14 @@ pipeline {
                	checkout scm          
             }
         }   
-        stage('Check linux download') {
+        stage('Check Linux download') {
             steps {
                	sh 'linux/microide_install.sh --checkDownload'
+            }
+        } 
+        stage('Check Windows download') {
+            steps {
+               	sh 'python inst.py --verifyWindowsDownload'
             }
         }    
     }

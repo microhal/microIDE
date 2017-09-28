@@ -4,35 +4,7 @@
 #define DOWNLOAD_DIR "{userdocs}\microIDE_installer"
 #define UNZIP_7Z_PATH "tools\7z1604-extra"
 
-#define ARM_GCC_TOOLCHAIN_URL "https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-win32.exe"
-#define ARM_GCC_TOOLCHAIN_LICENSE_URL "https://launchpadlibrarian.net/251686212/license.txt"
-#define ARM_GCC_TOOLCHAIN_FILENAME "gcc-arm-none-eabi-5_3-2016q1-20160330-win32.exe"
-#define ARM_GCC_TOOLCHAIN_VERSION "5.3.0"
-#define ARM_GCC_TOOLCHAIN_SIZE 0
-#define ARM_GCC_TOOLCHAIN_LOCATION "{app}\toolchains\gcc-arm-none-eabi\microhal"
-#define CLANG_TOOLCHAIN_URL "http://llvm.org/releases/3.8.0/LLVM-3.8.0-win64.exe"
-#define CLANG_TOOLCHAIN_FILENAME "LLVM-3.8.0-win64.exe"
-#define CLANG_TOOLCHAIN_VERSION "3.8.0"
-#define CLANG_TOOLCHAIN_SIZE 0
-#define CLANG_TOOLCHAIN_LOCATION "{app}\toolchains\LLVM\3.8.0"
-#define OPENOCD_URL "http://www.freddiechopin.info/en/download/category/4-openocd?download=154%3Aopenocd-0.10.0"
-#define OPENOCD_FILENAME "openocd-0.10.0.7z"
-#define OPENOCD_VERSION "0.10.0"
-#define OPENOCD_SIZE 0
-#define OPENOCD_LOCATION "{app}\tools\openocd\0.10.0"
-#define DOXYGEN_URL "http://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.13-setup.exe"
-#define DOXYGEN_LICENSE_URL "http://www.stack.nl/~dimitri/doxygen/index.html"
-#define DOXYGEN_FILENAME "doxygen-1.8.13-setup.exe"
-#define DOXYGEN_VERSION "1.8.13"
-#define DOXYGEN_SIZE 0
-#define DOXYGEN_LOCATION "{app}\tools\doxygen\1.8.13"
-#define MINGW_URL "https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.1.0/threads-win32/seh/x86_64-7.1.0-release-win32-seh-rt_v5-rev2.7z"
-#define MINGW_LICENSE_URL "http://sourceforge.net/projects/mingw-w64/"
-#define MINGW_FILENAME "x86_64-7.1.0-release-win32-seh-rt_v5-rev2.7z"
-#define MINGW_VERSION ""
-#define MINGW_SIZE 0
-#define MINGW_LOCATION "{app}\toolchains\minGW"
-
+#replace this text with instalation files information
 
 [Setup]
 AppName=microIDE
