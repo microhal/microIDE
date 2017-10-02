@@ -13,7 +13,7 @@ armGccToolchain = {
     'url' : 'https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2', 
     'checksum' : {'md5' : '5a261cac18c62d8b7e8c70beba2004bd'},
     'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
-    'installationLocation' : 'toolchains/gcc-arm-none-eabi/microhal'
+    'installationLocation' : '${microide}/toolchains/gcc-arm-none-eabi/microhal'
 }
 
 openOCD = {
@@ -125,7 +125,7 @@ def generateLinuxProductSetup():
 def generateWindowsProductSetup():
 	with open('templates/microide.product.setup.template', 'r') as file:
 		content = file.read()
-	toolchainPatch = winArmGccToolchain['installationLocation'].replace('{app}', '') + '\\' + re.sub('-\d{8}-win32.exe', '', winArmGccToolchain['filename'])
+	toolchainPatch = winArmGccToolchain['installationLocation'].replace('{app}', '${microide}') + '\\' + re.sub('-\d{8}-win32.exe', '', winArmGccToolchain['filename'])
 	content = content.replace("##microideToolchainPatch##", toolchainPatch.replace('/', '\\'))
 	
 	clangPath = winClangToolchain['installationLocation']
@@ -217,7 +217,7 @@ def generateInnoSetupFile():
 	text = text + '#define ARM_GCC_TOOLCHAIN_FILENAME "' + winArmGccToolchain['filename'] + '"\n'
 	text = text + '#define ARM_GCC_TOOLCHAIN_VERSION "' + winArmGccToolchain['version'] + '"\n'
 	text = text + '#define ARM_GCC_TOOLCHAIN_SIZE ' + str(winArmGccToolchain['size']) + '\n'
-	text = text + '#define ARM_GCC_TOOLCHAIN_LOCATION "' + winArmGccToolchain['installationLocation'] + '"\n'
+	text = text + '#define ARM_GCC_TOOLCHAIN_LOCATION "' + winArmGccToolchain['installationLocation'] + '\\' + re.sub('-\d{8}-win32.exe', '', winArmGccToolchain['filename']) + '"\n'
 
 	text = text + '#define CLANG_TOOLCHAIN_URL "' + winClangToolchain['url'] + '"\n'
 	text = text + '#define CLANG_TOOLCHAIN_FILENAME "' + winClangToolchain['filename'] + '"\n'

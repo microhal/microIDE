@@ -9,7 +9,7 @@
 #define ARM_GCC_TOOLCHAIN_FILENAME "gcc-arm-none-eabi-5_3-2016q1-20160330-win32.exe"
 #define ARM_GCC_TOOLCHAIN_VERSION "5.3.0"
 #define ARM_GCC_TOOLCHAIN_SIZE 0
-#define ARM_GCC_TOOLCHAIN_LOCATION "{app}\toolchains\gcc-arm-none-eabi\microhal"
+#define ARM_GCC_TOOLCHAIN_LOCATION "{app}\toolchains\gcc-arm-none-eabi\microhal\gcc-arm-none-eabi-5_3-2016q1"
 #define CLANG_TOOLCHAIN_URL "http://llvm.org/releases/3.8.0/LLVM-3.8.0-win64.exe"
 #define CLANG_TOOLCHAIN_FILENAME "LLVM-3.8.0-win64.exe"
 #define CLANG_TOOLCHAIN_VERSION "3.8.0"
@@ -31,7 +31,7 @@
 #define MINGW_FILENAME "x86_64-7.1.0-release-win32-seh-rt_v5-rev2.7z"
 #define MINGW_VERSION ""
 #define MINGW_SIZE 0
-#define MINGW_LOCATION "{app}\toolchains\minGW"
+#define MINGW_LOCATION "{app}\toolchains\mingw-w64"
 
 
 [Setup]
@@ -74,14 +74,6 @@ Name: "tools\graphiz"; Description: "Graphiz 2.38"; Types: devel custom; ExtraDi
 [Files]
 Source: "{#UNZIP_7Z_PATH}\*"; DestDir: "{tmp}\tools\7z"; Flags: recursesubdirs
 Source: "eclipse-installer\*"; DestDir: "{app}\eclipse-installer"; Flags: recursesubdirs; BeforeInstall: CreateNoticeFile
-Source: "launch\*"; DestDir: "{app}"; Flags: recursesubdirs;
-
-[Icons]
-Name: {commondesktop}\microIDE; Filename: {app}\launch.bat; WorkingDir: {app}; Tasks: desktopicon 
-;IconFilename: {app}\MyApplication.ico; Comment: "MyApplication"; Components: MyApplication;
-
-[Tasks]
-Name: desktopicon; Description: Create Desktop Icon;
 
 [Run]
 ;unpack git repozitory files   
@@ -97,6 +89,7 @@ Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#MINGW_FILEN
 ;Filename: "cmd.exe"; Parameters: "/c rename {app}\toolchains\mingw-w64\mingw64 {#MINGW_VERSION}"; Components: toolchains\mingw ; BeforeInstall: UpdateInstallProgress('Installing mingw toolchain.',55)
 ; tools installer
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#OPENOCD_FILENAME} -o{app}\tools\openocd -y"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.',56)
+Filename: "cmd.exe"; Parameters: "/c rename {app}\tools\openocd\openocd-0.10.0 0.10.0"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.',57)
 ; extract msys
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\msys-rev13.7z -o{app}\tools\ -y"; Components: tools\msys; BeforeInstall: UpdateInstallProgress('Installing msys.',62)
 ; install doxygen  
@@ -118,7 +111,7 @@ Filename: "{#DOXYGEN_LOCATION}\system\unins000.exe"; Parameters: "/SILENT"
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\eclipse";
-Type: filesandordirs; Name: "{app}\toolchains\mingw-w64"; Components: toolchains\mingw
+Type: filesandordirs; Name: "{#MINGW_LOCATION}"; Components: toolchains\mingw
 Type: filesandordirs; Name: "{app}\tools\graphiz"; Components: tools\graphiz
 Type: filesandordirs; Name: "{app}\tools\msys"; Components: tools\msys
 Type: filesandordirs; Name: "{app}\tools\openocd"; Components: tools\openocd
@@ -459,7 +452,6 @@ procedure CreateNoticeFile();
 begin
   SaveStringToFile(ExpandConstant('{tmp}\eclipse-notice.txt'), 'IMPORTANT NOTICE' + #13#10 + #13#10 +
                                                                'When you close this window, "eclipse installer" will run.' + #13#10 +
-                                                               'You have to set installation directory to: ' + ExpandConstant('{app}') + #13#10 +
-                                                               'You also have to uncheck "create start menu entry" and "create desktop shortcut".', False);
+                                                               'You have to set installation directory to: ' + ExpandConstant('{app}') + #13#10, False);
 end;
 
