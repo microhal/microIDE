@@ -9,22 +9,23 @@ To install microide on Linux operating system download <b>linux/microide_install
 
 ## Importing microhal examples
 The best way to start exploring microHAL features is to download all examples and play with them. Examples can be divided into two categorys:
-
-    - microHAL examples - these examples were introduced to show you the list of components included in microHAL library. Every component have at least one example to show you its API.
-    - microHAL drivers - this is set of examples from microHAL subproject that provides drivers for popular and commonly used devices.
+- microHAL examples - these examples were introduced to show you the list of components included in microHAL library. Every component have at least one example to show you its API.
+- microHAL drivers - this is set of examples from microHAL subproject that provides drivers for popular and commonly used devices.
 
 To download examples:
+- run microIDE,
+- open or create new workspace where examples should be stored,
+- click <b>File->Import...</b>
+- in newly open window please expand <b>Oomph</b> tree and select <b>Projects into Workspace</b> and click <b>next</b> button.
 
-    - run microIDE,
-    - open or create new workspace where examples should be stored,
-    - click <b>File->Import...</b>
-    - in newly open window please expand <b>Oomph</b> tree and select <b>Projects into Workspace</b> and click <b>next</b> button.
+![](images/eclipse_file_import_wizard_oomph.png)
+</br>
+</br>
+When new window apear please find and expand <b>microHAL Projects</b> tree. You should see <b>microHAL examples</b> option, please double click on it, the text should change to bold. Afterwards, please keep clicking <b>next</b> button. Confirm all operations by clicking <b>Finish</b> button.</br>
 
-[](images/eclipse_file_import_wizard_oomph.png)
-ema
-When new window apear please find and expand <b>microHAL Projects</b> tree. You should see <b>microHAL examples</b> option, please double click on it, the text should change to bold. Afterwards, please keep clicking <b>next</b> button. Confirm all operations by clicking <b>Finish</b> button.
-[](images/eclipse_file_import_oomph_microHALProjects_examples.png)
-
+![](images/eclipse_file_import_oomph_microHALProjects_examples.png)
+</br>
+</br>
 It may take a while for all examples to download into your workspace, so please be patient. When all examples will be downloaded project explorer will become messy. To improve readability change display method in project explorer to <b>Working Sets</b>.
 
 ### About microide
