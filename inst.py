@@ -117,7 +117,14 @@ def generateLinuxProductSetup():
 		content = file.read()
 	toolchainPatch = armGccToolchain['installationLocation'] + '/' + re.sub('-\d{8}-linux.tar.bz2', '', armGccToolchain['filename'])
 	content = content.replace("##microideToolchainPatch##", toolchainPatch)
+
 	content = content.replace("##clangFormatLocation##", "/usr/bin/clang-format")
+
+	content = content.replace("##MinGWToolchainPatch##", "/usr/bin")
+
+	content = content.replace("##DoxygenPatch##", "/usr/bin")
+
+	content = content.replace("##PatchModification##", "")
 
 	with open('eclipse-installer/setups/microIDE/microide.product.setup.linux', 'w') as file:
 		file.write(content)
@@ -136,14 +143,32 @@ def generateWindowsProductSetup():
 	mingwPath = mingwPath.replace('{app}', '${microide}') 
 	content = content.replace("##MinGWToolchainPatch##", mingwPath.replace('/', '\\' ))
 
+	doxygenPath = winDoxygen['installationLocation']
+	doxygenPath = doxygenPath.replace('{app}', '${microide|file}/bin') 
+	content = content.replace("##DoxygenPatch##", doxygenPath)
+
+	path = """<setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/delimiter"
+          value=";"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/operation"
+          value="replace"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/value"
+          value="${microIDE_tools_dir|file}\tools\graphiz\bin"/>"""
+	content = content.replace("##PatchModification##", path)
 
 	with open('eclipse-installer/setups/microIDE/microide.product.setup.windows', 'w') as file:
 		file.write(content)
 
+
 def generateLinuxInstaller():
 	with open('templates/microide_install.template', 'r') as file:
 		content = file.read()
-	text = 'ARM_GCC_TOOLCHAIN_URL=' + armGccToolchain['url'] + '\nARM_GCC_TOOLCHAIN_LICENSE_URL=' + armGccToolchain['licenseUrl'] + '\nARM_GCC_TOOLCHAIN_FILENAME=' + armGccToolchain['filename'] + '\nARM_GCC_TOOLCHAIN_VERSION=' + armGccToolchain['version'] + '\nARM_GCC_TOOLCHAIN_SIZE=' + str(armGccToolchain['size']) + '\nARM_GCC_TOOLCHAIN_CHECKSUM=' + armGccToolchain['checksum']['md5'] + '\nARM_GCC_TOOLCHAIN_LOCATION=' + armGccToolchain['installationLocation']
+	text = 'ARM_GCC_TOOLCHAIN_URL=' + armGccToolchain['url'] + '\nARM_GCC_TOOLCHAIN_LICENSE_URL=' + armGccToolchain['licenseUrl'] + '\nARM_GCC_TOOLCHAIN_FILENAME=' + armGccToolchain['filename'] + '\nARM_GCC_TOOLCHAIN_VERSION=' + armGccToolchain['version'] + '\nARM_GCC_TOOLCHAIN_SIZE=' + str(armGccToolchain['size']) + '\nARM_GCC_TOOLCHAIN_CHECKSUM=' + armGccToolchain['checksum']['md5'] + '\nARM_GCC_TOOLCHAIN_LOCATION=' + armGccToolchain['installationLocation'].replace('${microide}/', '')
 	text = text + '\n\nOPENOCD_URL=' + openOCD['url'] + '\nOPENOCD_FILENAME=' + openOCD['filename'] + '\nOPENOCD_VERSION=' + openOCD['version'] + '\nOPENOCD_SIZE=' + str(openOCD['size']) + '\nOPENOCD_CHECKSUM=' + openOCD['checksum']['md5'] + '\nOPENOCD_LOCATION=' + openOCD['installationLocation'] 
 	text = text + '\n\nECLIPSE_URL=' + eclipse['url'] + '\nECLIPSE_FILENAME=' + eclipse['filename'] + '\nECLIPSE_VERSION=' + eclipse['version'] + '\nECLIPSE_SIZE=' + str(eclipse['size']) + '\nECLIPSE_CHECKSUM=' + eclipse['checksum']['md5'] + '\nECLIPSE_LOCATION=' + eclipse['installationLocation']
 

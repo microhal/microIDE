@@ -16,7 +16,7 @@ ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2
 ARM_GCC_TOOLCHAIN_VERSION=5.3.0
 ARM_GCC_TOOLCHAIN_SIZE=93090908
 ARM_GCC_TOOLCHAIN_CHECKSUM=5a261cac18c62d8b7e8c70beba2004bd
-ARM_GCC_TOOLCHAIN_LOCATION=${microide}/toolchains/gcc-arm-none-eabi/microhal
+ARM_GCC_TOOLCHAIN_LOCATION=toolchains/gcc-arm-none-eabi/microhal
 
 OPENOCD_URL=https://sourceforge.net/projects/openocd/files/openocd/0.10.0/openocd-0.10.0.tar.gz/download
 OPENOCD_FILENAME=openocd-0.10.0.tar.gz

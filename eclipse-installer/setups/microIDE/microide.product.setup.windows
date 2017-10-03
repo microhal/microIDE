@@ -260,7 +260,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/value"
-          value="${microIDE_tools_dir|file}\tools\graphiz\bin"/>
+          value="${microIDE_tools_dir|file}	ools\graphizin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MINGW_HOME/operation"
@@ -496,11 +496,11 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.gna.eclox.core/doxygen.default"
-          value="eclox.core.doxygen.CustomDoxygen ${microide|file}/tools/doxygen/1.8.13/bin"/>
+          value="eclox.core.doxygen.CustomDoxygen ${microide|file}/bin\tools\doxygen\1.8.13"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.gna.eclox.core/doxygen.customs"
-          value="eclox.core.doxygen.CustomDoxygen ${microide|file}/tools/doxygen/1.8.13/bin&#xA;"/>
+          value="eclox.core.doxygen.CustomDoxygen ${microide|file}/bin\tools\doxygen\1.8.13&#xA;"/>
     </setupTask>
   </setupTask>
   <version name="oxygen"

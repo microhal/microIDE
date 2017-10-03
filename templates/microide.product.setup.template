@@ -249,18 +249,7 @@
           value="${microIDE_tools_dir|file}\tools\msys">
         <description></description>
       </setupTask>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/delimiter"
-          value=";"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/operation"
-          value="replace"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/value"
-          value="${microIDE_tools_dir|file}\tools\graphiz\bin"/>
+      ##PatchModification##
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MINGW_HOME/operation"
@@ -496,11 +485,11 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.gna.eclox.core/doxygen.default"
-          value="eclox.core.doxygen.CustomDoxygen ${microide|file}/tools/doxygen/1.8.13/bin"/>
+          value="eclox.core.doxygen.CustomDoxygen ##DoxygenPatch##"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.gna.eclox.core/doxygen.customs"
-          value="eclox.core.doxygen.CustomDoxygen ${microide|file}/tools/doxygen/1.8.13/bin&#xA;"/>
+          value="eclox.core.doxygen.CustomDoxygen ##DoxygenPatch##&#xA;"/>
     </setupTask>
   </setupTask>
   <version name="oxygen"
