@@ -5,6 +5,13 @@ To install microide on Windows operating system you should go to our Source Forg
 
 [![Download microHAL](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/microhal/files/latest/download)
 
+Installing microide is simply but have one tricky part. You have put correct path into eclipse installation. Correct path will be shown in IMPORTANT NOTICE text. you should copy this path and pase it into eclipse installer.
+
+![](images/microide_installer_important_notice.png)
+</br>
+You should copy this path and pase it into eclipse installer.
+
+![](images/microide_installer_set_eclipse_installation_directory.png)
 
 ### Linux installation
 To install microide on Linux operating system download <b>linux/microide_install.sh</b> file from this repository and run it in directory where you want to install microide.
