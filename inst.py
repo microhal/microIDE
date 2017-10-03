@@ -141,7 +141,7 @@ def generateWindowsProductSetup():
 		file.write(content)
 
 def generateLinuxInstaller():
-	with open('templates/microide.iss.template', 'r') as file:
+	with open('templates/microide_install.template', 'r') as file:
 		content = file.read()
 	text = 'ARM_GCC_TOOLCHAIN_URL=' + armGccToolchain['url'] + '\nARM_GCC_TOOLCHAIN_LICENSE_URL=' + armGccToolchain['licenseUrl'] + '\nARM_GCC_TOOLCHAIN_FILENAME=' + armGccToolchain['filename'] + '\nARM_GCC_TOOLCHAIN_VERSION=' + armGccToolchain['version'] + '\nARM_GCC_TOOLCHAIN_SIZE=' + str(armGccToolchain['size']) + '\nARM_GCC_TOOLCHAIN_CHECKSUM=' + armGccToolchain['checksum']['md5'] + '\nARM_GCC_TOOLCHAIN_LOCATION=' + armGccToolchain['installationLocation']
 	text = text + '\n\nOPENOCD_URL=' + openOCD['url'] + '\nOPENOCD_FILENAME=' + openOCD['filename'] + '\nOPENOCD_VERSION=' + openOCD['version'] + '\nOPENOCD_SIZE=' + str(openOCD['size']) + '\nOPENOCD_CHECKSUM=' + openOCD['checksum']['md5'] + '\nOPENOCD_LOCATION=' + openOCD['installationLocation'] 
@@ -297,7 +297,7 @@ def main():
 	parser.add_argument('--onlyDownload', nargs='?', type=bool, const=True, help='Checking if all files can be download from internet.')
 	parser.add_argument('--verifyWindowsDownload', nargs='?', type=bool, const=True, help='Checking if all files required for windows installation can be download from internet.')
 	parser.add_argument('--replaceGthr', nargs='?', type=bool, const=True, help='Part of toolchain patching, replacing gthr.h file into microhal version.')
-	parser.add_argument('--makeLinuxInstaller', nargs='?', type=bool, const=True, help='Creating windows installation files.')
+	parser.add_argument('--makeLinuxInstaller', nargs='?', type=bool, const=True, help='Creating linux installation files.')
 	parser.add_argument('--makeWindowsInstaller', nargs='?', type=bool, const=True, help='Creating windows installation files. This will work on linux with wine where Inno Setup and Inno Download Plugin was installed')
 	args = parser.parse_args()
 
