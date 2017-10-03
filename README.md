@@ -24,13 +24,20 @@ To download examples:
 </br>
 </br>
 When new window apear please find and expand <b>microHAL Projects</b> tree. You should see <b>microHAL examples</b> option, please double click on it, the text should change to bold.</br>
-Please keep clicking on <b>Next</b> button until you will see <b>Variables</b> tab. In Variables tab please sellect <b>Show all variables</b> checkbox and form menu <b>Github Access</b> select <b>HTTPS(read-only, anonymous)</b>.
-![](images/eclipse_file_import_github_settings_show_options.png)
-
-Afterwards, please keep clicking <b>Next</b> button. Confirm all operations by clicking <b>Finish</b> button.</br>
+Please keep clicking on <b>Next</b> button until you will see <b>Variables</b> tab. 
 
 ![](images/eclipse_file_import_oomph_microHALProjects_examples.png)
 </br>
+In Variables tab please sellect <b>Show all variables</b> checkbox and form menu <b>Github Access</b> select <b>HTTPS(read-only, anonymous)</b>.
+![](images/eclipse_file_import_github_settings_show_options.png)
+
+Afterwards, please keep clicking <b>Next</b> button. Confirm all operations by clicking <b>Finish</b> button.</br>
+When first step of importing examples will finish you will see small icon with exclamation mark in right bottom corner of eclipse. Please click on it and when new window apear click Finish.
+
+![](images/eclipse_file_import_restart_required.png)</br>
+
+This will restart eclipse and next step of importing examples will start automatically.
+
 </br>
 It may take a while for all examples to download into your workspace, so please be patient. When all examples will be downloaded project explorer will become messy. To improve readability change display method in project explorer 
 to <b>Working Sets</b>.
