@@ -1,10 +1,12 @@
 ## Microide is eclipse based IDE dedicated for embedded development. 
 
-### Windows
+### Windows installation
 To install microide on Windows operating system you should go to our Source Forge project site and download windows binary installer.
 
 [![Download microHAL](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/microhal/files/latest/download)
-### Linux
+
+
+### Linux installation
 To install microide on Linux operating system download <b>linux/microide_install.sh</b> file from this repository and run it in directory where you want to install microide.
 
 ## Importing microhal examples
@@ -21,14 +23,22 @@ To download examples:
 ![](images/eclipse_file_import_wizard_oomph.png)
 </br>
 </br>
-When new window apear please find and expand <b>microHAL Projects</b> tree. You should see <b>microHAL examples</b> option, please double click on it, the text should change to bold. Afterwards, please keep clicking <b>next</b> button. Confirm all operations by clicking <b>Finish</b> button.</br>
+When new window apear please find and expand <b>microHAL Projects</b> tree. You should see <b>microHAL examples</b> option, please double click on it, the text should change to bold.</br>
+Please keep clicking on <b>Next</b> button until you will see <b>Variables</b> tab. In Variables tab please sellect <b>Show all variables</b> checkbox and form menu <b>Github Access</b> select <b>HTTPS(read-only, anonymous)</b>.
+![](images/eclipse_file_import_github_settings_show_options.png)
+
+Afterwards, please keep clicking <b>Next</b> button. Confirm all operations by clicking <b>Finish</b> button.</br>
 
 ![](images/eclipse_file_import_oomph_microHALProjects_examples.png)
 </br>
 </br>
-It may take a while for all examples to download into your workspace, so please be patient. When all examples will be downloaded project explorer will become messy. To improve readability change display method in project explorer to <b>Working Sets</b>.
+It may take a while for all examples to download into your workspace, so please be patient. When all examples will be downloaded project explorer will become messy. To improve readability change display method in project explorer 
+to <b>Working Sets</b>.
 
-### About microide
+![](images/eclipse_projectExplorer_topLevelElements_workingSets.png)</br>
+
+
+## About microide
 Microide is dedicated for embedded development, its integrate tools like:
  - Eclipse CDT for C/C++ development
  - ARM Toolchain
@@ -41,9 +51,9 @@ Microide is dedicated for embedded development, its integrate tools like:
  
 All packages are preconfigured and IDE is redy for use after installing. This installer contain script that will download and install all comptonents.
 
-### Changelog
+## Changelog
 
-#### 0.3.1
+### 0.3.1
 - updated Eclipse to newest version (oxygen)
 - updated OpenOCD to 0.10.0 Release 
 - replaced GNU ARM Eclipse plugin with GNU MCU Eclipse
