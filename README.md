@@ -36,6 +36,7 @@ Please keep clicking on <b>Next</b> button until you will see <b>Variables</b> t
 ![](images/eclipse_file_import_oomph_microHALProjects_examples.png)
 </br>
 In Variables tab please sellect <b>Show all variables</b> checkbox and form menu <b>Github Access</b> select <b>HTTPS(read-only, anonymous)</b>.
+
 ![](images/eclipse_file_import_github_settings_show_options.png)
 
 Afterwards, please keep clicking <b>Next</b> button. Confirm all operations by clicking <b>Finish</b> button.</br>
@@ -44,13 +45,10 @@ When first step of importing examples will finish you will see small icon with e
 ![](images/eclipse_file_import_restart_required.png)</br>
 
 This will restart eclipse and next step of importing examples will start automatically.
-
 </br>
-It may take a while for all examples to download into your workspace, so please be patient. When all examples will be downloaded project explorer will become messy. To improve readability change display method in project explorer 
-to <b>Working Sets</b>.
+It may take a while for all examples to download into your workspace, so please be patient. When all examples will be downloaded project explorer will become messy. To improve readability change display method in project explorer to <b>Working Sets</b>.
 
 ![](images/eclipse_projectExplorer_topLevelElements_workingSets.png)</br>
-
 
 ## About microide
 Microide is dedicated for embedded development, its integrate tools like:
