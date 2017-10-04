@@ -142,7 +142,7 @@ def generateWindowsProductSetup():
 	content = content.replace("##MinGWToolchainPatch##", mingwPath.replace('/', '\\' ))
 
 	doxygenPath = winDoxygen['installationLocation']
-	doxygenPath = doxygenPath.replace('{app}', '${microide|file}/bin') 
+	doxygenPath = doxygenPath.replace('{app}', '${microide|file}') + '/bin'
 	content = content.replace("##DoxygenPatch##", doxygenPath)
 
 	with open('eclipse-installer/setups/microIDE/microide.product.setup.windows', 'w') as file:

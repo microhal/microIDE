@@ -68,7 +68,7 @@ wget -O $DOWNLOAD_DIR/$ECLIPSE_FILENAME $ECLIPSE_URL
 #    echo Aborting...
 #    exit 1
 #fi
-#}
+}
 
 
 instal() {

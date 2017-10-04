@@ -122,8 +122,14 @@
       value="${OPENOCD_LOCATION |file}/bin"/>
   <setupTask
       xsi:type="setup:StringSubstitutionTask"
+      filter="(osgi.os=win32)"
       name="openocd_executable"
       value="openocd.exe"/>
+  <setupTask
+      xsi:type="setup:StringSubstitutionTask"
+      filter="(osgi.os=linux)"
+      name="openocd_executable"
+      value="openocd"/>
   <setupTask
       xsi:type="setup:CompoundTask"
       name="User Preferences">
@@ -223,44 +229,53 @@
           value="org.eclipse.cdt.ui.doxygen"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/delimiter"
           value=";"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/operation"
           value="append"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/value"
           value="${MINGW_TOOLCHAIN_LOCATION|file}">
         <description></description>
       </setupTask>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MSYS_HOME/delimiter"
           value=";"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MSYS_HOME/operation"
           value="append"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MSYS_HOME/value"
           value="${microIDE_tools_dir|file}\tools\msys">
         <description></description>
       </setupTask>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/delimiter"
           value=";"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/operation"
           value="replace"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/value"
-          value="${microIDE_tools_dir|file}	ools\graphizin"/>
+          value="${microIDE_tools_dir|file}/tools/graphiz/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MINGW_HOME/operation"
@@ -492,15 +507,16 @@
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
+        filter="(osgi.os=win32)"
         name="org.gna.eclox.core">
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.gna.eclox.core/doxygen.default"
-          value="eclox.core.doxygen.CustomDoxygen ${microide|file}/bin\tools\doxygen\1.8.13"/>
+          value="eclox.core.doxygen.CustomDoxygen ${microide|file}\tools\doxygen\1.8.13/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.gna.eclox.core/doxygen.customs"
-          value="eclox.core.doxygen.CustomDoxygen ${microide|file}/bin\tools\doxygen\1.8.13&#xA;"/>
+          value="eclox.core.doxygen.CustomDoxygen ${microide|file}\tools\doxygen\1.8.13/bin&#xA;"/>
     </setupTask>
   </setupTask>
   <version name="oxygen"
