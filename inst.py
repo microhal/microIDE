@@ -124,8 +124,6 @@ def generateLinuxProductSetup():
 
 	content = content.replace("##DoxygenPatch##", "/usr/bin")
 
-	content = content.replace("##PatchModification##", "")
-
 	with open('eclipse-installer/setups/microIDE/microide.product.setup.linux', 'w') as file:
 		file.write(content)
 
@@ -146,20 +144,6 @@ def generateWindowsProductSetup():
 	doxygenPath = winDoxygen['installationLocation']
 	doxygenPath = doxygenPath.replace('{app}', '${microide|file}/bin') 
 	content = content.replace("##DoxygenPatch##", doxygenPath)
-
-	path = """<setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/delimiter"
-          value=";"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/operation"
-          value="replace"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/value"
-          value="${microIDE_tools_dir|file}\tools\graphiz\bin"/>"""
-	content = content.replace("##PatchModification##", path)
 
 	with open('eclipse-installer/setups/microIDE/microide.product.setup.windows', 'w') as file:
 		file.write(content)

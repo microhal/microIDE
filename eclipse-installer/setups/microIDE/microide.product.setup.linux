@@ -223,33 +223,53 @@
           value="org.eclipse.cdt.ui.doxygen"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=windows)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/delimiter"
           value=";"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=windows)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/operation"
           value="append"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=windows)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/value"
           value="${MINGW_TOOLCHAIN_LOCATION|file}">
         <description></description>
       </setupTask>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=windows)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MSYS_HOME/delimiter"
           value=";"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=windows)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MSYS_HOME/operation"
           value="append"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=windows)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MSYS_HOME/value"
           value="${microIDE_tools_dir|file}\tools\msys">
         <description></description>
       </setupTask>
-      
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=windows)"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/delimiter"
+          value=";"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=windows)"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/operation"
+          value="replace"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=windows)"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/value"
+          value="${microIDE_tools_dir|file}/tools/graphiz/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MINGW_HOME/operation"
