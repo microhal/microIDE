@@ -44,7 +44,7 @@
         type="URI"
         name="ARM_GCC_TOOLCHAIN_LOCATION"
         value="${microide}/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-5_3-2016q1"
-        defaultValue=""/>   
+        defaultValue=""/>
     <setupTask
         xsi:type="setup:VariableTask"
         type="URI"
@@ -56,7 +56,7 @@
         xsi:type="setup:VariableTask"
         type="URI"
         name="MINGW_TOOLCHAIN_LOCATION"
-        value="${microide}/toolchains/mingw-w64/5.3.0"/>
+        value="/usr/bin/mingw64"/>
     <setupTask
         xsi:type="setup:VariableTask"
         type="URI"
@@ -73,35 +73,37 @@
     <requirement
         name="org.wangzw.cppstyle.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.managedbuild.cross.feature.group"/>
+        name="ilg.gnumcueclipse.templates.ad.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.debug.gdbjtag.jlink.feature.group"/>
+        name="ilg.gnumcueclipse.managedbuild.cross.arm.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.debug.gdbjtag.openocd.feature.group"/>
+        name="ilg.gnumcueclipse.codered.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.templates.ad.feature.group"/>
+        name="ilg.gnumcueclipse.doc.user.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.codered.feature.group"/>
+        name="ilg.gnumcueclipse.templates.freescale.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.doc.user.feature.group"/>
+        name="ilg.gnumcueclipse.templates.cortexm.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.templates.freescale.feature.group"/>
+        name="ilg.gnumcueclipse.debug.gdbjtag.jlink.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.templates.cortexm.feature.group"/>
+        name="ilg.gnumcueclipse.debug.gdbjtag.openocd.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.debug.gdbjtag.qemu.feature.group"/>
+        name="ilg.gnumcueclipse.packs.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.templates.stm.feature.group"/>
+        name="ilg.gnumcueclipse.debug.gdbjtag.pyocd.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.packs.feature.group"/>
+        name="ilg.gnumcueclipse.debug.gdbjtag.qemu.feature.feature.group"/>
     <requirement
-        name="ilg.gnuarmeclipse.debug.gdbjtag.pyocd.feature.group"/>
+        name="ilg.gnumcueclipse.managedbuild.cross.riscv.feature.feature.group"/>
+    <requirement
+        name="ilg.gnumcueclipse.templates.stm.feature.feature.group"/>
     <repository
         url="http://anb0s.github.io/eclox"/>
     <repository
         url="http://www.cppstyle.com/mars"/>
     <repository
-        url="http://gnuarmeclipse.sourceforge.net/updates"/>
+        url="http://gnu-mcu-eclipse.netlify.com/v4-neon-updates"/>
     <description>all plugins required by microIDE</description>
   </setupTask>
   <setupTask
@@ -119,18 +121,20 @@
       name="openocd_path"
       value="${OPENOCD_LOCATION |file}/bin"/>
   <setupTask
+      xsi:type="setup:StringSubstitutionTask"
+      filter="(osgi.os=win32)"
+      name="openocd_executable"
+      value="openocd.exe"/>
+  <setupTask
+      xsi:type="setup:StringSubstitutionTask"
+      filter="(osgi.os=linux)"
+      name="openocd_executable"
+      value="openocd"/>
+  <setupTask
       xsi:type="setup:CompoundTask"
       name="User Preferences">
     <annotation
         source="http://www.eclipse.org/oomph/setup/UserPreferences">
-      <detail
-          key="/instance/ilg.gnuarmeclipse.managedbuild.cross/buildTools.path">
-        <value>record</value>
-      </detail>
-      <detail
-          key="/instance/ilg.gnuarmeclipse.managedbuild.cross/toolchain.path.1287942917">
-        <value>record</value>
-      </detail>
       <detail
           key="/instance/org.eclipse.core.resources/pathvariable.microHAL_DIR">
         <value>record</value>
@@ -186,15 +190,26 @@
     </annotation>
     <setupTask
         xsi:type="setup:CompoundTask"
-        name="ilg.gnuarmeclipse.managedbuild.cross">
+        name="ilg.gnumcueclipse.debug.gdbjtag.openocd">
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/ilg.gnuarmeclipse.managedbuild.cross/buildTools.path">
-        <description></description>
-      </setupTask>
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.server.executable"
+          value="$${openocd_path}/$${openocd_executable}"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="ilg.gnumcueclipse.managedbuild.cross">
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/ilg.gnuarmeclipse.managedbuild.cross/toolchain.path.1287942917"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross/buildTools.path"
+          value="${MSYS_LOCATION|file}/bin"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="ilg.gnumcueclipse.managedbuild.cross.arm">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.path.1287942917"
           value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
     </setupTask>
     <setupTask
@@ -202,36 +217,81 @@
         name="org.eclipse.cdt.core">
       <setupTask
           xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/build.all.configs.enabled"
+          value="false"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/build.proj.ref.configs.enabled"
+          value="false"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/doctool/workspace.default"
           value="org.eclipse.cdt.ui.doxygen"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/delimiter"
           value=";"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/operation"
           value="append"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/value"
           value="${MINGW_TOOLCHAIN_LOCATION|file}">
         <description></description>
       </setupTask>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MSYS_HOME/delimiter"
           value=";"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MSYS_HOME/operation"
           value="append"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MSYS_HOME/value"
           value="${microIDE_tools_dir|file}\tools\msys">
         <description></description>
       </setupTask>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/delimiter"
+          value=";"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/operation"
+          value="replace"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/value"
+          value="${microIDE_tools_dir|file}/tools/graphiz/bin"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/MINGW_HOME/operation"
+          value="replace"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/MINGW_HOME/value"
+          value="$${MICROIDE_MINGW_HOME}"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/MSYS_HOME/operation"
+          value="replace"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/MSYS_HOME/value"
+          value="$${MICROIDE_MSYS_HOME}"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -444,6 +504,19 @@
           xsi:type="setup:PreferenceTask"
           key="/instance/org.wangzw.cppstyle/cppstyle.enable.cpplint.on.save"
           value="false"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        filter="(osgi.os=win32)"
+        name="org.gna.eclox.core">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.gna.eclox.core/doxygen.default"
+          value="eclox.core.doxygen.CustomDoxygen /usr/bin"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.gna.eclox.core/doxygen.customs"
+          value="eclox.core.doxygen.CustomDoxygen /usr/bin&#xA;"/>
     </setupTask>
   </setupTask>
   <version name="oxygen"
