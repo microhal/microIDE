@@ -122,8 +122,14 @@
       value="${OPENOCD_LOCATION |file}/bin"/>
   <setupTask
       xsi:type="setup:StringSubstitutionTask"
+      filter="(osgi.os=windows)"
       name="openocd_executable"
       value="openocd.exe"/>
+  <setupTask
+      xsi:type="setup:StringSubstitutionTask"
+      filter="(osgi.os=linux)"
+      name="openocd_executable"
+      value="openocd"/>
   <setupTask
       xsi:type="setup:CompoundTask"
       name="User Preferences">
@@ -501,6 +507,7 @@
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
+        filter="(osgi.os=windows)"
         name="org.gna.eclox.core">
       <setupTask
           xsi:type="setup:PreferenceTask"

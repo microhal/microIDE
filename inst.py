@@ -29,8 +29,8 @@ eclipse = {
     'filename' : 'eclipse-inst-linux64.tar.gz',
     'size' : '0',
     'version' : 'oxygen',
-    'url' : 'https://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R/eclipse-inst-linux64.tar.gz\&r=1',
-    'checksum' : {'SHA512' : '2bbb38475b3f3b13b9c6c5db5895fe25ce24b4a8df6a24c6822a348a9652dc8df49ca19152495f34156c39022b8c2ed6b5bb1e84db3edc751302d73bdc1d56da'},
+    'url' : 'http://www.eclipse.org/downloads/download.php?file=/oomph/products/latest/eclipse-inst-linux64.tar.gz\&r=1',
+    'checksum' : {'' : ''},
     'installationLocation' : 'eclipse'
 }
 
