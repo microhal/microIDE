@@ -3,7 +3,7 @@
 ### Windows installation
 To install microide on Windows operating system you should go to our Source Forge project site and download windows binary installer.
 
-[![Download microHAL](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/microhal/files/latest/download)
+https://github.com/microHAL/microIDE/releases/download/0.3.1/microIDE_setup_0.3.1.exe
 
 Installing microide is simply but have one tricky part. You have put correct path into eclipse installation. Correct path will be shown in IMPORTANT NOTICE text. you should copy this path and pase it into eclipse installer.
 
