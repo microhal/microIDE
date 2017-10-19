@@ -1,4 +1,4 @@
-## Microide is eclipse based IDE dedicated for embedded development. 
+## Microide is eclipse based IDE dedicated for embedded development.
 
 ### Windows installation
 To install microide on Windows operating system you should go to our Source Forge project site and download windows binary installer.
