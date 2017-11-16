@@ -9,8 +9,10 @@
   <project
 	href="microIDE/microhal.examples.setup#/"/>
   <project
+	href="microIDE/microhal.project.snowflake.setup#/"/>
+  <project
 	href="microIDE/microhal.project.propellerTester.setup#/"/>
   <project
 	href="microIDE/microhal.templates.setup#/"/>
-  <description>List of microHAL projects.</description>
+  <description>List of microhal projects.</description>
 </setup:ProjectCatalog>
