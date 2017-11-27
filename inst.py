@@ -189,13 +189,6 @@ def recursiveRemoveNotListedFiles(directory, filesToPath):
 		if not os.listdir(root):
 			os.rmdir(root)
 
-def replaceGthr(toolchainDir):
-	for root, subdirs, files in os.walk(toolchainDir):
-		for filename in files:
-			file_path = os.path.join(root, filename)	
-			if filename == 'gthr.h':
-				shutil.copy('gthr.h', file_path)
-
 def replaceRecursive(destination, sourcefiledir, sourcefilename):
 	replaceCounter = 0
 	for root, subdirs, files in os.walk(destination):
@@ -225,21 +218,7 @@ def verifyLinuxDownloads(destdir):
 
 def getFiles(destdir):
 	verifyLinuxDownloads(destdir)
-	verifyWindowsDownloads(destdir)
-	#if destdir:
-	#	destdir = destdir + "/"
-	#files = linuxFiles
-
-	#for file in files:		
-	#	status = [False, False]	
-	#	status = download(destdir, file['filename'], file['url'], file['checksum'])
-	#	if status[0] == False:
-			#file['size'] = status[1]
-			#if f['checksum'].has_key('md5') == False:
-			#	f['checksum']['md5'] = hashlib.md5(open('./' + destdir + file['filename'],'rb').read()).hexdigest()	
-		#else:
-	#		print "An error occurred, while downloading " + f['filename']
-	#		exit(-1) 
+	verifyWindowsDownloads(destdir)	
 
 def fileExists(path):    
     try:
@@ -388,7 +367,8 @@ def main():
 		compileWindowsInstaller()
 	if args.replaceGthr == True:
 		print "Replacing gthr.h files..."
-		replaceGthr()
+		toolchainDir = 'norepo/toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-6-2017-q2-update'
+		replaceRecursive(toolchainDir, 'toolchainPatchFiles', 'gthr.h')
 	if args.createToolchainPatch == True:
 		print "Creating toolchain patch."
 		getMissingFiles('norepo/linux', [armGccToolchain])
@@ -404,7 +384,7 @@ def main():
 		print "Replacing condition_variable ..."
 		replaceRecursive(toolchainDir, 'toolchainPatchFiles', 'condition_variable')
 		print "Removing unchanged files"
-		recursiveRemoveNotListedFiles(toolchainDir, ['gthr.h', 'condition_variable', 'mutex', 'thread'])	
+		recursiveRemoveNotListedFiles(toolchainDir, ['gthr.h', 'condition_variable', 'mutex', 'thread'])
 	
 
 if __name__ == "__main__":

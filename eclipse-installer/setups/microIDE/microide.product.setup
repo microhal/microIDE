@@ -43,7 +43,7 @@
         xsi:type="setup:VariableTask"
         type="URI"
         name="ARM_GCC_TOOLCHAIN_LOCATION"
-        value="##microideToolchainPatch##"
+        value="${microide}/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-5_3-2016q1"
         defaultValue=""/>
     <setupTask
         xsi:type="setup:VariableTask"
@@ -56,7 +56,7 @@
         xsi:type="setup:VariableTask"
         type="URI"
         name="MINGW_TOOLCHAIN_LOCATION"
-        value="##MinGWToolchainPatch##/mingw64"/>
+        value="/usr/bin/mingw64"/>
     <setupTask
         xsi:type="setup:VariableTask"
         type="URI"
@@ -271,21 +271,6 @@
       </setupTask>
       <setupTask
           xsi:type="setup:PreferenceTask"
-          filter="(osgi.os=win32)"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/delimiter"
-          value=";"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          filter="(osgi.os=win32)"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/operation"
-          value="replace"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          filter="(osgi.os=win32)"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/value"
-          value="${microIDE_tools_dir|file}/tools/graphiz/bin"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MINGW_HOME/operation"
           value="replace"/>
       <setupTask
@@ -300,6 +285,21 @@
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MSYS_HOME/value"
           value="$${MICROIDE_MSYS_HOME}"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/delimiter"
+          value=";"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/operation"
+          value="replace"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/value"
+          value="${microIDE_tools_dir|file}/tools/graphiz/bin"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -491,11 +491,24 @@
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
+        filter="(osgi.os=win32)"
+        name="org.gna.eclox.core">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.gna.eclox.core/doxygen.customs"
+          value="eclox.core.doxygen.CustomDoxygen /usr/bin&#xA;"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.gna.eclox.core/doxygen.default"
+          value="eclox.core.doxygen.CustomDoxygen /usr/bin"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
         name="org.wangzw.cppstyle">
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.wangzw.cppstyle/cppstyle.clangformat.path"
-          value="##clangFormatLocation##">
+          value="/usr/bin/clang-format">
         <description></description>
       </setupTask>
       <setupTask
@@ -512,19 +525,6 @@
           xsi:type="setup:PreferenceTask"
           key="/instance/org.wangzw.cppstyle/cppstyle.enable.cpplint.on.save"
           value="false"/>
-    </setupTask>
-    <setupTask
-        xsi:type="setup:CompoundTask"
-        filter="(osgi.os=win32)"
-        name="org.gna.eclox.core">
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/instance/org.gna.eclox.core/doxygen.default"
-          value="eclox.core.doxygen.CustomDoxygen ##DoxygenPatch##"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/instance/org.gna.eclox.core/doxygen.customs"
-          value="eclox.core.doxygen.CustomDoxygen ##DoxygenPatch##&#xA;"/>
     </setupTask>
   </setupTask>
   <version name="oxygen"
