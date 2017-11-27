@@ -7,12 +7,16 @@ import re
 import argparse
 
 armGccToolchain = {
-    'filename' : 'gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2',
+#    'filename' : 'gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2',
+    'filename' : 'gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2',
     'size' : '0',
-    'version' : '5.3.0',
-    'url' : 'https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2', 
-    'checksum' : {'md5' : '5a261cac18c62d8b7e8c70beba2004bd'},
-    'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
+    'version' : '6.2.0',
+#    'url' : 'https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2', 
+    'url' : 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/6-2017q2/gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2?revision=2cc92fb5-3e0e-402d-9197-bdfc8224d8a5?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,6-2017-q2-update',
+#    'checksum' : {'md5' : '5a261cac18c62d8b7e8c70beba2004bd'},
+    'checksum' : {'md5' : '13747255194398ee08b3ba42e40e9465'},
+#    'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
+    'licenseUrl' : 'https://developer.arm.com/GetEula?Id=2d916619-954e-4adb-895d-b1ec657ae305',
     'installationLocation' : '${microide}/toolchains/gcc-arm-none-eabi/microhal'
 }
 
@@ -94,22 +98,29 @@ winEclipse = {
     'installationLocation' : 'eclipse'
 }
 
+linuxFiles = [armGccToolchain, openOCD, eclipse]
+windowsFiles = [winArmGccToolchain, winClangToolchain, winMinGwToolchain, winOpenOCD, winDoxygen, winEclipse]
+allFiles = linuxFiles + windowsFiles
+
 # ------------------------------------ end of file declaration
 
-def download(filename, url, checksum):
-	parameters = "wget -O ./" + filename + ' ' + url
+def download(destynation, filename, url, checksum):
+	if destynation:
+		destynation = destynation + "/"
+
+	parameters = "wget -O ./" + destynation + filename + ' ' + url
 	os.system(parameters  + " >> output.log")
 	if checksum.has_key('md5') == True:
-		if hashlib.md5(open('./' + filename,'rb').read()).hexdigest() != checksum['md5']:
+		if hashlib.md5(open('./'  + destynation + filename,'rb').read()).hexdigest() != checksum['md5']:
 			return [False, 0]
 	if checksum.has_key('SHA512') == True:
-		if hashlib.sha512(open('./' + filename,'rb').read()).hexdigest() != checksum['SHA512']:
+		if hashlib.sha512(open('./' + destynation + filename,'rb').read()).hexdigest() != checksum['SHA512']:
 			return [False, 0]
 	if checksum.has_key('SHA256') == True:
-		if hashlib.sha256(open('./' + filename,'rb').read()).hexdigest() != checksum['SHA256']:
+		if hashlib.sha256(open('./'  + destynation + filename,'rb').read()).hexdigest() != checksum['SHA256']:
 			return [False, 0]
 
-        return [True, os.stat('./' + filename).st_size]
+        return [True, os.stat('./'  + destynation + filename).st_size]
 	
 
 def generateLinuxProductSetup():
@@ -161,13 +172,12 @@ def generateLinuxInstaller():
 	with open('linux/microide_install.sh', 'w') as file:
 		file.write(content)	
 
-def createToolchainPatch():
-	os.system("tar --extract --file=" +  armGccToolchain['filename'] +' -C toolchains/gcc-arm-none-eabi-patch')
-	for root, subdirs, files in os.walk('toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-6-2017-q2-update', topdown=False):
+def recursiveRemoveNotListedFiles(directory, filesToPath):	
+	for root, subdirs, files in os.walk(directory, topdown=False):
 		for filename in files:
 			file_path = os.path.join(root, filename)
 	#		print('\t- file %s (full path: %s)' % (filename, file_path))
-			if filename not in ['gthr.h', 'condition_variable', 'mutex', 'thread']:
+			if filename not in filesToPath:
 				os.remove(file_path)
 
 		for subdir in subdirs:
@@ -179,43 +189,95 @@ def createToolchainPatch():
 		if not os.listdir(root):
 			os.rmdir(root)
 
-def replaceGthr():
-	for root, subdirs, files in os.walk('toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-6-2017-q2-update'):
+def replaceGthr(toolchainDir):
+	for root, subdirs, files in os.walk(toolchainDir):
 		for filename in files:
 			file_path = os.path.join(root, filename)	
 			if filename == 'gthr.h':
 				shutil.copy('gthr.h', file_path)
 
-
-def getFiles():
-	status = [False, False]
-	status = download(armGccToolchain['filename'], armGccToolchain['url'], armGccToolchain['checksum'])
-	if status[0] == True:
-		armGccToolchain['size'] = status[1]
-		if armGccToolchain['checksum'].has_key('md5') == False:
-			armGccToolchain['checksum']['md5'] = hashlib.md5(open('./' + armGccToolchain['filename'],'rb').read()).hexdigest()	
-	else:
-		print "An error occurred"
-		exit(-1) 
-
-	status = download(openOCD['filename'], openOCD['url'], openOCD['checksum'])
-	if status[0] == True:
-		openOCD['size'] = status[1]
-		if openOCD['checksum'].has_key('md5') == False:
-			openOCD['checksum']['md5'] = hashlib.md5(open('./' + openOCD['filename'],'rb').read()).hexdigest()	
-	else:
-		print "An error occurred"
-		exit(-1) 
+def replaceRecursive(destination, sourcefiledir, sourcefilename):
+	replaceCounter = 0
+	for root, subdirs, files in os.walk(destination):
+		for filename in files:
+			file_path = os.path.join(root, filename)	
+			if filename == sourcefilename:
+				shutil.copy(sourcefiledir + "/" + sourcefilename, file_path)
+				replaceCounter = replaceCounter + 1
+	print "Replaced " + str(replaceCounter) + " files"
 
 
-	status = download(eclipse['filename'], eclipse['url'], eclipse['checksum'])
-	if status[0] == True:
-		eclipse['size'] = status[1]
-		if eclipse['checksum'].has_key('md5') == False:
-			eclipse['checksum']['md5'] = hashlib.md5(open('./' + eclipse['filename'], 'rb').read()).hexdigest()	
-	else:
-		print "An error occurred"
-		exit(-1) 
+def verifyWindowsDownloads(destdir):
+	files = windowsFiles 
+	for file in files:
+		status = download(destdir + '/windows', file['filename'], file['url'], file['checksum'])	
+		if status[0] == False:
+			print "An error occurred" 
+			exit(-1) 
+
+def verifyLinuxDownloads(destdir):
+	files = linuxFiles
+	for file in files:
+		status = download(destdir + '/linux', file['filename'], file['url'], file['checksum'])	
+		if status[0] == False:
+			print "An error occurred"
+			exit(-1) 
+
+def getFiles(destdir):
+	verifyLinuxDownloads(destdir)
+	verifyWindowsDownloads(destdir)
+	#if destdir:
+	#	destdir = destdir + "/"
+	#files = linuxFiles
+
+	#for file in files:		
+	#	status = [False, False]	
+	#	status = download(destdir, file['filename'], file['url'], file['checksum'])
+	#	if status[0] == False:
+			#file['size'] = status[1]
+			#if f['checksum'].has_key('md5') == False:
+			#	f['checksum']['md5'] = hashlib.md5(open('./' + destdir + file['filename'],'rb').read()).hexdigest()	
+		#else:
+	#		print "An error occurred, while downloading " + f['filename']
+	#		exit(-1) 
+
+def fileExists(path):    
+    try:
+        st = os.stat(path)
+    except os.error:
+        return False
+    return True
+
+#this function will update:
+# - file size
+# - MD5 checksum
+def updateFileinfo(destdir, files):
+	if destdir:
+		destdir = destdir + "/"	
+
+	for file in files:
+		filePath = './'  + destdir + file['filename']
+		if fileExists(filePath):
+			file['size'] = os.stat(filePath).st_size	
+			if file['checksum'].has_key('md5') == False:
+				file['checksum']['md5'] = hashlib.md5(open(filePath,'rb').read()).hexdigest()	
+		else:
+			print "An error occurred, while updating file info: " + filePath
+			exit(-1) 
+
+def getMissingFiles(destdir, files):
+	if destdir:
+		destdir = destdir + "/"	
+
+	for file in files:
+		filePath = './'  + destdir + file['filename']
+		if fileExists(filePath) == False:	
+			download(destdir, file['filename'], file['url'], file['checksum'])
+		else:
+			print "File exist, no need to download: " + filePath
+
+
+
 
 def generateInnoSetupFile():
 	with open('templates/microide.iss.template', 'r') as file:
@@ -291,41 +353,58 @@ def compileWindowsInstaller():
 	parameters = './iscc.sh windows/microide.iss'
 	os.system(parameters  + " >> output.log")
 
-def verifyWindowsDownloads():
-	files = [ winArmGccToolchain, winClangToolchain, winMinGwToolchain, winOpenOCD, winDoxygen, winEclipse ]
-	for file in files:
-		status = download(file['filename'], file['url'], file['checksum'])	
-		if status[0] == False:
-			print "An error occurred"
-			exit(-1) 
+
 
 
 
 def main():
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--onlyDownload', nargs='?', type=bool, const=True, help='Checking if all files can be download from internet.')
+	parser.add_argument('--onlyDownload', nargs='?', type=bool, const=True, help='Checking if all windows and linux files can be download from internet.')
 	parser.add_argument('--verifyWindowsDownload', nargs='?', type=bool, const=True, help='Checking if all files required for windows installation can be download from internet.')
+	parser.add_argument('--verifyLinuxDownload', nargs='?', type=bool, const=True, help='Checking if all files required for linux installation can be download from internet.')
 	parser.add_argument('--replaceGthr', nargs='?', type=bool, const=True, help='Part of toolchain patching, replacing gthr.h file into microhal version.')
+	parser.add_argument('--createToolchainPatch', nargs='?', type=bool, const=True, help='Create toolchain patch.')
 	parser.add_argument('--makeLinuxInstaller', nargs='?', type=bool, const=True, help='Creating linux installation files.')
 	parser.add_argument('--makeWindowsInstaller', nargs='?', type=bool, const=True, help='Creating windows installation files. This will work on linux with wine where Inno Setup and Inno Download Plugin was installed')
+
 	args = parser.parse_args()
 
 	if args.onlyDownload == True:
-		getFiles()
+		getFiles('norepo')
 	if args.verifyWindowsDownload == True:
-		verifyWindowsDownloads()
+		verifyWindowsDownloads('norepo')
+	if args.verifyLinuxDownload == True:
+		verifyLinuxDownloads('norepo')
 	if args.makeLinuxInstaller == True:
 		print "Generating instalation files..."		
-		getFiles()
+		getMissingFiles('norepo/linux', linuxFiles)
+		updateFileinfo('norepo/linux', linuxFiles)
 		generateLinuxProductSetup()
 		generateLinuxInstaller()
+	if args.makeWindowsInstaller == True:
+		print "Generating windows instalation files..."
+		getMissingFiles('norepo/windows', windowsFiles)
+		updateFileinfo('norepo/linux', windowsFiles)		
+		compileWindowsInstaller()
 	if args.replaceGthr == True:
 		print "Replacing gthr.h files..."
 		replaceGthr()
-	if args.makeWindowsInstaller == True:
-		print "Generating windows instalation files..."		
-		compileWindowsInstaller()
-
+	if args.createToolchainPatch == True:
+		print "Creating toolchain patch."
+		getMissingFiles('norepo/linux', [armGccToolchain])
+		print "Extracting toolchain files..."
+		os.system("tar --extract --file=" +  'norepo/linux/' + armGccToolchain['filename'] + ' -C norepo/toolchains/gcc-arm-none-eabi-patch')		
+		toolchainDir = 'norepo/toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-6-2017-q2-update'
+		print "Replacing gthr.h ..."
+		replaceRecursive(toolchainDir, 'toolchainPatchFiles', 'gthr.h')
+		print "Replacing thread ..."
+		replaceRecursive(toolchainDir, 'toolchainPatchFiles', 'thread')
+		print "Replacing mutex ..."
+		replaceRecursive(toolchainDir, 'toolchainPatchFiles', 'mutex')
+		print "Replacing condition_variable ..."
+		replaceRecursive(toolchainDir, 'toolchainPatchFiles', 'condition_variable')
+		print "Removing unchanged files"
+		recursiveRemoveNotListedFiles(toolchainDir, ['gthr.h', 'condition_variable', 'mutex', 'thread'])	
 	
 
 if __name__ == "__main__":

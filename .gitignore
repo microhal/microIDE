@@ -1,4 +1,3 @@
 microide/
-*.bz2
-*.gz
-gthr.h
+norepo/
+toolchainPatchFiles/
