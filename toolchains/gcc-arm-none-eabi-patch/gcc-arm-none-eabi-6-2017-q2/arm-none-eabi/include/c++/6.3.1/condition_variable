@@ -46,46 +46,99 @@
 
 #if defined(_GLIBCXX_HAS_GTHREADS) && defined(_GLIBCXX_USE_C99_STDINT_TR1)
 
-struct Microhal_cond_impl{
-    	xTaskHandle waiting_tasks[10];
-    	uint8_t head;
-    	uint8_t tail;
+struct Microhal_cond_impl {
+    xTaskHandle waiting_tasks[10];
+    uint8_t head;
+    uint8_t tail;	
 
-    	bool add_waiting_task(xTaskHandle task){
-    		bool stat = false;
-    		taskENTER_CRITICAL();
-    		if(((head + 1) % 10) != tail){
-    			waiting_tasks[head] = task;
-    			head = (head + 1) % 10;
-    			stat = true;
-    		}
-    		taskEXIT_CRITICAL();
-    		return stat;
-    	}
+    bool add_waiting_task(xTaskHandle task) {
+    	bool stat = false;    		
+    	if (((head + 1) % 10) != tail) {
+    	    waiting_tasks[head] = task;
+    	    head = (head + 1) % 10;
+    	    stat = true;
+    	}    		
+    	return stat;
+    }
+    	
+    xTaskHandle delete_waiting_task(xTaskHandle task) {    		
+    	if (tail == head) {
+    	    // list is empty
+    	} else if (head > tail) {
+    	    auto i = tail;
+    	    bool found = false;
+    	    for (; i <= head; i++) {
+                if (waiting_tasks[i] == task) {
+    	            found = true;
+    	            break;
+                }
+    	    }
+    	    if (found) {
+    	     	for (; i < head; i++) {
+    	    	    waiting_tasks[i] = waiting_tasks[i + 1];
+    		    }
+    	    	head -= 1; // head > tail; smallest possible value of tail 0 ==> head >= 1
+    	    }
+    	} else {
+    	    auto i = tail;
+    	    decltype(tail) taskIndex = 0;
+    	    bool found = false;
+    	    for (; i < 10; i++) {
+    		    if (waiting_tasks[i] == task) {
+    		        taskIndex = i;
+    		        found = true;
+    		        break;
+    		    }
+    	    }
+    
+    	    if (found) {
+    		    auto i = taskIndex;
+    	    	for (; i > tail; i--) {
+    		        waiting_tasks[i] = waiting_tasks[i - 1];
+        		}	
+    	    	tail = (tail + 1) % 10;
+    	    } else {
+    	    	uint8_t i = 0;
+    	    	for (; i <= head; i++) {
+    	    	    if (waiting_tasks[i] == task) {
+    	        		found = true;
+    	    	    	break;
+    	    	    }
+    	        }
+    	        if (found) {
+    	            for (; i < head; i++) {
+    		            waiting_tasks[i] = waiting_tasks[i + 1];
+    		        }
+    		        if (head == 0) {
+    		            head = 9;
+    		        } else {
+    		            head -= 1;
+    		        }
+    	        }
+    	    }
+    	}      		
+    }
 
-    	xTaskHandle get_waiting_task(){
-    		xTaskHandle task = NULL;
+    xTaskHandle get_waiting_task() {
+     	xTaskHandle task = NULL;
+   		
+    	if(tail != head){
+   	        task = waiting_tasks[tail];
+   	        tail = (tail + 1) % 10;
+    	}    		
+    	return task;
+    }
+    	
+    uint8_t get_waiting_task_count() {
+        if(head >= tail)
+    	    return head - tail;
+    	else
+    	    return 10 - (tail - head);
+    }
 
-    		taskENTER_CRITICAL();
-    		if(tail != head){
-    			task = waiting_tasks[tail];
-    			tail = (tail + 1) % 10;
-    		}
-    		taskEXIT_CRITICAL();
-
-    		return task;
-    	}
-
-    	uint8_t get_waiting_task_count(){
-    		if(head >= tail)
-    			return head - tail;
-    		else
-    			return 10 - (tail - head);
-    	}
-
-    	constexpr Microhal_cond_impl() noexcept : waiting_tasks({nullptr}), head(0), tail(0){
-    	}
-    };
+    constexpr Microhal_cond_impl() noexcept : waiting_tasks({nullptr}), head(0), tail(0) {
+    }
+};
 bool __microhal_cond_timeout_wait(Microhal_cond_impl *impl, SemaphoreHandle_t *mutex, TickType_t timeout);
 
 namespace std _GLIBCXX_VISIBILITY(default)
