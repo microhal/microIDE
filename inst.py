@@ -201,17 +201,25 @@ def replaceRecursive(destination, sourcefiledir, sourcefilename):
 
 
 def verifyWindowsDownloads(destdir):
+    destdir = destdir + '/windows'
+    if not os.path.exists(destdir):
+        os.makedirs(destdir)
+
 	files = windowsFiles 
 	for file in files:
-		status = download(destdir + '/windows', file['filename'], file['url'], file['checksum'])	
+		status = download(destdir, file['filename'], file['url'], file['checksum'])	
 		if status[0] == False:
 			print "An error occurred" 
 			exit(-1) 
 
 def verifyLinuxDownloads(destdir):
+    destdir = destdir + '/linux'
+    if not os.path.exists(destdir):
+        os.makedirs(destdir)
+
 	files = linuxFiles
 	for file in files:
-		status = download(destdir + '/linux', file['filename'], file['url'], file['checksum'])	
+		status = download(destdir, file['filename'], file['url'], file['checksum'])	
 		if status[0] == False:
 			print "An error occurred"
 			exit(-1) 
