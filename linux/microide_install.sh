@@ -10,12 +10,12 @@ DOWNLOAD_DIR=./downloads
 
 #links to installation files
 
-ARM_GCC_TOOLCHAIN_URL=https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2
-ARM_GCC_TOOLCHAIN_LICENSE_URL=https://launchpadlibrarian.net/251686212/license.txt
-ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2
-ARM_GCC_TOOLCHAIN_VERSION=5.3.0
-ARM_GCC_TOOLCHAIN_SIZE=93090908
-ARM_GCC_TOOLCHAIN_CHECKSUM=5a261cac18c62d8b7e8c70beba2004bd
+ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/6-2017q2/gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2?revision=2cc92fb5-3e0e-402d-9197-bdfc8224d8a5?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,6-2017-q2-update
+ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=2d916619-954e-4adb-895d-b1ec657ae305
+ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2
+ARM_GCC_TOOLCHAIN_VERSION=6.2.0
+ARM_GCC_TOOLCHAIN_SIZE=100554551
+ARM_GCC_TOOLCHAIN_CHECKSUM=13747255194398ee08b3ba42e40e9465
 ARM_GCC_TOOLCHAIN_LOCATION=toolchains/gcc-arm-none-eabi/microhal
 
 OPENOCD_URL=https://sourceforge.net/projects/openocd/files/openocd/0.10.0/openocd-0.10.0.tar.gz/download
@@ -28,8 +28,8 @@ OPENOCD_LOCATION=tools/openocd/0.10.0
 ECLIPSE_URL=http://www.eclipse.org/downloads/download.php?file=/oomph/products/latest/eclipse-inst-linux64.tar.gz\&r=1
 ECLIPSE_FILENAME=eclipse-inst-linux64.tar.gz
 ECLIPSE_VERSION=oxygen
-ECLIPSE_SIZE=48055845
-ECLIPSE_CHECKSUM=67fe5b40f26163c734e54fd9a2aff624
+ECLIPSE_SIZE=48054847
+ECLIPSE_CHECKSUM=e0145a51fc903190f35e889cbac0da0a
 ECLIPSE_LOCATION=eclipse
 BRANCH_NAME=devel
 
@@ -84,9 +84,10 @@ sudo apt-get update
 sudo apt-get install lib32z1 lib32ncurses5 libbz2-1.0:i386 lib32stdc++6
 mkdir -p $ARM_GCC_TOOLCHAIN_LOCATION
 tar --extract --bzip2 --file=$DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME -C $ARM_GCC_TOOLCHAIN_LOCATION
+mv $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2} $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-*-linux.tar.bz2}
 #installing microhal patch to toolchain, this will allow to use standart operating system library with FreeRTOS
 echo 'Patching ARM Toolchain.'
-cp -r microIDE-$BRANCH_NAME/toolchains/gcc-arm-none-eabi-patch/$ARM_GCC_TOOLCHAIN_VERSION/* $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-*-linux.tar.bz2}
+cp -r microIDE-$BRANCH_NAME/toolchains/gcc-arm-none-eabi-patch/${ARM_GCC_TOOLCHAIN_FILENAME%-*-linux.tar.bz2}/* $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-*-linux.tar.bz2}
 
 # ------------------------------------ tools ---------------------------------
 echo 'Installing tools'

@@ -6,16 +6,22 @@ import shutil
 import re
 import argparse
 
+armGccToolchain_old_gcc5 = {
+    'filename' : 'gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2',
+    'size' : '0',
+    'version' : '6.2.0',
+    'url' : 'https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2', 
+    'checksum' : {'md5' : '5a261cac18c62d8b7e8c70beba2004bd'},
+    'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
+    'installationLocation' : '${microide}/toolchains/gcc-arm-none-eabi/microhal'
+}
+
 armGccToolchain = {
-#    'filename' : 'gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2',
     'filename' : 'gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2',
     'size' : '0',
     'version' : '6.2.0',
-#    'url' : 'https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2', 
     'url' : 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/6-2017q2/gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2?revision=2cc92fb5-3e0e-402d-9197-bdfc8224d8a5?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,6-2017-q2-update',
-#    'checksum' : {'md5' : '5a261cac18c62d8b7e8c70beba2004bd'},
     'checksum' : {'md5' : '13747255194398ee08b3ba42e40e9465'},
-#    'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
     'licenseUrl' : 'https://developer.arm.com/GetEula?Id=2d916619-954e-4adb-895d-b1ec657ae305',
     'installationLocation' : '${microide}/toolchains/gcc-arm-none-eabi/microhal'
 }
@@ -124,18 +130,19 @@ def download(destynation, filename, url, checksum):
 	
 
 def generateLinuxProductSetup():
-	with open('templates/microide.product.setup.template', 'r') as file:
+    with open('templates/microide.product.setup.template', 'r') as file:
 		content = file.read()
-	toolchainPatch = armGccToolchain['installationLocation'] + '/' + re.sub('-\d{8}-linux.tar.bz2', '', armGccToolchain['filename'])
-	content = content.replace("##microideToolchainPatch##", toolchainPatch)
+#	toolchainPatch = armGccToolchain['installationLocation'] + '/' + re.sub('-\d{8}-linux.tar.bz2', '', armGccToolchain['filename']) // for gcc 5
+    toolchainPatch = armGccToolchain['installationLocation'] + '/' + re.sub('-update-linux.tar.bz2', '', armGccToolchain['filename'])
+    content = content.replace("##microideToolchainPatch##", toolchainPatch)
 
-	content = content.replace("##clangFormatLocation##", "/usr/bin/clang-format")
+    content = content.replace("##clangFormatLocation##", "/usr/bin/clang-format")
 
-	content = content.replace("##MinGWToolchainPatch##", "/usr/bin")
+    content = content.replace("##MinGWToolchainPatch##", "/usr/bin")
 
-	content = content.replace("##DoxygenPatch##", "/usr/bin")
+    content = content.replace("##DoxygenPatch##", "/usr/bin")
 
-	with open('eclipse-installer/setups/microIDE/microide.product.setup.linux', 'w') as file:
+    with open('eclipse-installer/setups/microIDE/microide.product.setup.linux', 'w') as file:
 		file.write(content)
 
 def generateWindowsProductSetup():
@@ -161,15 +168,21 @@ def generateWindowsProductSetup():
 
 
 def generateLinuxInstaller():
-	with open('templates/microide_install.template', 'r') as file:
+    with open('templates/microide_install.template', 'r') as file:
 		content = file.read()
-	text = 'ARM_GCC_TOOLCHAIN_URL=' + armGccToolchain['url'] + '\nARM_GCC_TOOLCHAIN_LICENSE_URL=' + armGccToolchain['licenseUrl'] + '\nARM_GCC_TOOLCHAIN_FILENAME=' + armGccToolchain['filename'] + '\nARM_GCC_TOOLCHAIN_VERSION=' + armGccToolchain['version'] + '\nARM_GCC_TOOLCHAIN_SIZE=' + str(armGccToolchain['size']) + '\nARM_GCC_TOOLCHAIN_CHECKSUM=' + armGccToolchain['checksum']['md5'] + '\nARM_GCC_TOOLCHAIN_LOCATION=' + armGccToolchain['installationLocation'].replace('${microide}/', '')
-	text = text + '\n\nOPENOCD_URL=' + openOCD['url'] + '\nOPENOCD_FILENAME=' + openOCD['filename'] + '\nOPENOCD_VERSION=' + openOCD['version'] + '\nOPENOCD_SIZE=' + str(openOCD['size']) + '\nOPENOCD_CHECKSUM=' + openOCD['checksum']['md5'] + '\nOPENOCD_LOCATION=' + openOCD['installationLocation'] 
-	text = text + '\n\nECLIPSE_URL=' + eclipse['url'] + '\nECLIPSE_FILENAME=' + eclipse['filename'] + '\nECLIPSE_VERSION=' + eclipse['version'] + '\nECLIPSE_SIZE=' + str(eclipse['size']) + '\nECLIPSE_CHECKSUM=' + eclipse['checksum']['md5'] + '\nECLIPSE_LOCATION=' + eclipse['installationLocation']
+    text = 'ARM_GCC_TOOLCHAIN_URL=' + armGccToolchain['url'] + '\n'
+    text = text + 'ARM_GCC_TOOLCHAIN_LICENSE_URL=' + armGccToolchain['licenseUrl'] + '\n'
+    text = text + 'ARM_GCC_TOOLCHAIN_FILENAME=' + armGccToolchain['filename'] + '\n'
+    text = text + 'ARM_GCC_TOOLCHAIN_VERSION=' + armGccToolchain['version'] + '\n'
+    text = text + 'ARM_GCC_TOOLCHAIN_SIZE=' + str(armGccToolchain['size']) + '\n'
+    text = text + 'ARM_GCC_TOOLCHAIN_CHECKSUM=' + armGccToolchain['checksum']['md5'] + '\n'
+    text = text + 'ARM_GCC_TOOLCHAIN_LOCATION=' + armGccToolchain['installationLocation'].replace('${microide}/', '')
+    text = text + '\n\nOPENOCD_URL=' + openOCD['url'] + '\nOPENOCD_FILENAME=' + openOCD['filename'] + '\nOPENOCD_VERSION=' + openOCD['version'] + '\nOPENOCD_SIZE=' + str(openOCD['size']) + '\nOPENOCD_CHECKSUM=' + openOCD['checksum']['md5'] + '\nOPENOCD_LOCATION=' + openOCD['installationLocation'] 
+    text = text + '\n\nECLIPSE_URL=' + eclipse['url'] + '\nECLIPSE_FILENAME=' + eclipse['filename'] + '\nECLIPSE_VERSION=' + eclipse['version'] + '\nECLIPSE_SIZE=' + str(eclipse['size']) + '\nECLIPSE_CHECKSUM=' + eclipse['checksum']['md5'] + '\nECLIPSE_LOCATION=' + eclipse['installationLocation']
 
-	content = content.replace("#replace this text with instalation files information", text)
+    content = content.replace("#replace this text with instalation files information", text)
 
-	with open('linux/microide_install.sh', 'w') as file:
+    with open('linux/microide_install.sh', 'w') as file:
 		file.write(content)	
 
 def recursiveRemoveNotListedFiles(directory, filesToPath):	
@@ -371,7 +384,7 @@ def main():
 	if args.makeWindowsInstaller == True:
 		print "Generating windows instalation files..."
 		getMissingFiles('norepo/windows', windowsFiles)
-		updateFileinfo('norepo/linux', windowsFiles)		
+		updateFileinfo('norepo/windows', windowsFiles)		
 		compileWindowsInstaller()
 	if args.replaceGthr == True:
 		print "Replacing gthr.h files..."

@@ -392,6 +392,12 @@
       <predicate
           xsi:type="predicates:NamePredicate"
           pattern="hx711"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="ds18b20"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="mcp9800"/>
     </workingSet>
     <workingSet
         name="microhal.components.examples"
@@ -404,7 +410,7 @@
           pattern="hostComm"/>
     </workingSet>
     <workingSet
-        name="Tests"
+        name="tests"
         id="">
       <predicate
           xsi:type="predicates:NamePredicate"
@@ -430,6 +436,18 @@
       <predicate
           xsi:type="predicates:NamePredicate"
           pattern="i2c_test"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="test_os_call_once"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="stm32f4xx_allMCU"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="stm32f3xx_allMCU"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="serialPort_test"/>
     </workingSet>
     <workingSet
         name="Other"

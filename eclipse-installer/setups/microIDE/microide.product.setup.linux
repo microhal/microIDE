@@ -43,7 +43,7 @@
         xsi:type="setup:VariableTask"
         type="URI"
         name="ARM_GCC_TOOLCHAIN_LOCATION"
-        value="${microide}/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2"
+        value="${microide}/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-6-2017-q2"
         defaultValue=""/>
     <setupTask
         xsi:type="setup:VariableTask"
