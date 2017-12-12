@@ -187,11 +187,13 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     }
 
     void swap(thread& __t) noexcept {
-        std::swap(_M_id, __t._M_id); 
-#ifdef __MICROHAL
-#ifdef HAL_RTOS_FreeRTOS
-        state = __t.state;
-#endif
+#if defined(__MICROHAL) && defined(HAL_RTOS_FreeRTOS)
+        taskENTER_CRITICAL();
+        std::swap(_M_id, __t._M_id);
+        std::swap(state, __t.state);
+        taskEXIT_CRITICAL();
+#else
+        std::swap(_M_id, __t._M_id);
 #endif
     }
 
