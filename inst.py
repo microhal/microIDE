@@ -6,6 +6,8 @@ import shutil
 import re
 import argparse
 
+microideVersion = '0.3.2'
+
 armGccToolchain_old_gcc5 = {
     'filename' : 'gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2',
     'size' : '0',
@@ -170,14 +172,20 @@ def generateWindowsProductSetup():
 def generateLinuxInstaller():
     with open('templates/microide_install.template', 'r') as file:
 		content = file.read()
-    text = 'ARM_GCC_TOOLCHAIN_URL=' + armGccToolchain['url'] + '\n'
+    text = 'VERSION=' + microideVersion + '\n'
+    text = text + 'ARM_GCC_TOOLCHAIN_URL=' + armGccToolchain['url'] + '\n'
     text = text + 'ARM_GCC_TOOLCHAIN_LICENSE_URL=' + armGccToolchain['licenseUrl'] + '\n'
     text = text + 'ARM_GCC_TOOLCHAIN_FILENAME=' + armGccToolchain['filename'] + '\n'
     text = text + 'ARM_GCC_TOOLCHAIN_VERSION=' + armGccToolchain['version'] + '\n'
     text = text + 'ARM_GCC_TOOLCHAIN_SIZE=' + str(armGccToolchain['size']) + '\n'
     text = text + 'ARM_GCC_TOOLCHAIN_CHECKSUM=' + armGccToolchain['checksum']['md5'] + '\n'
     text = text + 'ARM_GCC_TOOLCHAIN_LOCATION=' + armGccToolchain['installationLocation'].replace('${microide}/', '')
-    text = text + '\n\nOPENOCD_URL=' + openOCD['url'] + '\nOPENOCD_FILENAME=' + openOCD['filename'] + '\nOPENOCD_VERSION=' + openOCD['version'] + '\nOPENOCD_SIZE=' + str(openOCD['size']) + '\nOPENOCD_CHECKSUM=' + openOCD['checksum']['md5'] + '\nOPENOCD_LOCATION=' + openOCD['installationLocation'] 
+    text = text + '\n\nOPENOCD_URL=' + openOCD['url'] 
+    text = text + '\nOPENOCD_FILENAME=' + openOCD['filename']
+    text = text + '\nOPENOCD_VERSION=' + openOCD['version']
+    text = text + '\nOPENOCD_SIZE=' + str(openOCD['size'])
+    text = text + '\nOPENOCD_CHECKSUM=' + openOCD['checksum']['md5']
+    text = text + '\nOPENOCD_LOCATION=' + openOCD['installationLocation'] 
     text = text + '\n\nECLIPSE_URL=' + eclipse['url'] + '\nECLIPSE_FILENAME=' + eclipse['filename'] + '\nECLIPSE_VERSION=' + eclipse['version'] + '\nECLIPSE_SIZE=' + str(eclipse['size']) + '\nECLIPSE_CHECKSUM=' + eclipse['checksum']['md5'] + '\nECLIPSE_LOCATION=' + eclipse['installationLocation']
 
     content = content.replace("#replace this text with instalation files information", text)
@@ -266,15 +274,17 @@ def updateFileinfo(destdir, files):
 			exit(-1) 
 
 def getMissingFiles(destdir, files):
-	if destdir:
-		destdir = destdir + "/"	
+    if not os.path.exists(destdir):
+        os.makedirs(destdir)
+    if destdir:
+        destdir = destdir + "/"	
 
-	for file in files:
-		filePath = './'  + destdir + file['filename']
-		if fileExists(filePath) == False:	
-			download(destdir, file['filename'], file['url'], file['checksum'])
-		else:
-			print "File exist, no need to download: " + filePath
+    for file in files:
+        filePath = './'  + destdir + file['filename']
+        if fileExists(filePath) == False:	
+            download(destdir, file['filename'], file['url'], file['checksum'])
+        else:
+            print "File exist, no need to download: " + filePath
 
 
 
@@ -376,7 +386,7 @@ def main():
 	if args.verifyLinuxDownload == True:
 		verifyLinuxDownloads('norepo')
 	if args.makeLinuxInstaller == True:
-		print "Generating instalation files..."		
+		print "Generating instalation files..."
 		getMissingFiles('norepo/linux', linuxFiles)
 		updateFileinfo('norepo/linux', linuxFiles)
 		generateLinuxProductSetup()
