@@ -32,7 +32,7 @@ armGccToolchain_6_2016_q2 = {
 armGccToolchain_7_2017_q4 = {
     'filename' : 'gcc-arm-none-eabi-7-2017-q4-major-linux.tar.bz2',
     'size' : '0',
-    'version' : '7.0.0',
+    'version' : '7.2.0',
     'url' : 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2017q4/gcc-arm-none-eabi-7-2017-q4-major-linux.tar.bz2?revision=375265d4-e9b5-41c8-bf23-56cbe927e156?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,7-2017-q4-major',
     'checksum' : {'md5' : 'd3b00ae09e847747ef11316a8b04989a'},
     'licenseUrl' : 'https://developer.arm.com/GetEula?Id=b8689563-35c9-4da7-b0cf-9c21f422343c',
@@ -158,7 +158,7 @@ def generateLinuxProductSetup():
     with open('templates/microide.product.setup.template', 'r') as file:
         content = file.read()
 #    toolchainPatch = armGccToolchain['installationLocation'] + '/' + re.sub('-\d{8}-linux.tar.bz2', '', armGccToolchain['filename']) // for gcc 5
-    toolchainPatch = armGccToolchain['installationLocation'] + '/' + re.sub('-update-linux.tar.bz2', '', armGccToolchain['filename'])
+    toolchainPatch = armGccToolchain['installationLocation'] + '/' + re.sub('-.{5,6}-linux\.tar\.bz2', '', armGccToolchain['filename'])
     content = content.replace("##microideToolchainPatch##", toolchainPatch)
 
     content = content.replace("##clangFormatLocation##", "/usr/bin/clang-format")
@@ -173,7 +173,7 @@ def generateLinuxProductSetup():
 def generateWindowsProductSetup():
     with open('templates/microide.product.setup.template', 'r') as file:
         content = file.read()
-    toolchainPatch = winArmGccToolchain['installationLocation'].replace('{app}', '${microide}') + '\\' + re.sub('-\d{8}-win32.exe', '', winArmGccToolchain['filename'])
+    toolchainPatch = winArmGccToolchain['installationLocation'].replace('{app}', '${microide}') + '\\' + re.sub('-.{5,6}-win32\.exe', '', winArmGccToolchain['filename'])
     content = content.replace("##microideToolchainPatch##", toolchainPatch.replace('/', '\\'))
     
     clangPath = winClangToolchain['installationLocation']
@@ -334,7 +334,7 @@ def generateInnoSetupFile():
     text = text + '#define ARM_GCC_TOOLCHAIN_FILENAME "' + winArmGccToolchain['filename'] + '"\n'
     text = text + '#define ARM_GCC_TOOLCHAIN_VERSION "' + winArmGccToolchain['version'] + '"\n'
     text = text + '#define ARM_GCC_TOOLCHAIN_SIZE ' + str(winArmGccToolchain['size']) + '\n'
-    text = text + '#define ARM_GCC_TOOLCHAIN_LOCATION "' + winArmGccToolchain['installationLocation'] + '\\' + re.sub('-\d{8}-win32.exe', '', winArmGccToolchain['filename']) + '"\n'
+    text = text + '#define ARM_GCC_TOOLCHAIN_LOCATION "' + winArmGccToolchain['installationLocation'] + '\\' + re.sub('-.{5,6}-win32\.exe', '', winArmGccToolchain['filename']) + '"\n'
 
     text = text + '#define CLANG_TOOLCHAIN_URL "' + winClangToolchain['url'] + '"\n'
     text = text + '#define CLANG_TOOLCHAIN_FILENAME "' + winClangToolchain['filename'] + '"\n'

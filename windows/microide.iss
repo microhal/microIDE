@@ -9,7 +9,7 @@
 #define ARM_GCC_TOOLCHAIN_FILENAME "gcc-arm-none-eabi-7-2017-q4-major-win32.exe"
 #define ARM_GCC_TOOLCHAIN_VERSION "7.2.0"
 #define ARM_GCC_TOOLCHAIN_SIZE 86533929
-#define ARM_GCC_TOOLCHAIN_LOCATION "{app}\toolchains\gcc-arm-none-eabi\microhal\gcc-arm-none-eabi-7-2017-q4-major-win32.exe"
+#define ARM_GCC_TOOLCHAIN_LOCATION "{app}\toolchains\gcc-arm-none-eabi\microhal\gcc-arm-none-eabi-7-2017-q4"
 #define CLANG_TOOLCHAIN_URL "http://llvm.org/releases/3.8.0/LLVM-3.8.0-win64.exe"
 #define CLANG_TOOLCHAIN_FILENAME "LLVM-3.8.0-win64.exe"
 #define CLANG_TOOLCHAIN_VERSION "3.8.0"

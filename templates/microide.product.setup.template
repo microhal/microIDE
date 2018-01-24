@@ -560,9 +560,7 @@
       <requirement
           name="org.eclipse.cdt.feature.group"/>
       <requirement
-          name="org.eclipse.cdt.launch.remote.feature.group"/>
-      <requirement
-          name="org.eclipse.cdt.mylyn.feature.group"/>
+          name="org.eclipse.cdt.launch.remote.feature.group"/>      
       <requirement
           name="org.eclipse.egit.feature.group"/>
       <requirement
