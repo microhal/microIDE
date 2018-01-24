@@ -19,7 +19,7 @@ armGccToolchain_old_gcc5 = {
     'installationLocation' : '${microide}/toolchains/gcc-arm-none-eabi/microhal'
 }
 
-armGccToolchain = {
+armGccToolchain_6_2016_q2 = {
     'filename' : 'gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2',
     'size' : '0',
     'version' : '6.2.0',
@@ -127,6 +127,7 @@ winEclipse = {
     'installationLocation' : 'eclipse'
 }
 
+armGccToolchain = armGccToolchain_7_2017_q4
 winArmGccToolchain = winArmGccToolchain_7_2017_q4
 linuxFiles = [armGccToolchain, openOCD, eclipse]
 windowsFiles = [winArmGccToolchain, winClangToolchain, winMinGwToolchain, winOpenOCD, winDoxygen, winEclipse]

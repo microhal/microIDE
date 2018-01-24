@@ -580,18 +580,6 @@
       <requirement
           name="org.eclipse.linuxtools.valgrind.feature.group"/>
       <requirement
-          name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.context_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.ide_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.team_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn_feature.feature.group"/>
-      <requirement
           name="org.eclipse.rse.feature.group"/>
       <requirement
           name="org.eclipse.tm.terminal.connector.cdtserial.feature.feature.group"/>

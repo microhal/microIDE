@@ -43,7 +43,7 @@
         xsi:type="setup:VariableTask"
         type="URI"
         name="ARM_GCC_TOOLCHAIN_LOCATION"
-        value="${microide}\toolchains\gcc-arm-none-eabi\microhal\gcc-arm-none-eabi-5_3-2016q1"
+        value="${microide}\toolchains\gcc-arm-none-eabi\microhal\gcc-arm-none-eabi-7-2017-q4-major-win32.exe"
         defaultValue=""/>
     <setupTask
         xsi:type="setup:VariableTask"
@@ -187,6 +187,10 @@
           key="/instance/org.eclipse.cdt.core/doctool/workspace.default">
         <value>record</value>
       </detail>
+      <detail
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/install.folder">
+        <value>record</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -195,6 +199,10 @@
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.server.executable"
           value="$${openocd_path}/$${openocd_executable}"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/install.folder"
+          value="${OPENOCD_LOCATION |file}/bin"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"

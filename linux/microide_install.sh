@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# This script was tested on ubuntu 16.04 LTS, it may require some changes to run on other versions
+
 # Absolute path to this script, e.g. /home/user/bin/foo.sh
 SCRIPT=$(readlink -f "$0")
 # Absolute path this script is in, thus /home/user/bin
@@ -8,12 +10,12 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 #links to installation files
 
 VERSION=0.3.2
-ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/6-2017q2/gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2?revision=2cc92fb5-3e0e-402d-9197-bdfc8224d8a5?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,6-2017-q2-update
-ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=2d916619-954e-4adb-895d-b1ec657ae305
-ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2
-ARM_GCC_TOOLCHAIN_VERSION=6.2.0
-ARM_GCC_TOOLCHAIN_SIZE=100554551
-ARM_GCC_TOOLCHAIN_CHECKSUM=13747255194398ee08b3ba42e40e9465
+ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2017q4/gcc-arm-none-eabi-7-2017-q4-major-linux.tar.bz2?revision=375265d4-e9b5-41c8-bf23-56cbe927e156?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,7-2017-q4-major
+ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=b8689563-35c9-4da7-b0cf-9c21f422343c
+ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-7-2017-q4-major-linux.tar.bz2
+ARM_GCC_TOOLCHAIN_VERSION=7.0.0
+ARM_GCC_TOOLCHAIN_SIZE=99857645
+ARM_GCC_TOOLCHAIN_CHECKSUM=d3b00ae09e847747ef11316a8b04989a
 ARM_GCC_TOOLCHAIN_LOCATION=toolchains/gcc-arm-none-eabi/microhal
 
 OPENOCD_URL=https://sourceforge.net/projects/openocd/files/openocd/0.10.0/openocd-0.10.0.tar.gz/download
@@ -26,8 +28,8 @@ OPENOCD_LOCATION=tools/openocd/0.10.0
 ECLIPSE_URL=http://www.eclipse.org/downloads/download.php?file=/oomph/products/latest/eclipse-inst-linux64.tar.gz\&r=1
 ECLIPSE_FILENAME=eclipse-inst-linux64.tar.gz
 ECLIPSE_VERSION=oxygen
-ECLIPSE_SIZE=48060711
-ECLIPSE_CHECKSUM=52bce05a9d774e1ee8723833dbb74354
+ECLIPSE_SIZE=48054847
+ECLIPSE_CHECKSUM=e0145a51fc903190f35e889cbac0da0a
 ECLIPSE_LOCATION=eclipse
 MICROIDE_DIR=$SCRIPTPATH/microide-$VERSION
 DOWNLOAD_DIR=./downloads
@@ -57,6 +59,8 @@ then
     echo Aborting...
     exit 1
 fi
+echo 'Downloading HIDAPI (OpenOCD component)...'
+wget -O $DOWNLOAD_DIR/hidapi.zip https://github.com/signal11/hidapi/archive/master.zip
 echo 'Downloading Eclipse...'
 wget -O $DOWNLOAD_DIR/$ECLIPSE_FILENAME $ECLIPSE_URL
 #md5_local=$(md5sum "$DOWNLOAD_DIR/$ECLIPSE_FILENAME" | awk '{print $1}')
@@ -70,6 +74,43 @@ wget -O $DOWNLOAD_DIR/$ECLIPSE_FILENAME $ECLIPSE_URL
 #fi
 }
 
+
+installOpenOCD() {
+    echo 'Installing HIDAPI ----------------------------------------------------------------' >> $MICROIDE_DIR/log.log
+    sudo apt-get install autoconf libudev-dev libusb-1.0-0-dev libtool pkg-config    
+    mkdir -p tmp
+    if ! unzip $DOWNLOAD_DIR/hidapi.zip -d tmp >> $MICROIDE_DIR/log.log; then
+        echo 'Unable to install HIDAPI, aborting -----------------------------------------------' >> $MICROIDE_DIR/log.log
+        echo 'Unable to unzip repozitory files'
+        echo 'Aborting...'
+        exit 1
+    fi 
+    cd tmp/hidapi-master
+    ./bootstrap >> $MICROIDE_DIR/log.log
+    ./configure >> $MICROIDE_DIR/log.log
+    echo 'Compilling HIDAPI ----------------------------------------------------------------' >> $MICROIDE_DIR/log.log
+    make -j 4 >> $MICROIDE_DIR/log.log
+    echo 'Installing (make install) HIDAPI -------------------------------------------------' >> $MICROIDE_DIR/log.log
+    sudo make install 
+    sudo ldconfig
+    cd ../../
+    
+    echo 'Installing openOCD'    
+    mkdir -p tools/openocd
+    echo 'Extracting OpenOCD... ------------------------------------------------------------' >> $MICROIDE_DIR/log.log
+    tar --extract --file=$DOWNLOAD_DIR/$OPENOCD_FILENAME -C tmp >> $MICROIDE_DIR/log.log
+    echo 'Compilling OpenOCD'
+    echo 'Compilling OpenOCD ---------------------------------------------------------------' >> $MICROIDE_DIR/log.log
+    cd tmp/${OPENOCD_FILENAME%.tar.gz}
+    ./configure --enable-stlink --enable-ti-icdi --enable-ulink --enable-cmsis-dap --enable-jlink --enable-oocd_trace --prefix=$MICROIDE_DIR/$OPENOCD_LOCATION >> $MICROIDE_DIR/log.log
+    make -j 4 >> $MICROIDE_DIR/log.log
+    echo 'Installing OpenOCD ---------------------------------------------------------------' >> $MICROIDE_DIR/log.log
+    make install
+    sudo cp contrib/60-openocd.rules /etc/udev/rules.d/
+    sudo usermod -aG plugdev $USER
+    cd ../../
+    rm -r tmp
+}
 
 instal() {
 #------------------------------------- toolchains -----------------------------
@@ -94,21 +135,7 @@ cp -r microIDE-$BRANCH_NAME/toolchains/gcc-arm-none-eabi-patch/${ARM_GCC_TOOLCHA
 
 # ------------------------------------ tools ---------------------------------
 echo 'Installing tools'
-echo 'Installing openOCD'
-sudo apt-get install libusb-1.0-0-dev libtool pkg-config
-mkdir -p tools/openocd
-echo 'Extracting OpenOCD...'
-mkdir -p tmp
-tar --extract --file=$DOWNLOAD_DIR/$OPENOCD_FILENAME -C tmp
-echo 'Compilling OpenOCD'
-echo 'Compilling OpenOCD ---------------------------------------------------------------' >> log.log
-cd tmp/${OPENOCD_FILENAME%.tar.gz}
-./configure --enable-stlink --enable-jlink --enable-oocd_trace --enable-buspirate --prefix=$MICROIDE_DIR/$OPENOCD_LOCATION >> log.log
-make  >> log.log
-make install
-sudo cp contrib/60-openocd.rules /etc/udev/rules.d/
-sudo usermod -aG plugdev $USER
-cd ../../
+installOpenOCD
 # ---------------------------------- eclipse ---------------------------------
 echo 'Installing Eclipse'
 echo 'Installing Eclipse ---------------------------------------------------------------' >> log.log
@@ -124,7 +151,6 @@ cp -r microIDE-$BRANCH_NAME/eclipse-installer/setups/* eclipse-installer/setups
 mv eclipse-installer/setups/microIDE/microide.product.setup.linux eclipse-installer/setups/microIDE/microide.product.setup
 rm eclipse-installer/setups/microIDE/microide.product.setup.windows
 rm -r microIDE-$BRANCH_NAME
-rm -r tmp
 rm -r $DOWNLOAD_DIR/$BRANCH_NAME.zip
 #install clang-format
 sudo apt-get install clang-format
