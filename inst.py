@@ -457,7 +457,7 @@ def main():
         #copy thread 
         shutil.copyfile(toolchainDir + '/arm-none-eabi/include/c++/7.2.1/thread', copyLocation +'/thread.oryg')
         #copy mutex
-        shutil.copyfile(toolchainDir + '/arm-none-eabi/include/c++/7.2.1/mutex', copyLocation +'/mutes.oryg')
+        shutil.copyfile(toolchainDir + '/arm-none-eabi/include/c++/7.2.1/mutex', copyLocation +'/mutex.oryg')
         #copy condition_variable
         shutil.copyfile(toolchainDir + '/arm-none-eabi/include/c++/7.2.1/condition_variable', copyLocation +'/condition_variable.oryg')
         print "Replacing gthr.h ..."
@@ -473,7 +473,7 @@ def main():
         print "Removing unchanged files"
         recursiveRemoveNotListedFiles(toolchainDir, ['gthr.h', 'condition_variable', 'mutex', 'thread'])
         print "Copying newly created patch to patches directory"
-        shutil.copytree('norepo/toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-7-2017-q4-major', 'toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-7-2017-q4-major')
+        shutil.copytree('norepo/toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-7-2017-q4-major', 'toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-7-2017-q4')
     
 
 if __name__ == "__main__":
