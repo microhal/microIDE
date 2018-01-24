@@ -58,7 +58,17 @@ eclipse = {
 }
 
 # ------------------------------------- windows version
-winArmGccToolchain = {
+winArmGccToolchain_7_2017_q4 = {
+    'filename' : 'gcc-arm-none-eabi-7-2017-q4-major-win32.exe',
+    'size' : '0',
+    'version' : '7.2.0',
+    'url' : 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2017q4/gcc-arm-none-eabi-7-2017-q4-major-win32.exe?revision=732bae94-c929-403d-9520-0b2bccd81ad7?product=GNU%20Arm%20Embedded%20Toolchain,32-bit,,Windows,7-2017-q4-major', 
+    'checksum' : {'md5' : 'bb4def39ff1cb3ff5d2931597d9aea4e'},
+    'licenseUrl' : 'https://developer.arm.com/GetEula?Id=b8689563-35c9-4da7-b0cf-9c21f422343c',
+    'installationLocation' : '{app}\\toolchains\\gcc-arm-none-eabi\\microhal'
+}
+
+winArmGccToolchain_5_3_2016 = {
     'filename' : 'gcc-arm-none-eabi-5_3-2016q1-20160330-win32.exe',
     'size' : '0',
     'version' : '5.3.0',
@@ -117,6 +127,7 @@ winEclipse = {
     'installationLocation' : 'eclipse'
 }
 
+winArmGccToolchain = winArmGccToolchain_7_2017_q4
 linuxFiles = [armGccToolchain, openOCD, eclipse]
 windowsFiles = [winArmGccToolchain, winClangToolchain, winMinGwToolchain, winOpenOCD, winDoxygen, winEclipse]
 allFiles = linuxFiles + windowsFiles
@@ -358,21 +369,24 @@ def generateInnoSetupFile():
 
 def download7zipStandaloneConsoleVersion():
     filename = '7z1604-extra.7z'
-    download(filename, 'http://www.7-zip.org/a/7z1604-extra.7z', {})
+    dest = 'norepo/windows'
+    download(dest, filename, 'http://www.7-zip.org/a/7z1604-extra.7z', {})
 
     os.system("mkdir -p windows/tools/7z1604-extra >> output.log")
-    parameters = '7za x ' + filename + ' -y -owindows/tools/7z1604-extra'
+    parameters = '7za x ' + dest + '/' + filename + ' -y -owindows/tools/7z1604-extra'
     os.system(parameters + " >> output.log")
 
 def compileWindowsInstaller():    
+    downloadDir = 'norepo/windows'
     # do some clenup
-    shutil.rmtree('windows/eclipse-installer')
+    shutil.rmtree('windows/eclipse-installer', ignore_errors=True)
 
     # prepare installer
     download7zipStandaloneConsoleVersion() # needed to unpack repositorys while installing on windows
-    download(winEclipse['filename'], winEclipse['url'], winEclipse['checksum']) # we need to download and include pathed version of eclipse installer into microide installer
+#    download(winEclipse['filename'], winEclipse['url'], winEclipse['checksum']) # we need to download and include pathed version of eclipse installer into microide installer
+    getMissingFiles(downloadDir, [winEclipse]) # we need to download and include pathed version of eclipse installer into microide installer
     #extracting eclipse files
-    command = '7za x ' + winEclipse['filename'] + ' -y -owindows/eclipse-installer'
+    command = '7za x ' + downloadDir + '/' + winEclipse['filename'] + ' -y -owindows/eclipse-installer'
     os.system(command)
     os.remove('windows/eclipse-installer/extractor.exe')
     #pathing eclipse installer
