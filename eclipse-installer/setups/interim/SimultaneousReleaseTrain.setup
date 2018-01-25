@@ -17,7 +17,7 @@
       xsi:type="setup.p2:P2Task"
       label="${scope.project.label}">
     <requirement
-        name="org.eclipse.b3.aggregator.editor.feature.feature.group"/>
+        name="org.eclipse.cbi.p2repo.aggregator.editor.feature.feature.group"/>
     <requirement
         name="org.eclipse.mylyn.ide_feature.feature.group"/>
     <requirement
@@ -41,7 +41,7 @@
     <requirement
         name="org.eclipse.egit.mylyn.feature.group"/>
     <repository
-        url="http://download.eclipse.org/modeling/emft/b3/updates-4.4"/>
+        url="http://download.eclipse.org/cbi/updates/aggregator/ide/4.6/"/>
     <repository
         url="http://download.eclipse.org/egit/updates-stable-nightly"/>
     <repository
@@ -131,6 +131,12 @@
         name="simrel.${simrel.train.name}.runaggregator.VALIDATE.gerrit"/>
   </setupTask>
   <stream name="master">
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="simrel.train.name"
+        value="oxygen"/>
+  </stream>
+  <stream name="Neon_maintenance">
     <setupTask
         xsi:type="setup:VariableTask"
         name="simrel.train.name"

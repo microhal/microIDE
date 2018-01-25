@@ -70,6 +70,16 @@
       <requirement
           name="org.eclipse.equinox.executable.feature.group"/>
       <repositoryList
+          name="Photon">
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
+      </repositoryList>
+      <repositoryList
+          name="Oxygen">
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
+      </repositoryList>
+      <repositoryList
           name="Neon">
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
@@ -188,7 +198,7 @@
               project="org.eclipse.equinox.p2.core"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@projects[name='p2']/@setupTasks.6/@workingSets.1"/>
+              excludedWorkingSet="//@projects[name='p2']/@setupTasks.6/@workingSets.1 //@projects[name='p2']/@setupTasks.6/@workingSets.2"/>
         </predicate>
       </workingSet>
       <workingSet
@@ -203,6 +213,18 @@
               pattern=".*test($|s.*)"/>
         </predicate>
       </workingSet>
+      <workingSet
+          name="Equinox p2 Examples">
+        <predicate
+            xsi:type="predicates:AndPredicate">
+          <operand
+              xsi:type="predicates:RepositoryPredicate"
+              project="org.eclipse.equinox.p2.core"/>
+          <operand
+              xsi:type="predicates:NamePredicate"
+              pattern=".*examples.*"/>
+        </predicate>
+      </workingSet>
     </setupTask>
     <stream
         name="master"
@@ -210,7 +232,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Neon"
+          defaultValue="Photon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Equinox P2 support</description>
@@ -264,7 +286,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Neon"
+          defaultValue="Photon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Equinox Framework support</description>
@@ -299,8 +321,20 @@
           activeRepositoryList="${eclipse.target.platform}">
         <requirement
             name="*"/>
+        <requirement
+            name="org.apache.sshd.core"/>
         <sourceLocator
             rootFolder="${git.clone.equinox.bundles.location}"/>
+        <repositoryList
+            name="Photon">
+          <repository
+              url="http://download.eclipse.org/tools/ajdt/44/dev/update"/>
+        </repositoryList>
+        <repositoryList
+            name="Oxygen">
+          <repository
+              url="http://download.eclipse.org/tools/ajdt/44/dev/update"/>
+        </repositoryList>
         <repositoryList
             name="Neon">
           <repository
@@ -343,7 +377,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Neon"
+          defaultValue="Photon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Equinox Bundles support</description>

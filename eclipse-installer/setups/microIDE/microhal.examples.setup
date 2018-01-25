@@ -227,8 +227,8 @@
         name="github.remoteURIs"
         label="Github repository">
       <choice
-          value="git@github.com:@{remoteURI}.git"
-          label="Git (read-write)"/>
+          value="https://github.com/@{remoteURI}.git"
+          label="HTTPS (read-only, anonymous)"/>
       <choice
           value="https://${github.user.id|username}@github.com/@{remoteURI}.git"
           label="HTTPS (read-write)">
@@ -236,8 +236,8 @@
             source="http://www.eclipse.org/oomph/setup/MatchChoice"/>
       </choice>
       <choice
-          value="https://github.com/@{remoteURI}.git"
-          label="HTTPS (read-only, anonymous)"/>
+          value="git@github.com:@{remoteURI}.git"
+          label="Git (read-write)"/>
       <description>Choose from the available Github URIs</description>
     </setupTask>
     <setupTask
@@ -392,6 +392,12 @@
       <predicate
           xsi:type="predicates:NamePredicate"
           pattern="hx711"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="ds18b20"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="mcp9800"/>
     </workingSet>
     <workingSet
         name="microhal.components.examples"
@@ -404,11 +410,51 @@
           pattern="hostComm"/>
     </workingSet>
     <workingSet
+        name="tests"
+        id="">
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="test_os_condition_variable"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="test_os_future"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="test_os_mutex"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="test_os_thread"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="SD card test"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="hostComm_test"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="i2c_mock"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="i2c_test"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="test_os_call_once"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="stm32f4xx_allMCU"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="stm32f3xx_allMCU"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="serialPort_test"/>
+    </workingSet>
+    <workingSet
         name="Other"
         id="">
       <predicate
           xsi:type="workingsets:ExclusionPredicate"
-          excludedWorkingSet="//@setupTasks.3/@workingSets.1 //@setupTasks.3/@workingSets.0 //@setupTasks.3/@workingSets.2"/>
+          excludedWorkingSet="//@setupTasks.3/@workingSets.1 //@setupTasks.3/@workingSets.0 //@setupTasks.3/@workingSets.2 //@setupTasks.3/@workingSets.3"/>
     </workingSet>
   </setupTask>
   <setupTask
@@ -465,6 +511,12 @@
         rootFolder="${git.clone.microhal.location}/components"
         locateNestedProjects="true"/>
   </setupTask>
+  <setupTask
+      xsi:type="projects:ProjectsImportTask">
+    <sourceLocator
+        rootFolder="${git.clone.microhal.location}/tests"
+        locateNestedProjects="true"/>
+  </setupTask>
   <stream name="master"
       label="Master"/>
   <stream name="devel"
@@ -479,6 +531,8 @@
       label="Port-stm32f4xx">
     <description></description>
   </stream>
+  <stream name="port-nrf51"
+      label="Port-nrf51"/>
   <stream name="crc"
       label="CRC">
     <description></description>

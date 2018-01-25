@@ -187,6 +187,10 @@
           key="/instance/org.eclipse.cdt.core/doctool/workspace.default">
         <value>record</value>
       </detail>
+      <detail
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/install.folder">
+        <value>record</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -195,6 +199,10 @@
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.server.executable"
           value="$${openocd_path}/$${openocd_executable}"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/install.folder"
+          value="${OPENOCD_LOCATION |file}/bin"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -552,9 +560,7 @@
       <requirement
           name="org.eclipse.cdt.feature.group"/>
       <requirement
-          name="org.eclipse.cdt.launch.remote.feature.group"/>
-      <requirement
-          name="org.eclipse.cdt.mylyn.feature.group"/>
+          name="org.eclipse.cdt.launch.remote.feature.group"/>      
       <requirement
           name="org.eclipse.egit.feature.group"/>
       <requirement
@@ -571,18 +577,6 @@
           name="org.eclipse.linuxtools.rpm.feature.group"/>
       <requirement
           name="org.eclipse.linuxtools.valgrind.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.context_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.ide_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.team_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn_feature.feature.group"/>
       <requirement
           name="org.eclipse.rse.feature.group"/>
       <requirement
