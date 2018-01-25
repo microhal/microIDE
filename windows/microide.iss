@@ -1,8 +1,9 @@
 #define AppName "microIDE"
-#define AppVersion "0.3.1"
 
 #define DOWNLOAD_DIR "{userdocs}\microIDE_installer"
 #define UNZIP_7Z_PATH "tools\7z1604-extra"
+
+#define AppVersion "0.3.2"
 
 #define ARM_GCC_TOOLCHAIN_URL "https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2017q4/gcc-arm-none-eabi-7-2017-q4-major-win32.exe?revision=732bae94-c929-403d-9520-0b2bccd81ad7?product=GNU%20Arm%20Embedded%20Toolchain,32-bit,,Windows,7-2017-q4-major"
 #define ARM_GCC_TOOLCHAIN_LICENSE_URL "https://developer.arm.com/GetEula?Id=b8689563-35c9-4da7-b0cf-9c21f422343c"
@@ -37,8 +38,8 @@
 [Setup]
 AppName=microIDE
 AppVersion={#AppVersion}
-AppCopyright="Copyright © 2017 Pawel Okas"
-AppPublisher=microHAL
+AppCopyright="Copyright © 2018 Pawel Okas"
+AppPublisher=microhal
 AppPublisherURL=www.microhal.org
 ;AppSupportURL=www.microhal.org
 ;AppUpdatesURL=www.microhal.org
@@ -47,7 +48,7 @@ ArchitecturesAllowed=x64
 DefaultDirName={sd}\microIDE
 DefaultGroupName=microIDE
 DisableStartupPrompt=yes
-VersionInfoCompany=microHAL
+VersionInfoCompany=microhal
 VersionInfoProductName=microIDE
 OutputBaseFilename=microIDE_setup_{#AppVersion}
 OutputDir=userdocs:Inno Setup Examples Output
@@ -74,14 +75,15 @@ Name: "tools\graphiz"; Description: "Graphiz 2.38"; Types: devel custom; ExtraDi
 [Files]
 Source: "{#UNZIP_7Z_PATH}\*"; DestDir: "{tmp}\tools\7z"; Flags: recursesubdirs
 Source: "eclipse-installer\*"; DestDir: "{app}\eclipse-installer"; Flags: recursesubdirs; BeforeInstall: CreateNoticeFile
+Source: "toolchainPatch\*"; DestDir: "{tmp}\toolchainPatch"; Flags: recursesubdirs;
 
 [Run]
 ;unpack git repozitory files   
-Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\master.zip -o{tmp}\ -y"; BeforeInstall: DisplayInstallProgress(True, 'Unpacking toolchain patch and eclipse installer setup configuration.');
+;Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\master.zip -o{tmp}\ -y"; BeforeInstall: DisplayInstallProgress(True, 'Unpacking toolchain patch and eclipse installer setup configuration.');
 ;toolchains installer
 Filename: "{#DOWNLOAD_DIR}\{#ARM_GCC_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#ARM_GCC_TOOLCHAIN_LOCATION}"; Components: toolchains\arm; BeforeInstall: UpdateInstallProgress('Installing ARM Toolchain.',5)
 ; install patch for arm toolchain
-Filename: "xcopy.exe"; Parameters: "/s /y {tmp}\microIDE-master\toolchains\gcc-arm-none-eabi-patch\{#ARM_GCC_TOOLCHAIN_VERSION} {#ARM_GCC_TOOLCHAIN_LOCATION}\"; Components: toolchains\arm; Flags: runhidden; BeforeInstall: UpdateInstallProgress('Patching ARM Toolchain.',20)                   
+Filename: "xcopy.exe"; Parameters: "/s /y {tmp}\toolchainPatch {#ARM_GCC_TOOLCHAIN_LOCATION}\..\"; Components: toolchains\arm; Flags: runhidden; BeforeInstall: UpdateInstallProgress('Patching ARM Toolchain.',20)                   
 ; install clang\llvm
 Filename: "{#DOWNLOAD_DIR}\{#CLANG_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#CLANG_TOOLCHAIN_LOCATION}"; Components: toolchains\clang; BeforeInstall: UpdateInstallProgress('Installing Clang Toolchain.',25)
 ;mingw
@@ -419,8 +421,8 @@ begin
   if not DirExists(ExpandConstant('{#DOWNLOAD_DIR}')) then
     CreateDir(ExpandConstant('{#DOWNLOAD_DIR}'));
 
-  if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\master.zip')) then
-    idpAddFile('https://github.com/microHAL/microIDE/archive/master.zip',  ExpandConstant('{#DOWNLOAD_DIR}\master.zip'));
+//  if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\master.zip')) then
+//    idpAddFile('https://github.com/microHAL/microIDE/archive/master.zip',  ExpandConstant('{#DOWNLOAD_DIR}\master.zip'));
 
   if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\{#ARM_GCC_TOOLCHAIN_FILENAME}')) then
     idpAddFileComp('{#ARM_GCC_TOOLCHAIN_URL}',  ExpandConstant('{#DOWNLOAD_DIR}\{#ARM_GCC_TOOLCHAIN_FILENAME}'),  'toolchains\arm');
@@ -438,7 +440,7 @@ begin
     idpAddFileComp('{#DOXYGEN_URL}',  ExpandConstant('{#DOWNLOAD_DIR}\{#DOXYGEN_FILENAME}'), 'tools\doxygen');    
   
   if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\graphviz-2.38.zip')) then
-    idpAddFileComp('http://www.graphviz.org/pub/graphviz/stable/windows/graphviz-2.38.zip',  ExpandConstant('{#DOWNLOAD_DIR}\graphviz-2.38.zip'),  'tools\graphiz');  
+    idpAddFileComp('https://graphviz.gitlab.io/_pages/Download/windows/graphviz-2.38.zip',  ExpandConstant('{#DOWNLOAD_DIR}\graphviz-2.38.zip'),  'tools\graphiz');                    
   
   if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\{#OPENOCD_FILENAME}')) then
     idpAddFileComp('{#OPENOCD_URL}',  ExpandConstant('{#DOWNLOAD_DIR}\{#OPENOCD_FILENAME}'),  'tools\openocd');    

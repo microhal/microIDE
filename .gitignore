@@ -1,3 +1,5 @@
 microide/
 norepo/
 toolchainPatchFiles/
+windows/toolchainPatch
+output.log

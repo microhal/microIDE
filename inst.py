@@ -329,7 +329,8 @@ def generateInnoSetupFile():
     with open('templates/microide.iss.template', 'r') as file:
         content = file.read()
 
-    text = '#define ARM_GCC_TOOLCHAIN_URL "' + winArmGccToolchain['url'] + '"\n'
+    text = '#define AppVersion "' + microideVersion + '"\n\n'
+    text = text + '#define ARM_GCC_TOOLCHAIN_URL "' + winArmGccToolchain['url'] + '"\n'
     text = text + '#define ARM_GCC_TOOLCHAIN_LICENSE_URL "' + winArmGccToolchain['licenseUrl'] + '"\n'
     text = text + '#define ARM_GCC_TOOLCHAIN_FILENAME "' + winArmGccToolchain['filename'] + '"\n'
     text = text + '#define ARM_GCC_TOOLCHAIN_VERSION "' + winArmGccToolchain['version'] + '"\n'
@@ -381,10 +382,10 @@ def compileWindowsInstaller():
     downloadDir = 'norepo/windows'
     # do some clenup
     shutil.rmtree('windows/eclipse-installer', ignore_errors=True)
+    shutil.rmtree('windows/toolchainPatch', ignore_errors=True)
 
     # prepare installer
     download7zipStandaloneConsoleVersion() # needed to unpack repositorys while installing on windows
-#    download(winEclipse['filename'], winEclipse['url'], winEclipse['checksum']) # we need to download and include pathed version of eclipse installer into microide installer
     getMissingFiles(downloadDir, [winEclipse]) # we need to download and include pathed version of eclipse installer into microide installer
     #extracting eclipse files
     command = '7za x ' + downloadDir + '/' + winEclipse['filename'] + ' -y -owindows/eclipse-installer'
@@ -398,6 +399,10 @@ def compileWindowsInstaller():
     shutil.copytree('eclipse-installer/setups', 'windows/eclipse-installer/setups')
     os.remove('windows/eclipse-installer/setups/microIDE/microide.product.setup.linux')
     os.rename('windows/eclipse-installer/setups/microIDE/microide.product.setup.windows', 'windows/eclipse-installer/setups/microIDE/microide.product.setup')
+    # include toolchain patch files into installer, firstly copy patch files into proper directory
+    patchDirectoryName = re.sub('-.{5,6}-win32\.exe', '', winArmGccToolchain['filename'])
+    shutil.copytree('toolchains/gcc-arm-none-eabi-patch/' + patchDirectoryName, 'windows/toolchainPatch/' + patchDirectoryName)
+    
     generateInnoSetupFile()
     parameters = './iscc.sh windows/microide.iss'
     os.system(parameters  + " >> output.log")
