@@ -78,8 +78,6 @@ Source: "eclipse-installer\*"; DestDir: "{app}\eclipse-installer"; Flags: recurs
 Source: "toolchainPatch\*"; DestDir: "{tmp}\toolchainPatch"; Flags: recursesubdirs;
 
 [Run]
-;unpack git repozitory files   
-;Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\master.zip -o{tmp}\ -y"; BeforeInstall: DisplayInstallProgress(True, 'Unpacking toolchain patch and eclipse installer setup configuration.');
 ;toolchains installer
 Filename: "{#DOWNLOAD_DIR}\{#ARM_GCC_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#ARM_GCC_TOOLCHAIN_LOCATION}"; Components: toolchains\arm; BeforeInstall: UpdateInstallProgress('Installing ARM Toolchain.',5)
 ; install patch for arm toolchain
@@ -420,9 +418,6 @@ begin
   // create directory where downloaded files will be stored
   if not DirExists(ExpandConstant('{#DOWNLOAD_DIR}')) then
     CreateDir(ExpandConstant('{#DOWNLOAD_DIR}'));
-
-//  if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\master.zip')) then
-//    idpAddFile('https://github.com/microHAL/microIDE/archive/master.zip',  ExpandConstant('{#DOWNLOAD_DIR}\master.zip'));
 
   if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\{#ARM_GCC_TOOLCHAIN_FILENAME}')) then
     idpAddFileComp('{#ARM_GCC_TOOLCHAIN_URL}',  ExpandConstant('{#DOWNLOAD_DIR}\{#ARM_GCC_TOOLCHAIN_FILENAME}'),  'toolchains\arm');
