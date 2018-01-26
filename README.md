@@ -1,11 +1,11 @@
 ## Microide is eclipse based IDE dedicated for embedded development.
 
 ### Windows installation
-To install microide on Windows operating system you should go to our Source Forge project site and download windows binary installer.
+To install microide on Windows operating system you should go to realase tab and download windows binary installer.
 
-https://github.com/microHAL/microIDE/releases/download/0.3.1/microIDE_setup_0.3.1.exe
+https://github.com/microHAL/microIDE/releases/latest
 
-Installing microide is simply but have one tricky part. You have put correct path into eclipse installation. Correct path will be shown in IMPORTANT NOTICE text. you should copy this path and pase it into eclipse installer.
+Installing microide is simple but have one tricky part. You have put correct path into eclipse installation. Correct path will be shown in IMPORTANT NOTICE text. you should copy this path and pase it into eclipse installer.
 
 ![](images/microide_installer_important_notice.png)
 </br>
@@ -15,7 +15,8 @@ You should copy this path and pase it into eclipse installer.
 
 ### Linux installation
 To install microide on Linux operating system download <b>linux/microide_install.sh</b> file from this repository and run it in directory where you want to install microide.
-You also can download installation script from link: https://github.com/microHAL/microIDE/releases/download/0.3.1/microide_install.sh
+You also can download installation script from link: https://github.com/microHAL/microIDE/releases/latest
+In linux installation you also have to put correct path into eclipse installation. Correct path will be shown in your installation console. 
 
 ## Importing microhal examples
 The best way to start exploring microHAL features is to download all examples and play with them. Examples can be divided into two categorys:
@@ -65,6 +66,9 @@ Microide is dedicated for embedded development, its integrate tools like:
 All packages are preconfigured and IDE is redy for use after installing. This installer contain script that will download and install all comptonents.
 
 ## Changelog
+
+### 0.3.2
+- updated ARM GCC toolchain to 7.2.0
 
 ### 0.3.1
 - updated Eclipse to newest version (oxygen)
