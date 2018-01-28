@@ -151,7 +151,7 @@ def download(destynation, filename, url, checksum):
         if hashlib.sha256(open('./'  + destynation + filename,'rb').read()).hexdigest() != checksum['SHA256']:
             return [False, 0]
 
-        return [True, os.stat('./'  + destynation + filename).st_size]
+    return [True, os.stat('./'  + destynation + filename).st_size]
     
 
 def generateLinuxProductSetup():
