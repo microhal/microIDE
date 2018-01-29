@@ -15,7 +15,12 @@ You should copy this path and pase it into eclipse installer.
 
 ### Linux installation
 To install microide on Linux operating system download <b>linux/microide_install.sh</b> file from this repository and run it in directory where you want to install microide.
-You also can download installation script from link: https://github.com/microHAL/microIDE/releases/latest
+
+It may be required to change file properties:</br>
+<b>chmod +x microide_install.sh</br>
+./microide_install.sh</b></br>
+</br>
+You also can download installation script from link: https://github.com/microHAL/microIDE/releases/latest</br>
 In linux installation you also have to put correct path into eclipse installation. Correct path will be shown in your installation console. 
 
 ## Importing microhal examples
