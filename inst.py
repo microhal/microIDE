@@ -171,7 +171,7 @@ def generateLinuxProductSetup():
     toolchainPatch = armGccToolchain['installationLocation'] + '/' + re.sub('-.{5,6}-linux\.tar\.bz2', '', armGccToolchain['filename'])
     content = content.replace("##microideToolchainPatch##", toolchainPatch)
 
-    content = content.replace("##clangFormatLocation##", "/usr/bin/clang-format")
+    content = content.replace("##clangFormatLocation##", "/usr/bin/clang-format-5.0")
 
     content = content.replace("##MinGWToolchainPatch##", "/usr/bin")
 
@@ -493,6 +493,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
 
