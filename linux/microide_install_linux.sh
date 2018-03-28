@@ -78,10 +78,9 @@ wget -O $DOWNLOAD_DIR/$ECLIPSE_FILENAME $ECLIPSE_URL
 
 installOpenOCD() {
     if [ "$1" = "addAptToGetPackagesToInstall" ]; then
-    	APT_GET_PACKAGES_TO_INSTALL+=' autoconf libudev-dev libusb-1.0-0-dev libtool pkg-config'
+    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL autoconf libudev-dev libusb-1.0-0-dev libtool pkg-config"
     else         
-        echo 'Installing HIDAPI ----------------------------------------------------------------' >> $MICROIDE_DIR/log.log
-    #    sudo apt-get install autoconf libudev-dev libusb-1.0-0-dev libtool pkg-config    
+        echo 'Installing HIDAPI ----------------------------------------------------------------' >> $MICROIDE_DIR/log.log  
         mkdir -p tmp
         if ! unzip $DOWNLOAD_DIR/hidapi.zip -d tmp >> $MICROIDE_DIR/log.log; then
             echo 'Unable to install HIDAPI, aborting -----------------------------------------------' >> $MICROIDE_DIR/log.log
@@ -119,11 +118,9 @@ installOpenOCD() {
 
 installARMToolchain() {
     if [ "$1" = "addAptToGetPackagesToInstall" ]; then
-    	APT_GET_PACKAGES_TO_INSTALL+=' lib32z1 lib32ncurses5 libbz2-1.0:i386 lib32stdc++6'
+    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL lib32z1 lib32ncurses5 libbz2-1.0:i386 lib32stdc++6"
     else 
         echo 'Installing ARM Toolchain...-------------------------------------------------------' >> log.log
- #       sudo apt-get update
- #       sudo apt-get install lib32z1 lib32ncurses5 libbz2-1.0:i386 lib32stdc++6
         mkdir -p $ARM_GCC_TOOLCHAIN_LOCATION
         tar --extract --bzip2 --file=$DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME -C $ARM_GCC_TOOLCHAIN_LOCATION
         mv $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2} $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-*-linux.tar.bz2}
@@ -136,7 +133,7 @@ installARMToolchain() {
 
 installEclipse() {
     if [ "$1" = "addAptToGetPackagesToInstall" ]; then
-    	APT_GET_PACKAGES_TO_INSTALL+=' default-jre'
+    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL default-jre"
     else 
         echo 'Installing Eclipse ---------------------------------------------------------------' >> log.log
         mkdir -p eclipse-installer
@@ -157,17 +154,25 @@ installEclipse() {
 
 installClangFormat() {
     if [ "$1" = "addAptToGetPackagesToInstall" ]; then
-    	APT_GET_PACKAGES_TO_INSTALL+=' clang-format-5.0'
+    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL clang-format-5.0"
     fi 
     #sudo apt-get install clang-format
 }
 
+installCppcheck() {
+    if [ "$1" = "addAptToGetPackagesToInstall" ]; then
+    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL cppcheck"
+    fi 
+}
+
 instal() {
-echo 'Installing required packages.'
+echo 'Installing required packages:'
 installARMToolchain 'addAptToGetPackagesToInstall'
 installOpenOCD 'addAptToGetPackagesToInstall'
 installEclipse 'addAptToGetPackagesToInstall'
 installClangFormat 'addAptToGetPackagesToInstall'
+installCppcheck 'addAptToGetPackagesToInstall'
+echo $APT_GET_PACKAGES_TO_INSTALL
 sudo apt-get update
 sudo apt-get install $APT_GET_PACKAGES_TO_INSTALL
 
@@ -189,6 +194,9 @@ echo 'Installing Eclipse'
 installEclipse
 #install clang-format
 installClangFormat
+
+#removing not needed files
+rm -r $DOWNLOAD_DIR
 
 echo '-----------------------------------------------------------------------------'
 echo 'Please install eclipse in following directory:'

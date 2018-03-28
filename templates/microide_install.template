@@ -138,12 +138,19 @@ installClangFormat() {
     #sudo apt-get install clang-format
 }
 
+installCppcheck() {
+    if [ "$1" = "addAptToGetPackagesToInstall" ]; then
+    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL cppcheck"
+    fi 
+}
+
 instal() {
 echo 'Installing required packages:'
 installARMToolchain 'addAptToGetPackagesToInstall'
 installOpenOCD 'addAptToGetPackagesToInstall'
 installEclipse 'addAptToGetPackagesToInstall'
 installClangFormat 'addAptToGetPackagesToInstall'
+installCppcheck 'addAptToGetPackagesToInstall'
 echo $APT_GET_PACKAGES_TO_INSTALL
 sudo apt-get update
 sudo apt-get install $APT_GET_PACKAGES_TO_INSTALL
