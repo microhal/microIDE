@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import os
 import hashlib
@@ -7,7 +7,7 @@ import re
 import argparse
 import subprocess
 
-microideVersion = '0.3.2'
+microideVersion = '0.3.3'
 
 armGccToolchain_old_gcc5 = {
     'filename' : 'gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2',
@@ -78,7 +78,7 @@ winArmGccToolchain_5_3_2016 = {
     'installationLocation' : '{app}\\toolchains\\gcc-arm-none-eabi\\microhal'
 }
 
-winClangToolchain = {
+winClangToolchain_3_8_0 = {
     'filename' : 'LLVM-3.8.0-win64.exe',
     'size' : '0',
     'version' : '3.8.0',
@@ -88,6 +88,15 @@ winClangToolchain = {
     'installationLocation' : '{app}\\toolchains\\LLVM\\3.8.0'
 }
 
+winClangToolchain_6_0_0 = {
+    'filename' : 'LLVM-6.0.0-win64.exe',
+    'size' : '0',
+    'version' : '6.0.0',
+    'url' : 'http://releases.llvm.org/6.0.0/LLVM-6.0.0-win64.exe', 
+    'checksum' : {'' : ''},
+    'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
+    'installationLocation' : '{app}\\toolchains\\LLVM\\3.8.0'
+}
 
 winMinGwToolchain = {
     'filename' : 'x86_64-7.1.0-release-win32-seh-rt_v5-rev2.7z',
@@ -129,6 +138,7 @@ winEclipse = {
 
 armGccToolchain = armGccToolchain_7_2017_q4
 winArmGccToolchain = winArmGccToolchain_7_2017_q4
+winClangToolchain = winClangToolchain_6_0_0
 linuxFiles = [armGccToolchain, openOCD, eclipse]
 windowsFiles = [winArmGccToolchain, winClangToolchain, winMinGwToolchain, winOpenOCD, winDoxygen, winEclipse]
 allFiles = linuxFiles + windowsFiles
@@ -213,7 +223,7 @@ def generateLinuxInstaller():
 
     content = content.replace("#replace this text with instalation files information", text)
 
-    with open('linux/microide_install.sh', 'w') as file:
+    with open('linux/microide_install_linux.sh', 'w') as file:
         file.write(content)    
 
 def recursiveRemoveNotListedFiles(directory, filesToPath):    

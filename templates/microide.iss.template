@@ -20,7 +20,7 @@ DefaultGroupName=microIDE
 DisableStartupPrompt=yes
 VersionInfoCompany=microhal
 VersionInfoProductName=microIDE
-OutputBaseFilename=microIDE_setup_{#AppVersion}
+OutputBaseFilename=microIDE_setup_{#AppVersion}_windows
 OutputDir=userdocs:Inno Setup Examples Output
 
 #include <idp.iss>
