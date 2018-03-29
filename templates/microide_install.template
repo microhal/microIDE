@@ -144,6 +144,33 @@ installCppcheck() {
     fi 
 }
 
+installGCC() {
+    if ! [ -x "$(command -v gcc)" ]; then
+        if ! [ -x "$(command -v gcc-7)" ]; then  
+            echo "Unable to find gcc, adding to instalation list"
+            APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL gcc-7"
+        fi
+    else
+        currentver="$(gcc -dumpversion)"
+        requiredver="7"
+        if [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]; then 
+            echo "GCC already installed"
+        else
+            if ! [ -x "$(command -v gcc-7)" ]; then  
+                echo "Unable to find gcc, adding to instalation list"
+                APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL gcc-7"
+            else
+                currentver="$(gcc-7 -dumpversion)"
+                requiredver="7"
+                if ! [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]; then 
+                    echo "Unable to find gcc with version 7 or abowe, adding to instalation list"
+                    APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL gcc-7"
+               fi
+            fi
+        fi 
+    fi
+}
+
 instal() {
 echo 'Installing required packages:'
 installARMToolchain 'addAptToGetPackagesToInstall'
@@ -151,6 +178,7 @@ installOpenOCD 'addAptToGetPackagesToInstall'
 installEclipse 'addAptToGetPackagesToInstall'
 installClangFormat 'addAptToGetPackagesToInstall'
 installCppcheck 'addAptToGetPackagesToInstall'
+installGCC
 echo $APT_GET_PACKAGES_TO_INSTALL
 sudo apt-get update
 sudo apt-get install $APT_GET_PACKAGES_TO_INSTALL
@@ -184,9 +212,6 @@ echo $MICROIDE_DIR
 #starting eclipse installer
 ./eclipse-installer/eclipse-inst
 }
-
-
-
 
 # script starting point
 mkdir -p microide-$VERSION
