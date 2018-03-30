@@ -41,15 +41,16 @@
     <setupTask
         xsi:type="setup:VariableTask"
         type="URI"
-        name="OPENOCD_LOCATION "
-        value="${microide}/tools/openocd/0.10.0"
-        defaultValue=""
-        label=""/>
+        name="CLANG_TOOLCHAIN_LOCATION"
+        value="##clangToolchainPatch##"
+        defaultValue=""/>
     <setupTask
         xsi:type="setup:VariableTask"
         type="URI"
-        name="MINGW_TOOLCHAIN_LOCATION"
-        value="##MinGWToolchainPatch##/mingw64"/>
+        name="OPENOCD_LOCATION "
+        value="${microide}/tools/openocd/0.10.0"
+        defaultValue=""
+        label=""/>  
     <setupTask
         xsi:type="setup:VariableTask"
         type="URI"
@@ -141,19 +142,7 @@
       <detail
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MSYS_HOME/operation">
         <value>record</value>
-      </detail>
-      <detail
-          key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/operation">
-        <value>record</value>
-      </detail>
-      <detail
-          key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/delimiter">
-        <value>record</value>
-      </detail>
-      <detail
-          key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/value">
-        <value>record</value>
-      </detail>
+      </detail> 
       <detail
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MSYS_HOME/value">
         <value>record</value>
@@ -238,23 +227,6 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           filter="(osgi.os=win32)"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/delimiter"
-          value=";"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          filter="(osgi.os=win32)"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/operation"
-          value="append"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          filter="(osgi.os=win32)"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/value"
-          value="${MINGW_TOOLCHAIN_LOCATION|file}">
-        <description></description>
-      </setupTask>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MSYS_HOME/delimiter"
           value=";"/>
       <setupTask
@@ -286,14 +258,6 @@
           value="${microIDE_tools_dir|file}/tools/graphiz/bin"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/MINGW_HOME/operation"
-          value="replace"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/MINGW_HOME/value"
-          value="$${MICROIDE_MINGW_HOME}"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MSYS_HOME/operation"
           value="replace"/>
       <setupTask
@@ -303,11 +267,11 @@
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
-        name="org.eclipse.cdt.managedbuilder.llvm.ui">
-      <setupTask
-          xsi:type="setup:PreferenceTask"
+        name="org.eclipse.cdt.managedbuilder.llvm.ui">   
+    <setupTask
+          xsi:type="setup:PreferenceTask"      
           key="/instance/org.eclipse.cdt.managedbuilder.llvm.ui/LLVM installation folder"
-          value="/usr/bin"/>
+          value="${CLANG_TOOLCHAIN_LOCATION|file}"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"

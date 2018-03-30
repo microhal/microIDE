@@ -192,7 +192,15 @@ installGCC() {
     fi
 }
 
+checkArchitecture() {
+    if [ "$(uname -i)" != "x86_64" ]; then
+        echo "This script can be used only on 64 bit systems. Aborting."
+        exit 1
+    fi
+}
+
 instal() {
+checkArchitecture
 echo 'Installing required packages:'
 installARMToolchain 'addAptToGetPackagesToInstall'
 installOpenOCD 'addAptToGetPackagesToInstall'
@@ -243,7 +251,7 @@ if [ "$1" = "--checkDownload" ]; then
 	download
 else
 	echo "Starting normal install."
-	download
+	#download
 	instal
 fi
 

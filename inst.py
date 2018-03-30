@@ -95,7 +95,7 @@ winClangToolchain_6_0_0 = {
     'url' : 'http://releases.llvm.org/6.0.0/LLVM-6.0.0-win64.exe', 
     'checksum' : {'' : ''},
     'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
-    'installationLocation' : '{app}\\toolchains\\LLVM\\3.8.0'
+    'installationLocation' : '{app}\\toolchains\\LLVM\\6.0.0'
 }
 
 winMinGwToolchain = {
@@ -140,7 +140,7 @@ armGccToolchain = armGccToolchain_7_2017_q4
 winArmGccToolchain = winArmGccToolchain_7_2017_q4
 winClangToolchain = winClangToolchain_6_0_0
 linuxFiles = [armGccToolchain, openOCD, eclipse]
-windowsFiles = [winArmGccToolchain, winClangToolchain, winMinGwToolchain, winOpenOCD, winDoxygen, winEclipse]
+windowsFiles = [winArmGccToolchain, winClangToolchain, winOpenOCD, winDoxygen, winEclipse]
 allFiles = linuxFiles + windowsFiles
 
 # ------------------------------------ end of file declaration
@@ -172,8 +172,9 @@ def generateLinuxProductSetup():
     content = content.replace("##microideToolchainPatch##", toolchainPatch)
 
     content = content.replace("##clangFormatLocation##", "/usr/bin/clang-format-5.0")
+    content = content.replace("##clangToolchainPatch##", "/usr/bin")
 
-    content = content.replace("##MinGWToolchainPatch##", "/usr/bin")
+#    content = content.replace("##MinGWToolchainPatch##", "/usr/bin")
 
     content = content.replace("##DoxygenPatch##", "/usr/bin")
 
@@ -187,12 +188,14 @@ def generateWindowsProductSetup():
     content = content.replace("##microideToolchainPatch##", toolchainPatch.replace('/', '\\'))
     
     clangPath = winClangToolchain['installationLocation']
-    clangPath = clangPath.replace('{app}', '${microide|file}') + '/bin/clang-format.exe'
-    content = content.replace("##clangFormatLocation##", clangPath.replace('/', '\\' ))
+    clangPath = clangPath.replace('{app}', '${microide|file}') + '/bin'
+    clangFormatLocation = clangPath + '/clang-format.exe'
+    content = content.replace("##clangFormatLocation##", clangFormatLocation.replace('/', '\\' ))
+    content = content.replace("##clangToolchainPatch##", clangPath.replace('/', '\\' ))
 
-    mingwPath = winMinGwToolchain['installationLocation']
-    mingwPath = mingwPath.replace('{app}', '${microide}') 
-    content = content.replace("##MinGWToolchainPatch##", mingwPath.replace('/', '\\' ))
+#    mingwPath = winMinGwToolchain['installationLocation']
+#    mingwPath = mingwPath.replace('{app}', '${microide}') 
+#    content = content.replace("##MinGWToolchainPatch##", mingwPath.replace('/', '\\' ))
 
     doxygenPath = winDoxygen['installationLocation']
     doxygenPath = doxygenPath.replace('{app}', '${microide|file}') + '/bin'
@@ -366,12 +369,12 @@ def generateInnoSetupFile():
     text = text + '#define DOXYGEN_SIZE ' + str(winDoxygen['size']) + '\n'
     text = text + '#define DOXYGEN_LOCATION "' + winDoxygen['installationLocation'] + '"\n'
 
-    text = text + '#define MINGW_URL "' + winMinGwToolchain['url'] + '"\n'
-    text = text + '#define MINGW_LICENSE_URL "' + winMinGwToolchain['licenseUrl'] + '"\n'
-    text = text + '#define MINGW_FILENAME "' + winMinGwToolchain['filename'] +'"\n'
-    text = text + '#define MINGW_VERSION "' + winMinGwToolchain['version'] + '"\n'
-    text = text + '#define MINGW_SIZE ' + str(winMinGwToolchain['size']) + '\n'
-    text = text + '#define MINGW_LOCATION "' + winMinGwToolchain['installationLocation'] + '"\n'
+#    text = text + '#define MINGW_URL "' + winMinGwToolchain['url'] + '"\n'
+#    text = text + '#define MINGW_LICENSE_URL "' + winMinGwToolchain['licenseUrl'] + '"\n'
+#    text = text + '#define MINGW_FILENAME "' + winMinGwToolchain['filename'] +'"\n'
+#    text = text + '#define MINGW_VERSION "' + winMinGwToolchain['version'] + '"\n'
+#    text = text + '#define MINGW_SIZE ' + str(winMinGwToolchain['size']) + '\n'
+#    text = text + '#define MINGW_LOCATION "' + winMinGwToolchain['installationLocation'] + '"\n'
 
 
     content = content.replace("#replace this text with instalation files information", text)
