@@ -136,6 +136,13 @@ winEclipse = {
     'installationLocation' : 'eclipse'
 }
 
+#------------------------------------ files required to prepare installer
+innosetup = {
+    'filename' : 'is.exe',
+    'url' : 'http://www.jrsoftware.org/download.php/is.exe',
+    'checksum' : {'' : ''},
+}
+
 armGccToolchain = armGccToolchain_7_2017_q4
 winArmGccToolchain = winArmGccToolchain_7_2017_q4
 winClangToolchain = winClangToolchain_6_0_0
@@ -171,12 +178,12 @@ def generateLinuxProductSetup():
     toolchainPatch = armGccToolchain['installationLocation'] + '/' + re.sub('-.{5,6}-linux\.tar\.bz2', '', armGccToolchain['filename'])
     content = content.replace("##microideToolchainPatch##", toolchainPatch)
 
-    content = content.replace("##clangFormatLocation##", "/usr/bin/clang-format-5.0")
-    content = content.replace("##clangToolchainPatch##", "/usr/bin")
+    content = content.replace("##clangFormatLocation##", "${binaryDir}/clang-format-5.0")
+    content = content.replace("##clangToolchainPatch##", "${binaryDir}")
 
-#    content = content.replace("##MinGWToolchainPatch##", "/usr/bin")
+#    content = content.replace("##MinGWToolchainPatch##", "${binaryDir}")
 
-    content = content.replace("##DoxygenPatch##", "/usr/bin")
+    content = content.replace("##DoxygenPatch##", "${binaryDir}")
 
     with open('eclipse-installer/setups/microIDE/microide.product.setup.linux', 'w') as file:
         file.write(content)
@@ -433,6 +440,7 @@ def main():
     parser.add_argument('--createToolchainPatch', nargs='?', type=bool, const=True, help='Create toolchain patch.')
     parser.add_argument('--makeLinuxInstaller', nargs='?', type=bool, const=True, help='Creating linux installation files.')
     parser.add_argument('--makeWindowsInstaller', nargs='?', type=bool, const=True, help='Creating windows installation files. This will work on linux with wine where Inno Setup and Inno Download Plugin was installed')
+    parser.add_argument('--initEnvinronment', nargs='?', type=bool, const=True, help='This option will install on you computer wine and Inno Setup.')
 
     args = parser.parse_args()
 
@@ -492,6 +500,16 @@ def main():
         recursiveRemoveNotListedFiles(toolchainDir, ['gthr.h', 'condition_variable', 'mutex', 'thread'])
         print "Copying newly created patch to patches directory"
         shutil.copytree('norepo/toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-7-2017-q4-major', 'toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-7-2017-q4')
+    if args.initEnvinronment == True:
+        try:
+            subprocess.call(["wine", "--version"])
+	except OSError as e:
+            if e.errno == os.errno.ENOET: #wine not installed
+                subprocess.call("sudo apt", "install", "wine")
+            else:
+		raise
+
+	getMissingFiles('norepo/linux', [innosetup])
     
 
 if __name__ == "__main__":
