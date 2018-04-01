@@ -28,13 +28,14 @@ OPENOCD_LOCATION=tools/openocd/0.10.0
 ECLIPSE_URL=http://www.eclipse.org/downloads/download.php?file=/oomph/products/latest/eclipse-inst-linux64.tar.gz\&r=1
 ECLIPSE_FILENAME=eclipse-inst-linux64.tar.gz
 ECLIPSE_VERSION=oxygen
-ECLIPSE_SIZE=48063925
-ECLIPSE_CHECKSUM=c8105a0d04c8aa105e282b955cb89c98
+ECLIPSE_SIZE=48060711
+ECLIPSE_CHECKSUM=52bce05a9d774e1ee8723833dbb74354
 ECLIPSE_LOCATION=eclipse
 MICROIDE_DIR=$SCRIPTPATH/microide-$VERSION
 DOWNLOAD_DIR=./downloads
 BRANCH_NAME=devel
 APT_GET_PACKAGES_TO_INSTALL=''
+APT_GET_REPOSITORYS_TO_ADD=''
 
 download() {
 wget --directory-prefix=$DOWNLOAD_DIR https://github.com/microHAL/microIDE/archive/$BRANCH_NAME.zip
@@ -137,7 +138,6 @@ installEclipse() {
     else 
         echo 'Installing Eclipse ---------------------------------------------------------------' >> log.log
         mkdir -p eclipse-installer
-#        sudo apt-get install default-jre
         tar --extract --file=$DOWNLOAD_DIR/$ECLIPSE_FILENAME
         #redirect eclipse installer product index
         cd eclipse-installer
@@ -149,6 +149,9 @@ installEclipse() {
         rm eclipse-installer/setups/microIDE/microide.product.setup.windows
         rm -r microIDE-$BRANCH_NAME
         rm -r $DOWNLOAD_DIR/$BRANCH_NAME.zip
+	# set path to microide
+	echo $MICROIDE_DIR
+	sed -i -e 's,value="${installation.location|uri}",value="'"$MICROIDE_DIR"'",g' "eclipse-installer/setups/microIDE/microide.product.setup"
     fi
 }
 
@@ -169,6 +172,7 @@ installGCC() {
     if ! [ -x "$(command -v gcc)" ]; then
         if ! [ -x "$(command -v gcc-7)" ]; then  
             echo "Unable to find gcc, adding to instalation list"
+            APT_GET_REPOSITORYS_TO_ADD="$APT_GET_REPOSITORYS_TO_ADD ppa:ubuntu-toolchain-r/test"
             APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL gcc-7"
         fi
     else
@@ -179,12 +183,14 @@ installGCC() {
         else
             if ! [ -x "$(command -v gcc-7)" ]; then  
                 echo "Unable to find gcc, adding to instalation list"
+                APT_GET_REPOSITORYS_TO_ADD="$APT_GET_REPOSITORYS_TO_ADD ppa:ubuntu-toolchain-r/test"
                 APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL gcc-7"
             else
                 currentver="$(gcc-7 -dumpversion)"
                 requiredver="7"
                 if ! [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]; then 
                     echo "Unable to find gcc with version 7 or abowe, adding to instalation list"
+                    APT_GET_REPOSITORYS_TO_ADD="$APT_GET_REPOSITORYS_TO_ADD ppa:ubuntu-toolchain-r/test"
                     APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL gcc-7"
                fi
             fi
@@ -200,46 +206,51 @@ checkArchitecture() {
 }
 
 instal() {
-checkArchitecture
-echo 'Installing required packages:'
-installARMToolchain 'addAptToGetPackagesToInstall'
-installOpenOCD 'addAptToGetPackagesToInstall'
-installEclipse 'addAptToGetPackagesToInstall'
-installClangFormat 'addAptToGetPackagesToInstall'
-installCppcheck 'addAptToGetPackagesToInstall'
-installGCC
-echo $APT_GET_PACKAGES_TO_INSTALL
-sudo apt-get update
-sudo apt-get install $APT_GET_PACKAGES_TO_INSTALL
+    checkArchitecture
+    echo 'Installing required packages:'
+    installARMToolchain 'addAptToGetPackagesToInstall'
+    installOpenOCD 'addAptToGetPackagesToInstall'
+    installEclipse 'addAptToGetPackagesToInstall'
+    installClangFormat 'addAptToGetPackagesToInstall'
+    installCppcheck 'addAptToGetPackagesToInstall'
+    installGCC
+    echo $APT_GET_PACKAGES_TO_INSTALL
+    echo $APT_GET_REPOSITORYS_TO_ADD
 
-#------------------------------------- toolchains -----------------------------
-echo 'Unpacking toolchain patch and eclipse installer setup configuration.'
-echo 'Unpacking toolchain patch and eclipse installer setup configuration.---------------' >> log.log
-if ! unzip $DOWNLOAD_DIR/$BRANCH_NAME.zip >> log.log; then
-    echo 'Unable to unzip repozitory files'
-    echo 'Aborting...'
-    exit 1
-fi 
-echo 'Installing ARM Toolchain...'
-installARMToolchain
-# ------------------------------------ tools ---------------------------------
-echo 'Installing tools'
-installOpenOCD
-# ---------------------------------- eclipse ---------------------------------
-echo 'Installing Eclipse'
-installEclipse
-#install clang-format
-installClangFormat
+    if [ "$APT_GET_REPOSITORYS_TO_ADD" != "" ]; then
+        sudo add-apt-repository $APT_GET_REPOSITORYS_TO_ADD
+    fi
+    sudo apt-get update
+    sudo apt-get install $APT_GET_PACKAGES_TO_INSTALL
 
-#removing not needed files
-rm -r $DOWNLOAD_DIR
+    #------------------------------------- toolchains -----------------------------
+    echo 'Unpacking toolchain patch and eclipse installer setup configuration.'
+    echo 'Unpacking toolchain patch and eclipse installer setup configuration.---------------' >> log.log
+    if ! unzip $DOWNLOAD_DIR/$BRANCH_NAME.zip >> log.log; then
+        echo 'Unable to unzip repozitory files'
+        echo 'Aborting...'
+        exit 1
+    fi 
+    echo 'Installing ARM Toolchain...'
+    installARMToolchain
+    # ------------------------------------ tools ---------------------------------
+    echo 'Installing tools'
+    installOpenOCD
+    # ---------------------------------- eclipse ---------------------------------
+    echo 'Installing Eclipse'
+    installEclipse
+    #install clang-format
+    installClangFormat
 
-echo '-----------------------------------------------------------------------------'
-echo 'Please install eclipse in following directory:'
-echo $MICROIDE_DIR
+    #removing not needed files
+    rm -r $DOWNLOAD_DIR
 
-#starting eclipse installer
-./eclipse-installer/eclipse-inst
+    echo '-----------------------------------------------------------------------------'
+    echo 'Please install eclipse in following directory:'
+    echo $MICROIDE_DIR
+
+    #starting eclipse installer
+    ./eclipse-installer/eclipse-inst
 }
 
 # script starting point
@@ -251,7 +262,7 @@ if [ "$1" = "--checkDownload" ]; then
 	download
 else
 	echo "Starting normal install."
-	#download
+	download
 	instal
 fi
 

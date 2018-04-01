@@ -146,6 +146,14 @@
       name="User Preferences">
     <setupTask
         xsi:type="setup:CompoundTask"
+        name="com.googlecode.cppcheclipse.core">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/com.googlecode.cppcheclipse.core/languageStandardC"
+          value="c11"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
         name="ilg.gnumcueclipse.debug.gdbjtag.openocd">
       <setupTask
           xsi:type="setup:PreferenceTask"
@@ -235,7 +243,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.managedbuilder.llvm.ui/LLVM installation folder"
-          value="${CLANG_TOOLCHAIN_LOCATION|file}"/>
+          value="${CLANG_TOOLCHAIN_LOCATION}"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
