@@ -45,25 +45,6 @@
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
-        type="URI"
-        name="ARM_GCC_TOOLCHAIN_LOCATION"
-        value="##microideToolchainPatch##"
-        defaultValue=""/>
-    <setupTask
-        xsi:type="setup:VariableTask"
-        type="URI"
-        name="CLANG_TOOLCHAIN_LOCATION"
-        value="##clangToolchainPatch##"
-        defaultValue=""/>
-    <setupTask
-        xsi:type="setup:VariableTask"
-        type="URI"
-        name="OPENOCD_LOCATION "
-        value="${microide}/tools/openocd/0.10.0"
-        defaultValue=""
-        label=""/>
-    <setupTask
-        xsi:type="setup:VariableTask"
         filter="(osgi.os=win32)"
         type="URI"
         name="MSYS_LOCATION"
@@ -130,7 +111,9 @@
   <setupTask
       xsi:type="setup:StringSubstitutionTask"
       name="openocd_path"
-      value="${OPENOCD_LOCATION |file}/bin"/>
+      value="${microide}/tools/openocd/0.10.0/bin">
+     <description>Location of OpenOCD binary file</description>
+  </setupTask>
   <setupTask
       xsi:type="setup:StringSubstitutionTask"
       filter="(osgi.os=win32)"
@@ -162,7 +145,9 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/install.folder"
-          value="${OPENOCD_LOCATION |file}/bin"/>
+          value="${microide}/tools/openocd/0.10.0/bin">
+        <description>Location of OpenOCD binary file</description>
+      </setupTask>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -179,7 +164,9 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.path.1287942917"
-          value="${ARM_GCC_TOOLCHAIN_LOCATION|file}/bin"/>
+          value="##microideToolchainPatch##/bin">
+          <description>Path to microide toolchain binary files</description>
+      </setupTask>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -243,7 +230,9 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.managedbuilder.llvm.ui/LLVM installation folder"
-          value="${CLANG_TOOLCHAIN_LOCATION}"/>
+          value="##clangToolchainPatch##">
+         <description>Path to Clang LLVM toolchain binary</description>
+      </setupTask>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
