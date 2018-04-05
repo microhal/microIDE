@@ -444,7 +444,7 @@
   <setupTask
       xsi:type="setup:StringSubstitutionTask"
       name="openocd_path"
-      value="${microideDir}/tools/openocd/0.10.0/bin">
+      value="${microideDir/tools/openocd/0.10.0/bin|file}">
     <description>Location of OpenOCD binary file</description>
   </setupTask>
   <setupTask
