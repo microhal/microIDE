@@ -16,7 +16,7 @@ armGccToolchain_old_gcc5 = {
     'url' : 'https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2', 
     'checksum' : {'md5' : '5a261cac18c62d8b7e8c70beba2004bd'},
     'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
-    'installationLocation' : '${microide}/toolchains/gcc-arm-none-eabi/microhal'
+    'installationLocation' : 'microideDir/toolchains/gcc-arm-none-eabi/microhal'
 }
 
 armGccToolchain_6_2016_q2 = {
@@ -26,7 +26,7 @@ armGccToolchain_6_2016_q2 = {
     'url' : 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/6-2017q2/gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2?revision=2cc92fb5-3e0e-402d-9197-bdfc8224d8a5?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,6-2017-q2-update',
     'checksum' : {'md5' : '13747255194398ee08b3ba42e40e9465'},
     'licenseUrl' : 'https://developer.arm.com/GetEula?Id=2d916619-954e-4adb-895d-b1ec657ae305',
-    'installationLocation' : '${microide}/toolchains/gcc-arm-none-eabi/microhal'
+    'installationLocation' : 'microideDir/toolchains/gcc-arm-none-eabi/microhal'
 }
 
 armGccToolchain_7_2017_q4 = {
@@ -36,7 +36,7 @@ armGccToolchain_7_2017_q4 = {
     'url' : 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2017q4/gcc-arm-none-eabi-7-2017-q4-major-linux.tar.bz2?revision=375265d4-e9b5-41c8-bf23-56cbe927e156?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,7-2017-q4-major',
     'checksum' : {'md5' : 'd3b00ae09e847747ef11316a8b04989a'},
     'licenseUrl' : 'https://developer.arm.com/GetEula?Id=b8689563-35c9-4da7-b0cf-9c21f422343c',
-    'installationLocation' : '${microide}/toolchains/gcc-arm-none-eabi/microhal'
+    'installationLocation' : 'microideDir/toolchains/gcc-arm-none-eabi/microhal'
 }
 
 openOCD = {
@@ -185,7 +185,7 @@ def generateLinuxProductSetup():
 
     content = content.replace("##DoxygenPatch##", "${binaryDir}")
 
-    with open('eclipse-installer/setups/microIDE/microide.product.setup.linux', 'w') as file:
+    with open('eclipse-installer/microideLocalSetups/microide.product.setup.linux', 'w') as file:
         file.write(content)
 
 def generateWindowsProductSetup():
@@ -208,7 +208,7 @@ def generateWindowsProductSetup():
     doxygenPath = doxygenPath.replace('{app}', '${microide|file}') + '/bin'
     content = content.replace("##DoxygenPatch##", doxygenPath)
 
-    with open('eclipse-installer/setups/microIDE/microide.product.setup.windows', 'w') as file:
+    with open('eclipse-installer/microideLocalSetups/microide.product.setup.windows', 'w') as file:
         file.write(content)
 
 

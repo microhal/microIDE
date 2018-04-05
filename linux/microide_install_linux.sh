@@ -16,7 +16,7 @@ ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-7-2017-q4-major-linux.tar.bz2
 ARM_GCC_TOOLCHAIN_VERSION=7.2.0
 ARM_GCC_TOOLCHAIN_SIZE=99857645
 ARM_GCC_TOOLCHAIN_CHECKSUM=d3b00ae09e847747ef11316a8b04989a
-ARM_GCC_TOOLCHAIN_LOCATION=toolchains/gcc-arm-none-eabi/microhal
+ARM_GCC_TOOLCHAIN_LOCATION=microideDir/toolchains/gcc-arm-none-eabi/microhal
 
 OPENOCD_URL=https://sourceforge.net/projects/openocd/files/openocd/0.10.0/openocd-0.10.0.tar.gz/download
 OPENOCD_FILENAME=openocd-0.10.0.tar.gz
@@ -28,8 +28,8 @@ OPENOCD_LOCATION=tools/openocd/0.10.0
 ECLIPSE_URL=http://www.eclipse.org/downloads/download.php?file=/oomph/products/latest/eclipse-inst-linux64.tar.gz\&r=1
 ECLIPSE_FILENAME=eclipse-inst-linux64.tar.gz
 ECLIPSE_VERSION=oxygen
-ECLIPSE_SIZE=48060711
-ECLIPSE_CHECKSUM=52bce05a9d774e1ee8723833dbb74354
+ECLIPSE_SIZE=48063925
+ECLIPSE_CHECKSUM=c8105a0d04c8aa105e282b955cb89c98
 ECLIPSE_LOCATION=eclipse
 MICROIDE_DIR=$SCRIPTPATH/microide-$VERSION
 DOWNLOAD_DIR=./downloads
@@ -133,25 +133,44 @@ installARMToolchain() {
 }
 
 installEclipse() {
+    MICROIDE_PRODUCTS_SETUP_FILE_CONTENT='<?xml version="1.0" encoding="UTF-8"?>
+<setup:ProductCatalog
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+	xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
+    name="microide"
+    label="microide Products">   
+  <product
+	href="file:'"$MICROIDE_DIR"'/eclipse-installer/microideLocalSetups/microide.product.setup#/"/>  
+  <description>Default IDE for microhal project</description>
+</setup:ProductCatalog>'
+
     if [ "$1" = "addAptToGetPackagesToInstall" ]; then
     	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL default-jre"
     else 
         echo 'Installing Eclipse ---------------------------------------------------------------' >> log.log
         mkdir -p eclipse-installer
+        # extract eclipse installer files:
         tar --extract --file=$DOWNLOAD_DIR/$ECLIPSE_FILENAME
-        #redirect eclipse installer product index
-        cd eclipse-installer
-        echo '-Doomph.redirection.setups=http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/->setups/' >> eclipse-inst.ini
-        cd ../
-        mkdir -p eclipse-installer/setups/
-        cp -r microIDE-$BRANCH_NAME/eclipse-installer/setups/* eclipse-installer/setups
+        # redirect eclipse installer product index:
+        cd eclipse-installer       
+        echo '-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->file:'"$MICROIDE_DIR"'/microideLocalSetups/microide.products.setup' >> eclipse-inst.ini
+        echo '-Doomph.redirection.myProjectsCatalog=index:/redirectable.projects.setup->https://raw.githubusercontent.com/microHAL/microIDE/devel/eclipse-installer/microideSetups/microhal.projects.setup' >> eclipse-inst.ini
+        # prepare directory for micride product setup files
+        mkdir -p microideLocalSetups
+        cd microideLocalSetups
+        echo "$MICROIDE_PRODUCTS_SETUP_FILE_CONTENT" > microide.products.setup
+        cd ../../
+        cp -r microIDE-$BRANCH_NAME/eclipse-installer/microideLocalSetups/* eclipse-installer/microideLocalSetups
         mv eclipse-installer/setups/microIDE/microide.product.setup.linux eclipse-installer/setups/microIDE/microide.product.setup
+        # set path to microide
+        echo $MICROIDE_DIR
+        sed -i -e 's,value="${installation.location|uri}",value="'"$MICROIDE_DIR"'",g' "eclipse-installer/setups/microIDE/microide.product.setup"
+        # remove files that are no longer needed
         rm eclipse-installer/setups/microIDE/microide.product.setup.windows
-        rm -r microIDE-$BRANCH_NAME
-        rm -r $DOWNLOAD_DIR/$BRANCH_NAME.zip
-	# set path to microide
-	echo $MICROIDE_DIR
-	sed -i -e 's,value="${installation.location|uri}",value="'"$MICROIDE_DIR"'",g' "eclipse-installer/setups/microIDE/microide.product.setup"
+        rm -r microIDE-$BRANCH_NAME         
     fi
 }
 
