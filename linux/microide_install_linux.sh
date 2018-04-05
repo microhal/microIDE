@@ -16,7 +16,7 @@ ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-7-2017-q4-major-linux.tar.bz2
 ARM_GCC_TOOLCHAIN_VERSION=7.2.0
 ARM_GCC_TOOLCHAIN_SIZE=99857645
 ARM_GCC_TOOLCHAIN_CHECKSUM=d3b00ae09e847747ef11316a8b04989a
-ARM_GCC_TOOLCHAIN_LOCATION=microideDir/toolchains/gcc-arm-none-eabi/microhal
+ARM_GCC_TOOLCHAIN_LOCATION=toolchains/gcc-arm-none-eabi/microhal
 
 OPENOCD_URL=https://sourceforge.net/projects/openocd/files/openocd/0.10.0/openocd-0.10.0.tar.gz/download
 OPENOCD_FILENAME=openocd-0.10.0.tar.gz
@@ -156,20 +156,21 @@ installEclipse() {
         tar --extract --file=$DOWNLOAD_DIR/$ECLIPSE_FILENAME
         # redirect eclipse installer product index:
         cd eclipse-installer       
-        echo '-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->file:'"$MICROIDE_DIR"'/microideLocalSetups/microide.products.setup' >> eclipse-inst.ini
+        echo '-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->file:'"$MICROIDE_DIR"'/eclipse-installer/microideLocalSetups/microide.products.setup' >> eclipse-inst.ini
         echo '-Doomph.redirection.myProjectsCatalog=index:/redirectable.projects.setup->https://raw.githubusercontent.com/microHAL/microIDE/devel/eclipse-installer/microideSetups/microhal.projects.setup' >> eclipse-inst.ini
+        echo '-Doomph.setup.product.catalog.filter=microide' >> eclipse-inst.ini
         # prepare directory for micride product setup files
         mkdir -p microideLocalSetups
         cd microideLocalSetups
         echo "$MICROIDE_PRODUCTS_SETUP_FILE_CONTENT" > microide.products.setup
         cd ../../
         cp -r microIDE-$BRANCH_NAME/eclipse-installer/microideLocalSetups/* eclipse-installer/microideLocalSetups
-        mv eclipse-installer/setups/microIDE/microide.product.setup.linux eclipse-installer/setups/microIDE/microide.product.setup
+        mv eclipse-installer/microideLocalSetups/microide.product.setup.linux eclipse-installer/microideLocalSetups/microide.product.setup
         # set path to microide
         echo $MICROIDE_DIR
-        sed -i -e 's,value="${installation.location|uri}",value="'"$MICROIDE_DIR"'",g' "eclipse-installer/setups/microIDE/microide.product.setup"
+        sed -i -e 's,value="${installation.location|uri}",value="file:'"$MICROIDE_DIR"'",g' "eclipse-installer/microideLocalSetups/microide.product.setup"
         # remove files that are no longer needed
-        rm eclipse-installer/setups/microIDE/microide.product.setup.windows
+        rm eclipse-installer/microideLocalSetups/microide.product.setup.windows
         rm -r microIDE-$BRANCH_NAME         
     fi
 }

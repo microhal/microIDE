@@ -191,21 +191,21 @@ def generateLinuxProductSetup():
 def generateWindowsProductSetup():
     with open('templates/microide.product.setup.template', 'r') as file:
         content = file.read()
-    toolchainPatch = winArmGccToolchain['installationLocation'].replace('{app}', '${microide}') + '\\' + re.sub('-.{5,6}-win32\.exe', '', winArmGccToolchain['filename'])
+    toolchainPatch = winArmGccToolchain['installationLocation'].replace('{app}', '${microideDir}') + '\\' + re.sub('-.{5,6}-win32\.exe', '', winArmGccToolchain['filename'])
     content = content.replace("##microideToolchainPatch##", toolchainPatch.replace('/', '\\'))
     
     clangPath = winClangToolchain['installationLocation']
-    clangPath = clangPath.replace('{app}', '${microide|file}') + '/bin'
+    clangPath = clangPath.replace('{app}', '${microideDir|file}') + '/bin'
     clangFormatLocation = clangPath + '/clang-format.exe'
     content = content.replace("##clangFormatLocation##", clangFormatLocation.replace('/', '\\' ))
     content = content.replace("##clangToolchainPatch##", clangPath.replace('/', '\\' ))
 
 #    mingwPath = winMinGwToolchain['installationLocation']
-#    mingwPath = mingwPath.replace('{app}', '${microide}') 
+#    mingwPath = mingwPath.replace('{app}', '${microideDir}') 
 #    content = content.replace("##MinGWToolchainPatch##", mingwPath.replace('/', '\\' ))
 
     doxygenPath = winDoxygen['installationLocation']
-    doxygenPath = doxygenPath.replace('{app}', '${microide|file}') + '/bin'
+    doxygenPath = doxygenPath.replace('{app}', '${microideDir|file}') + '/bin'
     content = content.replace("##DoxygenPatch##", doxygenPath)
 
     with open('eclipse-installer/microideLocalSetups/microide.product.setup.windows', 'w') as file:
@@ -222,7 +222,7 @@ def generateLinuxInstaller():
     text = text + 'ARM_GCC_TOOLCHAIN_VERSION=' + armGccToolchain['version'] + '\n'
     text = text + 'ARM_GCC_TOOLCHAIN_SIZE=' + str(armGccToolchain['size']) + '\n'
     text = text + 'ARM_GCC_TOOLCHAIN_CHECKSUM=' + armGccToolchain['checksum']['md5'] + '\n'
-    text = text + 'ARM_GCC_TOOLCHAIN_LOCATION=' + armGccToolchain['installationLocation'].replace('${microide}/', '')
+    text = text + 'ARM_GCC_TOOLCHAIN_LOCATION=' + armGccToolchain['installationLocation'].replace('microideDir/', '')
     text = text + '\n\nOPENOCD_URL=' + openOCD['url'] 
     text = text + '\nOPENOCD_FILENAME=' + openOCD['filename']
     text = text + '\nOPENOCD_VERSION=' + openOCD['version']
