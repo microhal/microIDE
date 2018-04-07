@@ -178,12 +178,12 @@ def generateLinuxProductSetup():
     toolchainPatch = armGccToolchain['installationLocation'] + '/' + re.sub('-.{5,6}-linux\.tar\.bz2', '', armGccToolchain['filename'])
     content = content.replace("##microideToolchainPatch##", toolchainPatch)
 
-    content = content.replace("##clangFormatLocation##", "${binaryDir}/clang-format-5.0")
-    content = content.replace("##clangToolchainPatch##", "${binaryDir}")
+    content = content.replace("##clangFormatLocation##", "${binaryDir/clang-format-5.0|file}")
+    content = content.replace("##clangToolchainPatch##", "${binaryDir|file}")
 
 #    content = content.replace("##MinGWToolchainPatch##", "${binaryDir}")
 
-    content = content.replace("##DoxygenPatch##", "${binaryDir}")
+    content = content.replace("##DoxygenPatch##", "${binaryDir|file}")
 
     with open('eclipse-installer/microideLocalSetups/microide.product.setup.linux', 'w') as file:
         file.write(content)
@@ -191,22 +191,22 @@ def generateLinuxProductSetup():
 def generateWindowsProductSetup():
     with open('templates/microide.product.setup.template', 'r') as file:
         content = file.read()
-    toolchainPatch = winArmGccToolchain['installationLocation'].replace('{app}', '${microideDir}') + '\\' + re.sub('-.{5,6}-win32\.exe', '', winArmGccToolchain['filename'])
-    content = content.replace("##microideToolchainPatch##", toolchainPatch.replace('/', '\\'))
+    toolchainPatch = winArmGccToolchain['installationLocation'].replace('{app}', 'microideDir') + '/' + re.sub('-.{5,6}-win32\.exe', '', winArmGccToolchain['filename'])
+    content = content.replace("##microideToolchainPatch##", toolchainPatch.replace('\\', '/'))
     
     clangPath = winClangToolchain['installationLocation']
-    clangPath = clangPath.replace('{app}', '${microideDir|file}') + '/bin'
+    clangPath = clangPath.replace('{app}', '${microideDir') + '/bin|file}'
     clangFormatLocation = clangPath + '/clang-format.exe'
-    content = content.replace("##clangFormatLocation##", clangFormatLocation.replace('/', '\\' ))
-    content = content.replace("##clangToolchainPatch##", clangPath.replace('/', '\\' ))
+    content = content.replace("##clangFormatLocation##", clangFormatLocation.replace('\\', '/' ))
+    content = content.replace("##clangToolchainPatch##", clangPath.replace('\\', '/' ))
 
 #    mingwPath = winMinGwToolchain['installationLocation']
 #    mingwPath = mingwPath.replace('{app}', '${microideDir}') 
-#    content = content.replace("##MinGWToolchainPatch##", mingwPath.replace('/', '\\' ))
+#    content = content.replace("##MinGWToolchainPatch##", mingwPath.replace('\\', '/' ))
 
     doxygenPath = winDoxygen['installationLocation']
-    doxygenPath = doxygenPath.replace('{app}', '${microideDir|file}') + '/bin'
-    content = content.replace("##DoxygenPatch##", doxygenPath)
+    doxygenPath = doxygenPath.replace('{app}', '${microideDir') + '/bin|file}'
+    content = content.replace("##DoxygenPatch##", doxygenPath.replace('\\', '/' ))
 
     with open('eclipse-installer/microideLocalSetups/microide.product.setup.windows', 'w') as file:
         file.write(content)
@@ -413,12 +413,14 @@ def compileWindowsInstaller():
     os.remove('windows/eclipse-installer/extractor.exe')
     #pathing eclipse installer
     with open('windows/eclipse-installer/eclipse-inst.ini', 'a') as iniFile:
-        iniFile.write('-Doomph.redirection.setups=http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/->setups/')    
+        iniFile.write('-Doomph.redirection.myProjectsCatalog=index:/redirectable.projects.setup->https://raw.githubusercontent.com/microHAL/microIDE/devel/eclipse-installer/microideSetups/microhal.projects.setup\n')
+        iniFile.write('-Doomph.setup.product.catalog.filter=microide')
+        
     generateWindowsProductSetup() # generate oomph setup files for windows
     # copying oomph setup files
-    shutil.copytree('eclipse-installer/setups', 'windows/eclipse-installer/setups')
-    os.remove('windows/eclipse-installer/setups/microIDE/microide.product.setup.linux')
-    os.rename('windows/eclipse-installer/setups/microIDE/microide.product.setup.windows', 'windows/eclipse-installer/setups/microIDE/microide.product.setup')
+    shutil.copytree('eclipse-installer/microideLocalSetups', 'windows/eclipse-installer/microideLocalSetups')
+    os.remove('windows/eclipse-installer/microideLocalSetups/microide.product.setup.linux')
+    os.rename('windows/eclipse-installer/microideLocalSetups/microide.product.setup.windows', 'windows/eclipse-installer/microideLocalSetups/microide.product.setup')
     # include toolchain patch files into installer, firstly copy patch files into proper directory
     patchDirectoryName = re.sub('-.{5,6}-win32\.exe', '', winArmGccToolchain['filename'])
     shutil.copytree('toolchains/gcc-arm-none-eabi-patch/' + patchDirectoryName, 'windows/toolchainPatch/' + patchDirectoryName)

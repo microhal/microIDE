@@ -124,7 +124,7 @@
           xsi:type="setup:PreferenceTask"
           filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MSYS_HOME/value"
-          value="${microideDir\tools\msys|file}">
+          value="${microideDir/tools/msys|file}">
         <description></description>
       </setupTask>
       <setupTask

@@ -34,7 +34,7 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 Name: "eclipse"; Description: "Eclipse"; Types: user devel custom; Flags: fixed; ExtraDiskSpaceRequired: 51720192
 Name: "toolchains"; Description: "Toolchains"; Types: user devel custom; 
 Name: "toolchains\arm"; Description: "gcc-arm-none-eabi {#ARM_GCC_TOOLCHAIN_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#ARM_GCC_TOOLCHAIN_SIZE}  
-Name: "toolchains\clang"; Description: "clang/llvm"; Types: user devel custom; ExtraDiskSpaceRequired: {#CLANG_TOOLCHAIN_SIZE} 
+Name: "toolchains\clang"; Description: "clang/llvm {#CLANG_TOOLCHAIN_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#CLANG_TOOLCHAIN_SIZE} 
 ;Name: "toolchains\mingw"; Description: "minGW-w64"; Types: user devel custom; ExtraDiskSpaceRequired: 478638080
 Name: "tools"; Description: "Programming tools"; Types: user devel custom;
 Name: "tools\openocd"; Description: "openOCD {#OPENOCD_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#OPENOCD_SIZE}
@@ -47,9 +47,12 @@ Source: "{#UNZIP_7Z_PATH}\*"; DestDir: "{tmp}\tools\7z"; Flags: recursesubdirs
 Source: "eclipse-installer\*"; DestDir: "{app}\eclipse-installer"; Flags: recursesubdirs; BeforeInstall: CreateNoticeFile
 Source: "toolchainPatch\*"; DestDir: "{tmp}\toolchainPatch"; Flags: recursesubdirs;
 
+[Dirs]
+Name: "{app}\eclipse-installer\microideLocalSetups"
+
 [Run]
 ;toolchains installer
-Filename: "{#DOWNLOAD_DIR}\{#ARM_GCC_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#ARM_GCC_TOOLCHAIN_LOCATION}"; Components: toolchains\arm; BeforeInstall: UpdateInstallProgress('Installing ARM Toolchain.',5)
+Filename: "{#DOWNLOAD_DIR}\{#ARM_GCC_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#ARM_GCC_TOOLCHAIN_LOCATION}"; Components: toolchains\arm; BeforeInstall: DisplayInstallProgress(True, 'Installing ARM Toolchain.')
 ; install patch for arm toolchain
 Filename: "xcopy.exe"; Parameters: "/s /y {tmp}\toolchainPatch {#ARM_GCC_TOOLCHAIN_LOCATION}\..\"; Components: toolchains\arm; Flags: runhidden; BeforeInstall: UpdateInstallProgress('Patching ARM Toolchain.',20)                   
 ; install clang\llvm
@@ -71,7 +74,7 @@ Filename: "cmd.exe"; Parameters: "/c rename {app}\tools\release graphiz"; Compon
 ; copy oomph setup files
 ;Filename: "xcopy.exe"; Parameters: "/s /y {tmp}\microIDE-master\eclipse-installer\setups {app}\eclipse-installer\setups\"; Components: eclipse; Flags: runhidden; BeforeInstall: UpdateInstallProgress('Preparing eclipse instalation.',97)                   
 Filename: "notepad.exe"; Parameters: "{tmp}\eclipse-notice.txt"; Components: eclipse; BeforeInstall: UpdateInstallProgress('Preparing eclipse instalation.',99); AfterInstall: DisplayInstallProgress(False, ''); 
-Filename: "{app}\eclipse-installer\eclipse-inst.exe"; Components: eclipse 
+Filename: "{app}\eclipse-installer\eclipse-inst.exe"; Components: eclipse; BeforeInstall: PrepareMicroideOomphSetupFiles 
 
 
 [UninstallRun]
@@ -421,4 +424,63 @@ begin
                                                                'When you close this window, "eclipse installer" will run.' + #13#10 +
                                                                'You have to set installation directory to: ' + ExpandConstant('{app}') + #13#10, False);
 end;
+
+procedure CreateMicroideProductsSetupFile();
+var
+    microideProductSetupPatch: String;
+begin
+  microideProductSetupPatch := ExpandConstant('{app}/eclipse-installer/microideLocalSetups/microide.product.setup');
+  StringChangeEx(microideProductSetupPatch, '\', '/', False);  
+  SaveStringToFile(ExpandConstant('{app}\eclipse-installer\microideLocalSetups\microide.products.setup'), 
+                                                               '<?xml version="1.0" encoding="UTF-8"?>' + #13#10 +
+                                                               '<setup:ProductCatalog' + #13#10 +
+                                                               '    xmi:version="2.0"' + #13#10 +
+                                                               '    xmlns:xmi="http://www.omg.org/XMI"' + #13#10 +
+                                                               '    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' + #13#10 +
+                                                               '    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"' + #13#10 +
+                                                               '    xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"' + #13#10 +
+                                                               '    name="microide"' + #13#10 +
+                                                               '    label="microide Products">' + #13#10 +   
+                                                               '  <product' + #13#10 +
+                                                               '    href="file:/' +  microideProductSetupPatch + '#/"/>' + #13#10 +  
+                                                               '  <description>Default IDE for microhal project</description>' + #13#10 +
+                                                               '</setup:ProductCatalog>',
+                                                               False);
+end;
+
+procedure ReplaceMicroideProductLocationInSetupFile();
+var
+    data: String;
+    microideInstalationPatch: String;    
+begin
+  if LoadStringFromFile(ExpandConstant('{app}\eclipse-installer\microideLocalSetups\microide.product.setup'), data) then
+  begin
+    microideInstalationPatch := ExpandConstant('value="file:/{app}"');
+    StringChangeEx(microideInstalationPatch, '\', '/', False);
+    StringChangeEx(data, 'value="${installation.location|uri}"', microideInstalationPatch, False);    
+    SaveStringToFile(ExpandConstant('{app}\eclipse-installer\microideLocalSetups\microide.product.setup'), data, False);
+  end; 
+end;
+
+procedure PrepareEclipseIniFile();
+var
+    fileContent: String;
+    productsCatalogLocation: String;
+begin
+  if LoadStringFromFile(ExpandConstant('{app}\eclipse-installer\eclipse-inst.ini'), fileContent) then
+  begin
+    productsCatalogLocation := ExpandConstant('-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->file:/{app}/eclipse-installer/microideLocalSetups/microide.products.setup');
+    StringChangeEx(productsCatalogLocation, '\', '/', False);
+    fileContent := fileContent + #13#10 + productsCatalogLocation
+    SaveStringToFile(ExpandConstant('{app}\eclipse-installer\eclipse-inst.ini'), fileContent, False);
+  end; 
+end;
+
+procedure PrepareMicroideOomphSetupFiles();
+begin
+    CreateMicroideProductsSetupFile();
+    ReplaceMicroideProductLocationInSetupFile();
+    PrepareEclipseIniFile();
+end;
+
 
