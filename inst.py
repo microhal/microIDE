@@ -136,6 +136,16 @@ winEclipse = {
     'installationLocation' : 'eclipse'
 }
 
+winCppcheck = {
+    'filename' : 'cppcheck-1.83-x64-Setup.msi',
+    'size' : '0',
+    'version' : '1.83',
+    'url' : 'https://github.com/danmar/cppcheck/releases/download/1.83/cppcheck-1.83-x64-Setup.msi',
+    'checksum' : {'' : ''},
+    'licenseUrl' : 'https://github.com/danmar/cppcheck/blob/master/COPYING',
+    'installationLocation' : '{app}\\tools\\cppcheck\\1.83'
+}
+
 #------------------------------------ files required to prepare installer
 innosetup = {
     'filename' : 'is.exe',
@@ -147,7 +157,7 @@ armGccToolchain = armGccToolchain_7_2017_q4
 winArmGccToolchain = winArmGccToolchain_7_2017_q4
 winClangToolchain = winClangToolchain_6_0_0
 linuxFiles = [armGccToolchain, openOCD, eclipse]
-windowsFiles = [winArmGccToolchain, winClangToolchain, winOpenOCD, winDoxygen, winEclipse]
+windowsFiles = [winArmGccToolchain, winClangToolchain, winOpenOCD, winDoxygen, winEclipse, winCppcheck]
 allFiles = linuxFiles + windowsFiles
 
 # ------------------------------------ end of file declaration
@@ -200,9 +210,9 @@ def generateWindowsProductSetup():
     content = content.replace("##clangFormatLocation##", clangFormatLocation.replace('\\', '/' ))
     content = content.replace("##clangToolchainPatch##", clangPath.replace('\\', '/' ))
 
-#    mingwPath = winMinGwToolchain['installationLocation']
-#    mingwPath = mingwPath.replace('{app}', '${microideDir}') 
-#    content = content.replace("##MinGWToolchainPatch##", mingwPath.replace('\\', '/' ))
+    mingwPath = winMinGwToolchain['installationLocation']
+    mingwPath = mingwPath.replace('{app}', '${microideDir') + '|file}'
+    content = content.replace("##MinGWToolchainPatch##", mingwPath.replace('\\', '/' ))
 
     doxygenPath = winDoxygen['installationLocation']
     doxygenPath = doxygenPath.replace('{app}', '${microideDir') + '/bin|file}'
@@ -376,12 +386,19 @@ def generateInnoSetupFile():
     text = text + '#define DOXYGEN_SIZE ' + str(winDoxygen['size']) + '\n'
     text = text + '#define DOXYGEN_LOCATION "' + winDoxygen['installationLocation'] + '"\n'
 
-#    text = text + '#define MINGW_URL "' + winMinGwToolchain['url'] + '"\n'
-#    text = text + '#define MINGW_LICENSE_URL "' + winMinGwToolchain['licenseUrl'] + '"\n'
-#    text = text + '#define MINGW_FILENAME "' + winMinGwToolchain['filename'] +'"\n'
-#    text = text + '#define MINGW_VERSION "' + winMinGwToolchain['version'] + '"\n'
-#    text = text + '#define MINGW_SIZE ' + str(winMinGwToolchain['size']) + '\n'
-#    text = text + '#define MINGW_LOCATION "' + winMinGwToolchain['installationLocation'] + '"\n'
+    text = text + '#define MINGW_URL "' + winMinGwToolchain['url'] + '"\n'
+    text = text + '#define MINGW_LICENSE_URL "' + winMinGwToolchain['licenseUrl'] + '"\n'
+    text = text + '#define MINGW_FILENAME "' + winMinGwToolchain['filename'] +'"\n'
+    text = text + '#define MINGW_VERSION "' + winMinGwToolchain['version'] + '"\n'
+    text = text + '#define MINGW_SIZE ' + str(winMinGwToolchain['size']) + '\n'
+    text = text + '#define MINGW_LOCATION "' + winMinGwToolchain['installationLocation'] + '"\n'
+
+    text = text + '#define CPPCHECK_URL "' + winCppcheck['url'] + '"\n'
+    text = text + '#define CPPCHECK_LICENSE_URL "' + winCppcheck['licenseUrl'] + '"\n'
+    text = text + '#define CPPCHECK_FILENAME "' + winCppcheck['filename'] +'"\n'
+    text = text + '#define CPPCHECK_VERSION "' + winCppcheck['version'] + '"\n'
+    text = text + '#define CPPCHECK_SIZE ' + str(winCppcheck['size']) + '\n'
+    text = text + '#define CPPCHECK_LOCATION "' + winCppcheck['installationLocation'] + '"\n'
 
 
     content = content.replace("#replace this text with instalation files information", text)
@@ -435,9 +452,9 @@ def compileWindowsInstaller():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--onlyDownload', nargs='?', type=bool, const=True, help='Checking if all windows and linux files can be download from internet.')
-    parser.add_argument('--verifyWindowsDownload', nargs='?', type=bool, const=True, help='Checking if all files required for windows installation can be download from internet.')
-    parser.add_argument('--verifyLinuxDownload', nargs='?', type=bool, const=True, help='Checking if all files required for linux installation can be download from internet.')
+    parser.add_argument('--onlyDownload', nargs='?', type=bool, const=True, help='Checking if all windows and linux files can be download from the internet.')
+    parser.add_argument('--verifyWindowsDownload', nargs='?', type=bool, const=True, help='Checking if all files required for windows installation can be download from the internet.')
+    parser.add_argument('--verifyLinuxDownload', nargs='?', type=bool, const=True, help='Checking if all files required for linux installation can be download from the internet.')
     parser.add_argument('--replaceGthr', nargs='?', type=bool, const=True, help='Part of toolchain patching, replacing gthr.h file into microhal version.')
     parser.add_argument('--createToolchainPatch', nargs='?', type=bool, const=True, help='Create toolchain patch.')
     parser.add_argument('--makeLinuxInstaller', nargs='?', type=bool, const=True, help='Creating linux installation files.')
@@ -505,11 +522,12 @@ def main():
     if args.initEnvinronment == True:
         try:
             subprocess.call(["wine", "--version"])
-	except OSError as e:
+        except OSError as e:
             if e.errno == os.errno.ENOET: #wine not installed
                 subprocess.call("sudo apt", "install", "wine")
             else:
-		raise
+                raise
+        #todo add innosetup instalation
 
 	getMissingFiles('norepo/linux', [innosetup])
     

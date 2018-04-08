@@ -35,12 +35,13 @@ Name: "eclipse"; Description: "Eclipse"; Types: user devel custom; Flags: fixed;
 Name: "toolchains"; Description: "Toolchains"; Types: user devel custom; 
 Name: "toolchains\arm"; Description: "gcc-arm-none-eabi {#ARM_GCC_TOOLCHAIN_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#ARM_GCC_TOOLCHAIN_SIZE}  
 Name: "toolchains\clang"; Description: "clang/llvm {#CLANG_TOOLCHAIN_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#CLANG_TOOLCHAIN_SIZE} 
-;Name: "toolchains\mingw"; Description: "minGW-w64"; Types: user devel custom; ExtraDiskSpaceRequired: 478638080
+Name: "toolchains\mingw"; Description: "minGW-w64"; Types: user devel custom; ExtraDiskSpaceRequired: 478638080
 Name: "tools"; Description: "Programming tools"; Types: user devel custom;
 Name: "tools\openocd"; Description: "openOCD {#OPENOCD_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#OPENOCD_SIZE}
 Name: "tools\msys"; Description: "msys"; Types: user devel custom; ExtraDiskSpaceRequired: 416485376
 Name: "tools\doxygen"; Description: "Doxygen {#DOXYGEN_VERSION}"; Types: devel custom; ExtraDiskSpaceRequired: {#DOXYGEN_SIZE}  
 Name: "tools\graphiz"; Description: "Graphiz 2.38"; Types: devel custom; ExtraDiskSpaceRequired: 204574720 
+Name: "tools\cppcheck"; Description: "Cppcheck"; Types: devel custom; ExtraDiskSpaceRequired: {#CPPCHECK_SIZE} 
 
 [Files]
 Source: "{#UNZIP_7Z_PATH}\*"; DestDir: "{tmp}\tools\7z"; Flags: recursesubdirs
@@ -51,28 +52,28 @@ Source: "toolchainPatch\*"; DestDir: "{tmp}\toolchainPatch"; Flags: recursesubdi
 Name: "{app}\eclipse-installer\microideLocalSetups"
 
 [Run]
-;toolchains installer
+;---- toolchains installer
 Filename: "{#DOWNLOAD_DIR}\{#ARM_GCC_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#ARM_GCC_TOOLCHAIN_LOCATION}"; Components: toolchains\arm; BeforeInstall: DisplayInstallProgress(True, 'Installing ARM Toolchain.')
 ; install patch for arm toolchain
 Filename: "xcopy.exe"; Parameters: "/s /y {tmp}\toolchainPatch {#ARM_GCC_TOOLCHAIN_LOCATION}\..\"; Components: toolchains\arm; Flags: runhidden; BeforeInstall: UpdateInstallProgress('Patching ARM Toolchain.',20)                   
-; install clang\llvm
+;---- install clang\llvm
 Filename: "{#DOWNLOAD_DIR}\{#CLANG_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#CLANG_TOOLCHAIN_LOCATION}"; Components: toolchains\clang; BeforeInstall: UpdateInstallProgress('Installing Clang Toolchain.',25)
-;mingw
-;Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#MINGW_FILENAME} -o{#MINGW_LOCATION} -y"; Components: toolchains\mingw; BeforeInstall: UpdateInstallProgress('Installing mingw toolchain.',40) 
-;Filename: "cmd.exe"; Parameters: "/c rename {app}\toolchains\mingw-w64\mingw64 {#MINGW_VERSION}"; Components: toolchains\mingw ; BeforeInstall: UpdateInstallProgress('Installing mingw toolchain.',55)
-; tools installer
-Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#OPENOCD_FILENAME} -o{app}\tools\openocd -y"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.',56)
+;---- mingw
+Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#MINGW_FILENAME} -o{#MINGW_LOCATION} -y"; Components: toolchains\mingw; BeforeInstall: UpdateInstallProgress('Installing mingw toolchain.', 40) 
+Filename: "cmd.exe"; Parameters: "/c rename {app}\toolchains\mingw-w64\mingw64 {#MINGW_VERSION}"; Components: toolchains\mingw ; BeforeInstall: UpdateInstallProgress('Installing mingw toolchain.', 55)
+;---- tools installer
+Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#OPENOCD_FILENAME} -o{app}\tools\openocd -y"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.', 56)
 Filename: "cmd.exe"; Parameters: "/c rename {app}\tools\openocd\openocd-0.10.0 0.10.0"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.',57)
-; extract msys
+;---- extract msys
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\msys-rev13.7z -o{app}\tools\ -y"; Components: tools\msys; BeforeInstall: UpdateInstallProgress('Installing msys.',62)
-; install doxygen  
+;---- install doxygen  
 Filename: "{#DOWNLOAD_DIR}\{#DOXYGEN_FILENAME}"; Parameters: "/SILENT /DIR={#DOXYGEN_LOCATION}"; Components: tools\doxygen; BeforeInstall: UpdateInstallProgress('Installing doxygen.',75)
-; unpack graphiz
+;---- unpack graphiz
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\graphviz-2.38.zip -o{app}\tools\ -y"; Components: tools\graphiz; BeforeInstall: UpdateInstallProgress('Installing graphiz.',85)
 Filename: "cmd.exe"; Parameters: "/c rename {app}\tools\release graphiz"; Components: tools\graphiz; BeforeInstall: UpdateInstallProgress('Installing graphiz.',95)
+;---- install cppcheck
+Filename: "msiexec.exe"; Parameters: "/i {#DOWNLOAD_DIR}\{#CPPCHECK_FILENAME} /qb /L*V {app}\cppcheck.log INSTALLDIR={#CPPCHECK_LOCATION} ADDLOCAL=""CppcheckCore,Complete,CLI,Translations,GUI,ConfigFiles,PlatformFiles,CRT"""; Components: tools\cppcheck; BeforeInstall: UpdateInstallProgress('Installing Cppcheck.', 97)
 ;---- eclipse installer
-; copy oomph setup files
-;Filename: "xcopy.exe"; Parameters: "/s /y {tmp}\microIDE-master\eclipse-installer\setups {app}\eclipse-installer\setups\"; Components: eclipse; Flags: runhidden; BeforeInstall: UpdateInstallProgress('Preparing eclipse instalation.',97)                   
 Filename: "notepad.exe"; Parameters: "{tmp}\eclipse-notice.txt"; Components: eclipse; BeforeInstall: UpdateInstallProgress('Preparing eclipse instalation.',99); AfterInstall: DisplayInstallProgress(False, ''); 
 Filename: "{app}\eclipse-installer\eclipse-inst.exe"; Components: eclipse; BeforeInstall: PrepareMicroideOomphSetupFiles 
 
@@ -84,7 +85,7 @@ Filename: "{#DOXYGEN_LOCATION}\system\unins000.exe"; Parameters: "/SILENT"
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\eclipse";
-;Type: filesandordirs; Name: "{#MINGW_LOCATION}"; Components: toolchains\mingw
+Type: filesandordirs; Name: "{#MINGW_LOCATION}"; Components: toolchains\mingw
 Type: filesandordirs; Name: "{app}\tools\graphiz"; Components: tools\graphiz
 Type: filesandordirs; Name: "{app}\tools\msys"; Components: tools\msys
 Type: filesandordirs; Name: "{app}\tools\openocd"; Components: tools\openocd
@@ -97,8 +98,8 @@ Type: dirifempty; Name: "{app}\tools";
 
 
 
-;[Registry]
-;Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{olddata};{#MINGW_LOCATION}\bin"; Check: NeedsAddPath('{#MINGW_LOCATION}\bin')
+[Registry]
+Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{olddata};{#MINGW_LOCATION}\bin"; Check: NeedsAddPath('{#MINGW_LOCATION}\bin')
 
 ;-----------------------------------------------------------------------------------------------------------------------------
 [Code]
@@ -143,11 +144,11 @@ end;
 //-----------------------------
 [Code]       
 var   
-  LicenceAccepted: Array[0..4] of Boolean; 
-  RequireLicenceAccepted: Array[0..4] of Boolean;
-  Button: Array[0..4] of TNewButton;
-  CheckBox: Array[0..4] of TNewCheckBox;
-  URLLabel: Array[0..4] of TNewStaticText;
+  LicenceAccepted: Array[0..6] of Boolean; 
+  RequireLicenceAccepted: Array[0..6] of Boolean;
+  Button: Array[0..6] of TNewButton;
+  CheckBox: Array[0..6] of TNewCheckBox;
+  URLLabel: Array[0..6] of TNewStaticText;
 
 function NeedsAddPath(Param: string): boolean;
 var
@@ -171,12 +172,12 @@ begin
   ShellExecAsOriginalUser('open', '{#ARM_GCC_TOOLCHAIN_LICENSE_URL}', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode); 
 end;
 
-//procedure Show_mingw_license(Sender: TObject);
-//var 
-//  ErrorCode: Integer;
-//begin 
-//  ShellExecAsOriginalUser('open', 'http://sourceforge.net/projects/mingw-w64/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
-//end;
+procedure Show_mingw_license(Sender: TObject);
+var 
+  ErrorCode: Integer;
+begin 
+  ShellExecAsOriginalUser('open', 'http://sourceforge.net/projects/mingw-w64/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
+end;
 
 procedure Show_openocd_license(Sender: TObject);
 var
@@ -205,6 +206,13 @@ var
 begin
   ShellExecAsOriginalUser('open', 'http://llvm.org/releases/{#CLANG_TOOLCHAIN_VERSION}/LICENSE.TXT', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
 end;
+
+procedure Cppcheck_clang_license(Sender: TObject);
+var
+  ErrorCode: Integer;
+begin
+  ShellExecAsOriginalUser('open', '{#CPPCHECK_LICENSE_URL}', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
+end;
 //------------------------------------------------------------
 procedure URLLabelOnClick(Sender: TObject);
 var
@@ -212,11 +220,12 @@ var
 begin      
   case TNewStaticText(Sender).Caption of
     'GCC ARM Embedded': ShellExecAsOriginalUser('open', 'https://launchpad.net/gcc-arm-embedded/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
-//    'minGW-w64': ShellExecAsOriginalUser('open', 'http://mingw-w64.org', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
+    'minGW-w64': ShellExecAsOriginalUser('open', 'http://mingw-w64.org', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
     'openOCD': ShellExecAsOriginalUser('open', 'http://openocd.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
     'Doxygen': ShellExecAsOriginalUser('open', 'http://www.doxygen.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
     'Graphiz': ShellExecAsOriginalUser('open', 'http://www.graphviz.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
     'Clang': ShellExecAsOriginalUser('open', 'http://clang.llvm.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
+    'Cppcheck': ShellExecAsOriginalUser('open', 'http://cppcheck.sourceforge.net/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
   end;
 end;      
 
@@ -224,7 +233,7 @@ procedure CheckIfAllLicenseAccepted();
 var
   i: Integer;  
 begin                     
-  for i := 0 to 4 do
+  for i := 0 to 5 do
   begin
     if LicenceAccepted[i] <> RequireLicenceAccepted[i] then 
     begin
@@ -242,11 +251,11 @@ begin
    CheckIfAllLicenseAccepted;
 end;
 
-//procedure MinGWLicenseChecked(Sender: TObject);
-//begin
-//   LicenceAccepted[1] := TNewCheckBox(Sender).Checked;
-//   CheckIfAllLicenseAccepted;
-//end;
+procedure MinGWLicenseChecked(Sender: TObject);
+begin
+   LicenceAccepted[1] := TNewCheckBox(Sender).Checked;
+   CheckIfAllLicenseAccepted;
+end;
 
 procedure openOCDLicenseChecked(Sender: TObject);
 begin
@@ -271,21 +280,28 @@ begin
    LicenceAccepted[4] := TNewCheckBox(Sender).Checked;
    CheckIfAllLicenseAccepted;
 end;
+
+procedure CppcheckLicenseChecked(Sender: TObject);
+begin
+   LicenceAccepted[5] := TNewCheckBox(Sender).Checked;
+   CheckIfAllLicenseAccepted;
+end;
 //----------------------------------------------------   
 
 procedure LicensePageActivate(Sender: TWizardPage);
 var
   i: Integer;
-  ComponentName: Array[0..4] of String;
+  ComponentName: Array[0..6] of String;
 begin 
   ComponentName[0] := 'toolchains\arm';
-//  ComponentName[1] := 'toolchains\mingw';
-  ComponentName[1] := 'tools\openocd';
-  ComponentName[2] := 'tools\doxygen';
-  ComponentName[3] := 'tools\graphiz';
-  ComponentName[4] := 'toolchains\clang';
+  ComponentName[1] := 'toolchains\mingw';
+  ComponentName[2] := 'tools\openocd';
+  ComponentName[3] := 'tools\doxygen';
+  ComponentName[4] := 'tools\graphiz';
+  ComponentName[5] := 'toolchains\clang';
+  ComponentName[6] := 'tools\cppcheck';
   
-  for i:=0 to 4 do
+  for i:=0 to 6 do
   begin     
     if IsComponentSelected(ComponentName[i]) then
     begin
@@ -310,32 +326,35 @@ procedure License_InitializeWizard();
 var 
   Page: TWizardPage; 
   
-  WebAddress: Array[0..4] of String;
+  WebAddress: Array[0..6] of String;
   i: Integer;   
   longestComponnentName: Integer;
-  CheckboxEventsFunctions: Array[0..4] of TNotifyEvent;
-  ShowLicenseEventsFunctions: Array[0..4] of TNotifyEvent;
+  CheckboxEventsFunctions: Array[0..6] of TNotifyEvent;
+  ShowLicenseEventsFunctions: Array[0..6] of TNotifyEvent;
 begin
   WebAddress[0] := 'GCC ARM Embedded';
-//  WebAddress[1] := 'minGW-w64';
-  WebAddress[1] := 'openOCD';
-  WebAddress[2] := 'Doxygen';
-  WebAddress[3] := 'Graphiz';
-  WebAddress[4] := 'Clang'; 
+  WebAddress[1] := 'minGW-w64';
+  WebAddress[2] := 'openOCD';
+  WebAddress[3] := 'Doxygen';
+  WebAddress[4] := 'Graphiz';
+  WebAddress[5] := 'Clang';
+  WebAddress[6] := 'Cppcheck';  
 
   CheckboxEventsFunctions[0] := @AcceptARMLicenseChecked;
-//  CheckboxEventsFunctions[1] := @MinGWLicenseChecked;
-  CheckboxEventsFunctions[1] := @openOCDLicenseChecked;
-  CheckboxEventsFunctions[2] := @DoxygenLicenseChecked;
-  CheckboxEventsFunctions[3] := @GraphizLicenseChecked;
-  CheckboxEventsFunctions[4] := @ClangLicenseChecked;
+  CheckboxEventsFunctions[1] := @MinGWLicenseChecked;
+  CheckboxEventsFunctions[2] := @openOCDLicenseChecked;
+  CheckboxEventsFunctions[3] := @DoxygenLicenseChecked;
+  CheckboxEventsFunctions[4] := @GraphizLicenseChecked;
+  CheckboxEventsFunctions[5] := @ClangLicenseChecked;
+  CheckboxEventsFunctions[6] := @CppcheckLicenseChecked;
 
   ShowLicenseEventsFunctions[0] := @Show_GCCARM_license;
-//  ShowLicenseEventsFunctions[1] := @Show_mingw_license;
-  ShowLicenseEventsFunctions[1] := @Show_openocd_license;
-  ShowLicenseEventsFunctions[2] := @Show_doxygen_license;
-  ShowLicenseEventsFunctions[3] := @Show_graphiz_license;
-  ShowLicenseEventsFunctions[4] := @Show_clang_license
+  ShowLicenseEventsFunctions[1] := @Show_mingw_license;
+  ShowLicenseEventsFunctions[2] := @Show_openocd_license;
+  ShowLicenseEventsFunctions[3] := @Show_doxygen_license;
+  ShowLicenseEventsFunctions[4] := @Show_graphiz_license;
+  ShowLicenseEventsFunctions[5] := @Show_clang_license
+  ShowLicenseEventsFunctions[6] := @Cppcheck_clang_license
 
   longestComponnentName := 0;   
     
@@ -345,7 +364,7 @@ begin
   // Set the states and event handlers
   Page.OnActivate := @LicensePageActivate;
 
-  for i:=0 to 4 do
+  for i:=0 to 6 do
   begin
     URLLabel[i] := TNewStaticText.Create(Page);
     URLLabel[i].Caption := WebAddress[i];
@@ -363,7 +382,7 @@ begin
     if URLLabel[i].Width > longestComponnentName then longestComponnentName := URLLabel[i].Width;   
   end;
   
-  for i:=0 to 4 do
+  for i:=0 to 6 do
   begin  
     Button[i] := TNewButton.Create(Page);
     Button[i].Top := ScaleY(30*i);
@@ -398,8 +417,8 @@ begin
   if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\{#CLANG_TOOLCHAIN_FILENAME}')) then                                    
     idpAddFileComp('{#CLANG_TOOLCHAIN_URL}', ExpandConstant('{#DOWNLOAD_DIR}\{#CLANG_TOOLCHAIN_FILENAME}'), 'toolchains\clang');        
   
-//  if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\{#MINGW_FILENAME}')) then                                    
-//    idpAddFileComp('{#MINGW_URL}', ExpandConstant('{#DOWNLOAD_DIR}\{#MINGW_FILENAME}'), 'toolchains\mingw');      
+  if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\{#MINGW_FILENAME}')) then                                    
+    idpAddFileComp('{#MINGW_URL}', ExpandConstant('{#DOWNLOAD_DIR}\{#MINGW_FILENAME}'), 'toolchains\mingw');      
   
   if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\msys-rev13.7z')) then
     idpAddFileComp('http://downloads.sourceforge.net/project/mingwbuilds/external-binary-packages/msys%2B7za%2Bwget%2Bsvn%2Bgit%2Bmercurial%2Bcvs-rev13.7z',  ExpandConstant('{#DOWNLOAD_DIR}\msys-rev13.7z'),  'tools\msys');
@@ -412,6 +431,9 @@ begin
   
   if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\{#OPENOCD_FILENAME}')) then
     idpAddFileComp('{#OPENOCD_URL}',  ExpandConstant('{#DOWNLOAD_DIR}\{#OPENOCD_FILENAME}'),  'tools\openocd');    
+
+  if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\{#CPPCHECK_FILENAME}')) then
+    idpAddFileComp('{#CPPCHECK_URL}',  ExpandConstant('{#DOWNLOAD_DIR}\{#CPPCHECK_FILENAME}'),  'tools\cppcheck');   
  
   idpDownloadAfter(wpReady);
   License_InitializeWizard();  
