@@ -33,7 +33,7 @@ ECLIPSE_CHECKSUM=c8105a0d04c8aa105e282b955cb89c98
 ECLIPSE_LOCATION=eclipse
 MICROIDE_DIR=$SCRIPTPATH/microide-$VERSION
 DOWNLOAD_DIR=./downloads
-BRANCH_NAME=devel
+BRANCH_NAME=master
 APT_GET_PACKAGES_TO_INSTALL=''
 APT_GET_REPOSITORYS_TO_ADD=''
 
@@ -218,6 +218,12 @@ installGCC() {
     fi
 }
 
+installDoxygen() {
+    if [ "$1" = "addAptToGetPackagesToInstall" ]; then
+        APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL doxygen"
+    fi
+}
+
 checkArchitecture() {
     if [ "$(uname -i)" != "x86_64" ]; then
         echo "This script can be used only on 64 bit systems. Aborting."
@@ -233,7 +239,9 @@ instal() {
     installEclipse 'addAptToGetPackagesToInstall'
     installClangFormat 'addAptToGetPackagesToInstall'
     installCppcheck 'addAptToGetPackagesToInstall'
+    installDoxygen 'addAptToGetPackagesToInstall'
     installGCC
+    
     echo $APT_GET_PACKAGES_TO_INSTALL
     echo $APT_GET_REPOSITORYS_TO_ADD
 
