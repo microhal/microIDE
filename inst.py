@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import os
 import hashlib
@@ -7,7 +7,7 @@ import re
 import argparse
 import subprocess
 
-microideVersion = '0.3.2'
+microideVersion = '0.3.3'
 
 armGccToolchain_old_gcc5 = {
     'filename' : 'gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2',
@@ -16,7 +16,7 @@ armGccToolchain_old_gcc5 = {
     'url' : 'https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2', 
     'checksum' : {'md5' : '5a261cac18c62d8b7e8c70beba2004bd'},
     'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
-    'installationLocation' : '${microide}/toolchains/gcc-arm-none-eabi/microhal'
+    'installationLocation' : 'microideDir/toolchains/gcc-arm-none-eabi/microhal'
 }
 
 armGccToolchain_6_2016_q2 = {
@@ -26,7 +26,7 @@ armGccToolchain_6_2016_q2 = {
     'url' : 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/6-2017q2/gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2?revision=2cc92fb5-3e0e-402d-9197-bdfc8224d8a5?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,6-2017-q2-update',
     'checksum' : {'md5' : '13747255194398ee08b3ba42e40e9465'},
     'licenseUrl' : 'https://developer.arm.com/GetEula?Id=2d916619-954e-4adb-895d-b1ec657ae305',
-    'installationLocation' : '${microide}/toolchains/gcc-arm-none-eabi/microhal'
+    'installationLocation' : 'microideDir/toolchains/gcc-arm-none-eabi/microhal'
 }
 
 armGccToolchain_7_2017_q4 = {
@@ -36,7 +36,7 @@ armGccToolchain_7_2017_q4 = {
     'url' : 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2017q4/gcc-arm-none-eabi-7-2017-q4-major-linux.tar.bz2?revision=375265d4-e9b5-41c8-bf23-56cbe927e156?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,7-2017-q4-major',
     'checksum' : {'md5' : 'd3b00ae09e847747ef11316a8b04989a'},
     'licenseUrl' : 'https://developer.arm.com/GetEula?Id=b8689563-35c9-4da7-b0cf-9c21f422343c',
-    'installationLocation' : '${microide}/toolchains/gcc-arm-none-eabi/microhal'
+    'installationLocation' : 'microideDir/toolchains/gcc-arm-none-eabi/microhal'
 }
 
 openOCD = {
@@ -78,7 +78,7 @@ winArmGccToolchain_5_3_2016 = {
     'installationLocation' : '{app}\\toolchains\\gcc-arm-none-eabi\\microhal'
 }
 
-winClangToolchain = {
+winClangToolchain_3_8_0 = {
     'filename' : 'LLVM-3.8.0-win64.exe',
     'size' : '0',
     'version' : '3.8.0',
@@ -88,6 +88,15 @@ winClangToolchain = {
     'installationLocation' : '{app}\\toolchains\\LLVM\\3.8.0'
 }
 
+winClangToolchain_6_0_0 = {
+    'filename' : 'LLVM-6.0.0-win64.exe',
+    'size' : '0',
+    'version' : '6.0.0',
+    'url' : 'http://releases.llvm.org/6.0.0/LLVM-6.0.0-win64.exe', 
+    'checksum' : {'' : ''},
+    'licenseUrl' : 'https://launchpadlibrarian.net/251686212/license.txt',
+    'installationLocation' : '{app}\\toolchains\\LLVM\\6.0.0'
+}
 
 winMinGwToolchain = {
     'filename' : 'x86_64-7.1.0-release-win32-seh-rt_v5-rev2.7z',
@@ -127,10 +136,28 @@ winEclipse = {
     'installationLocation' : 'eclipse'
 }
 
+winCppcheck = {
+    'filename' : 'cppcheck-1.83-x64-Setup.msi',
+    'size' : '0',
+    'version' : '1.83',
+    'url' : 'https://github.com/danmar/cppcheck/releases/download/1.83/cppcheck-1.83-x64-Setup.msi',
+    'checksum' : {'' : ''},
+    'licenseUrl' : 'https://github.com/danmar/cppcheck/blob/master/COPYING',
+    'installationLocation' : '{app}\\tools\\cppcheck\\1.83'
+}
+
+#------------------------------------ files required to prepare installer
+innosetup = {
+    'filename' : 'is.exe',
+    'url' : 'http://www.jrsoftware.org/download.php/is.exe',
+    'checksum' : {'' : ''},
+}
+
 armGccToolchain = armGccToolchain_7_2017_q4
 winArmGccToolchain = winArmGccToolchain_7_2017_q4
+winClangToolchain = winClangToolchain_6_0_0
 linuxFiles = [armGccToolchain, openOCD, eclipse]
-windowsFiles = [winArmGccToolchain, winClangToolchain, winMinGwToolchain, winOpenOCD, winDoxygen, winEclipse]
+windowsFiles = [winArmGccToolchain, winClangToolchain, winOpenOCD, winDoxygen, winEclipse, winCppcheck]
 allFiles = linuxFiles + windowsFiles
 
 # ------------------------------------ end of file declaration
@@ -161,34 +188,37 @@ def generateLinuxProductSetup():
     toolchainPatch = armGccToolchain['installationLocation'] + '/' + re.sub('-.{5,6}-linux\.tar\.bz2', '', armGccToolchain['filename'])
     content = content.replace("##microideToolchainPatch##", toolchainPatch)
 
-    content = content.replace("##clangFormatLocation##", "/usr/bin/clang-format")
+    content = content.replace("##clangFormatLocation##", "${binaryDir/clang-format-5.0|file}")
+    content = content.replace("##clangToolchainPatch##", "${binaryDir|file}")
 
-    content = content.replace("##MinGWToolchainPatch##", "/usr/bin")
+#    content = content.replace("##MinGWToolchainPatch##", "${binaryDir}")
 
-    content = content.replace("##DoxygenPatch##", "/usr/bin")
+    content = content.replace("##DoxygenPatch##", "${binaryDir|file}")
 
-    with open('eclipse-installer/setups/microIDE/microide.product.setup.linux', 'w') as file:
+    with open('eclipse-installer/microideLocalSetups/microide.product.setup.linux', 'w') as file:
         file.write(content)
 
 def generateWindowsProductSetup():
     with open('templates/microide.product.setup.template', 'r') as file:
         content = file.read()
-    toolchainPatch = winArmGccToolchain['installationLocation'].replace('{app}', '${microide}') + '\\' + re.sub('-.{5,6}-win32\.exe', '', winArmGccToolchain['filename'])
-    content = content.replace("##microideToolchainPatch##", toolchainPatch.replace('/', '\\'))
+    toolchainPatch = winArmGccToolchain['installationLocation'].replace('{app}', 'microideDir') + '/' + re.sub('-.{5,6}-win32\.exe', '', winArmGccToolchain['filename'])
+    content = content.replace("##microideToolchainPatch##", toolchainPatch.replace('\\', '/'))
     
     clangPath = winClangToolchain['installationLocation']
-    clangPath = clangPath.replace('{app}', '${microide|file}') + '/bin/clang-format.exe'
-    content = content.replace("##clangFormatLocation##", clangPath.replace('/', '\\' ))
+    clangPath = clangPath.replace('{app}', '${microideDir') + '/bin|file}'
+    clangFormatLocation = clangPath + '/clang-format.exe'
+    content = content.replace("##clangFormatLocation##", clangFormatLocation.replace('\\', '/' ))
+    content = content.replace("##clangToolchainPatch##", clangPath.replace('\\', '/' ))
 
     mingwPath = winMinGwToolchain['installationLocation']
-    mingwPath = mingwPath.replace('{app}', '${microide}') 
-    content = content.replace("##MinGWToolchainPatch##", mingwPath.replace('/', '\\' ))
+    mingwPath = mingwPath.replace('{app}', '${microideDir') + '|file}'
+    content = content.replace("##MinGWToolchainPatch##", mingwPath.replace('\\', '/' ))
 
     doxygenPath = winDoxygen['installationLocation']
-    doxygenPath = doxygenPath.replace('{app}', '${microide|file}') + '/bin'
-    content = content.replace("##DoxygenPatch##", doxygenPath)
+    doxygenPath = doxygenPath.replace('{app}', '${microideDir') + '/bin|file}'
+    content = content.replace("##DoxygenPatch##", doxygenPath.replace('\\', '/' ))
 
-    with open('eclipse-installer/setups/microIDE/microide.product.setup.windows', 'w') as file:
+    with open('eclipse-installer/microideLocalSetups/microide.product.setup.windows', 'w') as file:
         file.write(content)
 
 
@@ -202,7 +232,7 @@ def generateLinuxInstaller():
     text = text + 'ARM_GCC_TOOLCHAIN_VERSION=' + armGccToolchain['version'] + '\n'
     text = text + 'ARM_GCC_TOOLCHAIN_SIZE=' + str(armGccToolchain['size']) + '\n'
     text = text + 'ARM_GCC_TOOLCHAIN_CHECKSUM=' + armGccToolchain['checksum']['md5'] + '\n'
-    text = text + 'ARM_GCC_TOOLCHAIN_LOCATION=' + armGccToolchain['installationLocation'].replace('${microide}/', '')
+    text = text + 'ARM_GCC_TOOLCHAIN_LOCATION=' + armGccToolchain['installationLocation'].replace('microideDir/', '')
     text = text + '\n\nOPENOCD_URL=' + openOCD['url'] 
     text = text + '\nOPENOCD_FILENAME=' + openOCD['filename']
     text = text + '\nOPENOCD_VERSION=' + openOCD['version']
@@ -213,7 +243,7 @@ def generateLinuxInstaller():
 
     content = content.replace("#replace this text with instalation files information", text)
 
-    with open('linux/microide_install.sh', 'w') as file:
+    with open('linux/microide_install_linux.sh', 'w') as file:
         file.write(content)    
 
 def recursiveRemoveNotListedFiles(directory, filesToPath):    
@@ -363,6 +393,13 @@ def generateInnoSetupFile():
     text = text + '#define MINGW_SIZE ' + str(winMinGwToolchain['size']) + '\n'
     text = text + '#define MINGW_LOCATION "' + winMinGwToolchain['installationLocation'] + '"\n'
 
+    text = text + '#define CPPCHECK_URL "' + winCppcheck['url'] + '"\n'
+    text = text + '#define CPPCHECK_LICENSE_URL "' + winCppcheck['licenseUrl'] + '"\n'
+    text = text + '#define CPPCHECK_FILENAME "' + winCppcheck['filename'] +'"\n'
+    text = text + '#define CPPCHECK_VERSION "' + winCppcheck['version'] + '"\n'
+    text = text + '#define CPPCHECK_SIZE ' + str(winCppcheck['size']) + '\n'
+    text = text + '#define CPPCHECK_LOCATION "' + winCppcheck['installationLocation'] + '"\n'
+
 
     content = content.replace("#replace this text with instalation files information", text)
 
@@ -393,12 +430,14 @@ def compileWindowsInstaller():
     os.remove('windows/eclipse-installer/extractor.exe')
     #pathing eclipse installer
     with open('windows/eclipse-installer/eclipse-inst.ini', 'a') as iniFile:
-        iniFile.write('-Doomph.redirection.setups=http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/->setups/')    
+        iniFile.write('-Doomph.redirection.myProjectsCatalog=index:/redirectable.projects.setup->https://raw.githubusercontent.com/microHAL/microIDE/devel/eclipse-installer/microideSetups/microhal.projects.setup\n')
+        iniFile.write('-Doomph.setup.product.catalog.filter=microide')
+        
     generateWindowsProductSetup() # generate oomph setup files for windows
     # copying oomph setup files
-    shutil.copytree('eclipse-installer/setups', 'windows/eclipse-installer/setups')
-    os.remove('windows/eclipse-installer/setups/microIDE/microide.product.setup.linux')
-    os.rename('windows/eclipse-installer/setups/microIDE/microide.product.setup.windows', 'windows/eclipse-installer/setups/microIDE/microide.product.setup')
+    shutil.copytree('eclipse-installer/microideLocalSetups', 'windows/eclipse-installer/microideLocalSetups')
+    os.remove('windows/eclipse-installer/microideLocalSetups/microide.product.setup.linux')
+    os.rename('windows/eclipse-installer/microideLocalSetups/microide.product.setup.windows', 'windows/eclipse-installer/microideLocalSetups/microide.product.setup')
     # include toolchain patch files into installer, firstly copy patch files into proper directory
     patchDirectoryName = re.sub('-.{5,6}-win32\.exe', '', winArmGccToolchain['filename'])
     shutil.copytree('toolchains/gcc-arm-none-eabi-patch/' + patchDirectoryName, 'windows/toolchainPatch/' + patchDirectoryName)
@@ -413,13 +452,14 @@ def compileWindowsInstaller():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--onlyDownload', nargs='?', type=bool, const=True, help='Checking if all windows and linux files can be download from internet.')
-    parser.add_argument('--verifyWindowsDownload', nargs='?', type=bool, const=True, help='Checking if all files required for windows installation can be download from internet.')
-    parser.add_argument('--verifyLinuxDownload', nargs='?', type=bool, const=True, help='Checking if all files required for linux installation can be download from internet.')
+    parser.add_argument('--onlyDownload', nargs='?', type=bool, const=True, help='Checking if all windows and linux files can be download from the internet.')
+    parser.add_argument('--verifyWindowsDownload', nargs='?', type=bool, const=True, help='Checking if all files required for windows installation can be download from the internet.')
+    parser.add_argument('--verifyLinuxDownload', nargs='?', type=bool, const=True, help='Checking if all files required for linux installation can be download from the internet.')
     parser.add_argument('--replaceGthr', nargs='?', type=bool, const=True, help='Part of toolchain patching, replacing gthr.h file into microhal version.')
     parser.add_argument('--createToolchainPatch', nargs='?', type=bool, const=True, help='Create toolchain patch.')
     parser.add_argument('--makeLinuxInstaller', nargs='?', type=bool, const=True, help='Creating linux installation files.')
     parser.add_argument('--makeWindowsInstaller', nargs='?', type=bool, const=True, help='Creating windows installation files. This will work on linux with wine where Inno Setup and Inno Download Plugin was installed')
+    parser.add_argument('--initEnvinronment', nargs='?', type=bool, const=True, help='This option will install on you computer wine and Inno Setup.')
 
     args = parser.parse_args()
 
@@ -479,10 +519,19 @@ def main():
         recursiveRemoveNotListedFiles(toolchainDir, ['gthr.h', 'condition_variable', 'mutex', 'thread'])
         print "Copying newly created patch to patches directory"
         shutil.copytree('norepo/toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-7-2017-q4-major', 'toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-7-2017-q4')
+    if args.initEnvinronment == True:
+        try:
+            subprocess.call(["wine", "--version"])
+        except OSError as e:
+            if e.errno == os.errno.ENOET: #wine not installed
+                subprocess.call("sudo apt", "install", "wine")
+            else:
+                raise
+        #todo add innosetup instalation
+
+	getMissingFiles('norepo/linux', [innosetup])
     
 
 if __name__ == "__main__":
     main()
-
-
 

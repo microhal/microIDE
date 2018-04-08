@@ -9,10 +9,31 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 
 #links to installation files
 
-#replace this text with instalation files information
+VERSION=0.3.3
+ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2017q4/gcc-arm-none-eabi-7-2017-q4-major-linux.tar.bz2?revision=375265d4-e9b5-41c8-bf23-56cbe927e156?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,7-2017-q4-major
+ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=b8689563-35c9-4da7-b0cf-9c21f422343c
+ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-7-2017-q4-major-linux.tar.bz2
+ARM_GCC_TOOLCHAIN_VERSION=7.2.0
+ARM_GCC_TOOLCHAIN_SIZE=99857645
+ARM_GCC_TOOLCHAIN_CHECKSUM=d3b00ae09e847747ef11316a8b04989a
+ARM_GCC_TOOLCHAIN_LOCATION=toolchains/gcc-arm-none-eabi/microhal
+
+OPENOCD_URL=https://sourceforge.net/projects/openocd/files/openocd/0.10.0/openocd-0.10.0.tar.gz/download
+OPENOCD_FILENAME=openocd-0.10.0.tar.gz
+OPENOCD_VERSION=0.10.0
+OPENOCD_SIZE=6124274
+OPENOCD_CHECKSUM=8971d16aee5c2642b33ee55fc6c86239
+OPENOCD_LOCATION=tools/openocd/0.10.0
+
+ECLIPSE_URL=http://www.eclipse.org/downloads/download.php?file=/oomph/products/latest/eclipse-inst-linux64.tar.gz\&r=1
+ECLIPSE_FILENAME=eclipse-inst-linux64.tar.gz
+ECLIPSE_VERSION=oxygen
+ECLIPSE_SIZE=48063925
+ECLIPSE_CHECKSUM=c8105a0d04c8aa105e282b955cb89c98
+ECLIPSE_LOCATION=eclipse
 MICROIDE_DIR=$SCRIPTPATH/microide-$VERSION
 DOWNLOAD_DIR=./downloads
-BRANCH_NAME=master
+BRANCH_NAME=devel
 APT_GET_PACKAGES_TO_INSTALL=''
 APT_GET_REPOSITORYS_TO_ADD=''
 
@@ -197,12 +218,6 @@ installGCC() {
     fi
 }
 
-installDoxygen() {
-    if [ "$1" = "addAptToGetPackagesToInstall" ]; then
-        APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL doxygen"
-    fi
-}
-
 checkArchitecture() {
     if [ "$(uname -i)" != "x86_64" ]; then
         echo "This script can be used only on 64 bit systems. Aborting."
@@ -218,9 +233,7 @@ instal() {
     installEclipse 'addAptToGetPackagesToInstall'
     installClangFormat 'addAptToGetPackagesToInstall'
     installCppcheck 'addAptToGetPackagesToInstall'
-    installDoxygen 'addAptToGetPackagesToInstall'
     installGCC
-    
     echo $APT_GET_PACKAGES_TO_INSTALL
     echo $APT_GET_REPOSITORYS_TO_ADD
 

@@ -91,7 +91,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.path.1287942917"
-          value="${##microideToolchainPatch##/bin|file}">
+          value="${microideDir/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-7-2017-q4/bin|file}">
         <description>Path to microide toolchain binary files</description>
       </setupTask>
     </setupTask>
@@ -124,7 +124,7 @@
           xsi:type="setup:PreferenceTask"
           filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MSYS_HOME/value"
-          value="${microideDir/tools/msys|file}">
+          value="${microideDir\tools\msys|file}">
         <description></description>
       </setupTask>
       <setupTask
@@ -164,7 +164,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.managedbuilder.llvm.ui/LLVM installation folder"
-          value="##clangToolchainPatch##">
+          value="${binaryDir}">
         <description>Path to Clang LLVM toolchain binary</description>
       </setupTask>
     </setupTask>
@@ -359,11 +359,11 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.gna.eclox.core/doxygen.default"
-          value="eclox.core.doxygen.CustomDoxygen ##DoxygenPatch##"/>
+          value="eclox.core.doxygen.CustomDoxygen ${binaryDir}"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.gna.eclox.core/doxygen.customs"
-          value="eclox.core.doxygen.CustomDoxygen ##DoxygenPatch##&#xA;"/>
+          value="eclox.core.doxygen.CustomDoxygen ${binaryDir}&#xA;"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -371,7 +371,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.wangzw.cppstyle/cppstyle.clangformat.path"
-          value="##clangFormatLocation##">
+          value="${binaryDir}/clang-format-5.0">
         <description></description>
       </setupTask>
       <setupTask

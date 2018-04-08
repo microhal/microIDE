@@ -20,7 +20,7 @@ DefaultGroupName=microIDE
 DisableStartupPrompt=yes
 VersionInfoCompany=microhal
 VersionInfoProductName=microIDE
-OutputBaseFilename=microIDE_setup_{#AppVersion}
+OutputBaseFilename=microIDE_setup_{#AppVersion}_windows
 OutputDir=userdocs:Inno Setup Examples Output
 
 #include <idp.iss>
@@ -34,44 +34,48 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 Name: "eclipse"; Description: "Eclipse"; Types: user devel custom; Flags: fixed; ExtraDiskSpaceRequired: 51720192
 Name: "toolchains"; Description: "Toolchains"; Types: user devel custom; 
 Name: "toolchains\arm"; Description: "gcc-arm-none-eabi {#ARM_GCC_TOOLCHAIN_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#ARM_GCC_TOOLCHAIN_SIZE}  
-Name: "toolchains\clang"; Description: "clang/llvm"; Types: user devel custom; ExtraDiskSpaceRequired: {#CLANG_TOOLCHAIN_SIZE} 
+Name: "toolchains\clang"; Description: "clang/llvm {#CLANG_TOOLCHAIN_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#CLANG_TOOLCHAIN_SIZE} 
 Name: "toolchains\mingw"; Description: "minGW-w64"; Types: user devel custom; ExtraDiskSpaceRequired: 478638080
 Name: "tools"; Description: "Programming tools"; Types: user devel custom;
 Name: "tools\openocd"; Description: "openOCD {#OPENOCD_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#OPENOCD_SIZE}
 Name: "tools\msys"; Description: "msys"; Types: user devel custom; ExtraDiskSpaceRequired: 416485376
 Name: "tools\doxygen"; Description: "Doxygen {#DOXYGEN_VERSION}"; Types: devel custom; ExtraDiskSpaceRequired: {#DOXYGEN_SIZE}  
 Name: "tools\graphiz"; Description: "Graphiz 2.38"; Types: devel custom; ExtraDiskSpaceRequired: 204574720 
+Name: "tools\cppcheck"; Description: "Cppcheck"; Types: devel custom; ExtraDiskSpaceRequired: {#CPPCHECK_SIZE} 
 
 [Files]
 Source: "{#UNZIP_7Z_PATH}\*"; DestDir: "{tmp}\tools\7z"; Flags: recursesubdirs
 Source: "eclipse-installer\*"; DestDir: "{app}\eclipse-installer"; Flags: recursesubdirs; BeforeInstall: CreateNoticeFile
 Source: "toolchainPatch\*"; DestDir: "{tmp}\toolchainPatch"; Flags: recursesubdirs;
 
+[Dirs]
+Name: "{app}\eclipse-installer\microideLocalSetups"
+
 [Run]
-;toolchains installer
-Filename: "{#DOWNLOAD_DIR}\{#ARM_GCC_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#ARM_GCC_TOOLCHAIN_LOCATION}"; Components: toolchains\arm; BeforeInstall: UpdateInstallProgress('Installing ARM Toolchain.',5)
+;---- toolchains installer
+Filename: "{#DOWNLOAD_DIR}\{#ARM_GCC_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#ARM_GCC_TOOLCHAIN_LOCATION}"; Components: toolchains\arm; BeforeInstall: DisplayInstallProgress(True, 'Installing ARM Toolchain.')
 ; install patch for arm toolchain
 Filename: "xcopy.exe"; Parameters: "/s /y {tmp}\toolchainPatch {#ARM_GCC_TOOLCHAIN_LOCATION}\..\"; Components: toolchains\arm; Flags: runhidden; BeforeInstall: UpdateInstallProgress('Patching ARM Toolchain.',20)                   
-; install clang\llvm
+;---- install clang\llvm
 Filename: "{#DOWNLOAD_DIR}\{#CLANG_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#CLANG_TOOLCHAIN_LOCATION}"; Components: toolchains\clang; BeforeInstall: UpdateInstallProgress('Installing Clang Toolchain.',25)
-;mingw
-Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#MINGW_FILENAME} -o{#MINGW_LOCATION} -y"; Components: toolchains\mingw; BeforeInstall: UpdateInstallProgress('Installing mingw toolchain.',40) 
-;Filename: "cmd.exe"; Parameters: "/c rename {app}\toolchains\mingw-w64\mingw64 {#MINGW_VERSION}"; Components: toolchains\mingw ; BeforeInstall: UpdateInstallProgress('Installing mingw toolchain.',55)
-; tools installer
-Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#OPENOCD_FILENAME} -o{app}\tools\openocd -y"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.',56)
+;---- mingw
+Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#MINGW_FILENAME} -o{#MINGW_LOCATION} -y"; Components: toolchains\mingw; BeforeInstall: UpdateInstallProgress('Installing mingw toolchain.', 40) 
+Filename: "cmd.exe"; Parameters: "/c rename {app}\toolchains\mingw-w64\mingw64 {#MINGW_VERSION}"; Components: toolchains\mingw ; BeforeInstall: UpdateInstallProgress('Installing mingw toolchain.', 55)
+;---- tools installer
+Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#OPENOCD_FILENAME} -o{app}\tools\openocd -y"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.', 56)
 Filename: "cmd.exe"; Parameters: "/c rename {app}\tools\openocd\openocd-0.10.0 0.10.0"; Components: tools\openocd; BeforeInstall: UpdateInstallProgress('Installing OpenOCD.',57)
-; extract msys
+;---- extract msys
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\msys-rev13.7z -o{app}\tools\ -y"; Components: tools\msys; BeforeInstall: UpdateInstallProgress('Installing msys.',62)
-; install doxygen  
+;---- install doxygen  
 Filename: "{#DOWNLOAD_DIR}\{#DOXYGEN_FILENAME}"; Parameters: "/SILENT /DIR={#DOXYGEN_LOCATION}"; Components: tools\doxygen; BeforeInstall: UpdateInstallProgress('Installing doxygen.',75)
-; unpack graphiz
+;---- unpack graphiz
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\graphviz-2.38.zip -o{app}\tools\ -y"; Components: tools\graphiz; BeforeInstall: UpdateInstallProgress('Installing graphiz.',85)
 Filename: "cmd.exe"; Parameters: "/c rename {app}\tools\release graphiz"; Components: tools\graphiz; BeforeInstall: UpdateInstallProgress('Installing graphiz.',95)
+;---- install cppcheck
+Filename: "msiexec.exe"; Parameters: "/i {#DOWNLOAD_DIR}\{#CPPCHECK_FILENAME} /qb /L*V {app}\cppcheck.log INSTALLDIR={#CPPCHECK_LOCATION} ADDLOCAL=""CppcheckCore,Complete,CLI,Translations,GUI,ConfigFiles,PlatformFiles,CRT"""; Components: tools\cppcheck; BeforeInstall: UpdateInstallProgress('Installing Cppcheck.', 97)
 ;---- eclipse installer
-; copy oomph setup files
-;Filename: "xcopy.exe"; Parameters: "/s /y {tmp}\microIDE-master\eclipse-installer\setups {app}\eclipse-installer\setups\"; Components: eclipse; Flags: runhidden; BeforeInstall: UpdateInstallProgress('Preparing eclipse instalation.',97)                   
 Filename: "notepad.exe"; Parameters: "{tmp}\eclipse-notice.txt"; Components: eclipse; BeforeInstall: UpdateInstallProgress('Preparing eclipse instalation.',99); AfterInstall: DisplayInstallProgress(False, ''); 
-Filename: "{app}\eclipse-installer\eclipse-inst.exe"; Components: eclipse 
+Filename: "{app}\eclipse-installer\eclipse-inst.exe"; Components: eclipse; BeforeInstall: PrepareMicroideOomphSetupFiles 
 
 
 [UninstallRun]
@@ -140,11 +144,11 @@ end;
 //-----------------------------
 [Code]       
 var   
-  LicenceAccepted: Array[0..5] of Boolean; 
-  RequireLicenceAccepted: Array[0..5] of Boolean;
-  Button: Array[0..5] of TNewButton;
-  CheckBox: Array[0..5] of TNewCheckBox;
-  URLLabel: Array[0..5] of TNewStaticText;
+  LicenceAccepted: Array[0..6] of Boolean; 
+  RequireLicenceAccepted: Array[0..6] of Boolean;
+  Button: Array[0..6] of TNewButton;
+  CheckBox: Array[0..6] of TNewCheckBox;
+  URLLabel: Array[0..6] of TNewStaticText;
 
 function NeedsAddPath(Param: string): boolean;
 var
@@ -202,6 +206,13 @@ var
 begin
   ShellExecAsOriginalUser('open', 'http://llvm.org/releases/{#CLANG_TOOLCHAIN_VERSION}/LICENSE.TXT', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
 end;
+
+procedure Cppcheck_clang_license(Sender: TObject);
+var
+  ErrorCode: Integer;
+begin
+  ShellExecAsOriginalUser('open', '{#CPPCHECK_LICENSE_URL}', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
+end;
 //------------------------------------------------------------
 procedure URLLabelOnClick(Sender: TObject);
 var
@@ -214,6 +225,7 @@ begin
     'Doxygen': ShellExecAsOriginalUser('open', 'http://www.doxygen.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
     'Graphiz': ShellExecAsOriginalUser('open', 'http://www.graphviz.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
     'Clang': ShellExecAsOriginalUser('open', 'http://clang.llvm.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
+    'Cppcheck': ShellExecAsOriginalUser('open', 'http://cppcheck.sourceforge.net/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
   end;
 end;      
 
@@ -247,23 +259,29 @@ end;
 
 procedure openOCDLicenseChecked(Sender: TObject);
 begin
-   LicenceAccepted[2] := TNewCheckBox(Sender).Checked;
+   LicenceAccepted[1] := TNewCheckBox(Sender).Checked;
    CheckIfAllLicenseAccepted;
 end;
 
 procedure DoxygenLicenseChecked(Sender: TObject);
 begin
-   LicenceAccepted[3] := TNewCheckBox(Sender).Checked;
+   LicenceAccepted[2] := TNewCheckBox(Sender).Checked;
    CheckIfAllLicenseAccepted;
 end;  
 
 procedure GraphizLicenseChecked(Sender: TObject);
 begin
-   LicenceAccepted[4] := TNewCheckBox(Sender).Checked;
+   LicenceAccepted[3] := TNewCheckBox(Sender).Checked;
    CheckIfAllLicenseAccepted;
 end;
 
 procedure ClangLicenseChecked(Sender: TObject);
+begin
+   LicenceAccepted[4] := TNewCheckBox(Sender).Checked;
+   CheckIfAllLicenseAccepted;
+end;
+
+procedure CppcheckLicenseChecked(Sender: TObject);
 begin
    LicenceAccepted[5] := TNewCheckBox(Sender).Checked;
    CheckIfAllLicenseAccepted;
@@ -281,8 +299,9 @@ begin
   ComponentName[3] := 'tools\doxygen';
   ComponentName[4] := 'tools\graphiz';
   ComponentName[5] := 'toolchains\clang';
+  ComponentName[6] := 'tools\cppcheck';
   
-  for i:=0 to 5 do
+  for i:=0 to 6 do
   begin     
     if IsComponentSelected(ComponentName[i]) then
     begin
@@ -307,18 +326,19 @@ procedure License_InitializeWizard();
 var 
   Page: TWizardPage; 
   
-  WebAddress: Array[0..5] of String;
+  WebAddress: Array[0..6] of String;
   i: Integer;   
   longestComponnentName: Integer;
-  CheckboxEventsFunctions: Array[0..5] of TNotifyEvent;
-  ShowLicenseEventsFunctions: Array[0..5] of TNotifyEvent;
+  CheckboxEventsFunctions: Array[0..6] of TNotifyEvent;
+  ShowLicenseEventsFunctions: Array[0..6] of TNotifyEvent;
 begin
   WebAddress[0] := 'GCC ARM Embedded';
   WebAddress[1] := 'minGW-w64';
   WebAddress[2] := 'openOCD';
   WebAddress[3] := 'Doxygen';
   WebAddress[4] := 'Graphiz';
-  WebAddress[5] := 'Clang'; 
+  WebAddress[5] := 'Clang';
+  WebAddress[6] := 'Cppcheck';  
 
   CheckboxEventsFunctions[0] := @AcceptARMLicenseChecked;
   CheckboxEventsFunctions[1] := @MinGWLicenseChecked;
@@ -326,6 +346,7 @@ begin
   CheckboxEventsFunctions[3] := @DoxygenLicenseChecked;
   CheckboxEventsFunctions[4] := @GraphizLicenseChecked;
   CheckboxEventsFunctions[5] := @ClangLicenseChecked;
+  CheckboxEventsFunctions[6] := @CppcheckLicenseChecked;
 
   ShowLicenseEventsFunctions[0] := @Show_GCCARM_license;
   ShowLicenseEventsFunctions[1] := @Show_mingw_license;
@@ -333,6 +354,7 @@ begin
   ShowLicenseEventsFunctions[3] := @Show_doxygen_license;
   ShowLicenseEventsFunctions[4] := @Show_graphiz_license;
   ShowLicenseEventsFunctions[5] := @Show_clang_license
+  ShowLicenseEventsFunctions[6] := @Cppcheck_clang_license
 
   longestComponnentName := 0;   
     
@@ -342,7 +364,7 @@ begin
   // Set the states and event handlers
   Page.OnActivate := @LicensePageActivate;
 
-  for i:=0 to 5 do
+  for i:=0 to 6 do
   begin
     URLLabel[i] := TNewStaticText.Create(Page);
     URLLabel[i].Caption := WebAddress[i];
@@ -360,7 +382,7 @@ begin
     if URLLabel[i].Width > longestComponnentName then longestComponnentName := URLLabel[i].Width;   
   end;
   
-  for i:=0 to 5 do
+  for i:=0 to 6 do
   begin  
     Button[i] := TNewButton.Create(Page);
     Button[i].Top := ScaleY(30*i);
@@ -409,6 +431,9 @@ begin
   
   if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\{#OPENOCD_FILENAME}')) then
     idpAddFileComp('{#OPENOCD_URL}',  ExpandConstant('{#DOWNLOAD_DIR}\{#OPENOCD_FILENAME}'),  'tools\openocd');    
+
+  if not FileExists(ExpandConstant('{#DOWNLOAD_DIR}\{#CPPCHECK_FILENAME}')) then
+    idpAddFileComp('{#CPPCHECK_URL}',  ExpandConstant('{#DOWNLOAD_DIR}\{#CPPCHECK_FILENAME}'),  'tools\cppcheck');   
  
   idpDownloadAfter(wpReady);
   License_InitializeWizard();  
@@ -421,4 +446,63 @@ begin
                                                                'When you close this window, "eclipse installer" will run.' + #13#10 +
                                                                'You have to set installation directory to: ' + ExpandConstant('{app}') + #13#10, False);
 end;
+
+procedure CreateMicroideProductsSetupFile();
+var
+    microideProductSetupPatch: String;
+begin
+  microideProductSetupPatch := ExpandConstant('{app}/eclipse-installer/microideLocalSetups/microide.product.setup');
+  StringChangeEx(microideProductSetupPatch, '\', '/', False);  
+  SaveStringToFile(ExpandConstant('{app}\eclipse-installer\microideLocalSetups\microide.products.setup'), 
+                                                               '<?xml version="1.0" encoding="UTF-8"?>' + #13#10 +
+                                                               '<setup:ProductCatalog' + #13#10 +
+                                                               '    xmi:version="2.0"' + #13#10 +
+                                                               '    xmlns:xmi="http://www.omg.org/XMI"' + #13#10 +
+                                                               '    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' + #13#10 +
+                                                               '    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"' + #13#10 +
+                                                               '    xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"' + #13#10 +
+                                                               '    name="microide"' + #13#10 +
+                                                               '    label="microide Products">' + #13#10 +   
+                                                               '  <product' + #13#10 +
+                                                               '    href="file:/' +  microideProductSetupPatch + '#/"/>' + #13#10 +  
+                                                               '  <description>Default IDE for microhal project</description>' + #13#10 +
+                                                               '</setup:ProductCatalog>',
+                                                               False);
+end;
+
+procedure ReplaceMicroideProductLocationInSetupFile();
+var
+    data: String;
+    microideInstalationPatch: String;    
+begin
+  if LoadStringFromFile(ExpandConstant('{app}\eclipse-installer\microideLocalSetups\microide.product.setup'), data) then
+  begin
+    microideInstalationPatch := ExpandConstant('value="file:/{app}"');
+    StringChangeEx(microideInstalationPatch, '\', '/', False);
+    StringChangeEx(data, 'value="${installation.location|uri}"', microideInstalationPatch, False);    
+    SaveStringToFile(ExpandConstant('{app}\eclipse-installer\microideLocalSetups\microide.product.setup'), data, False);
+  end; 
+end;
+
+procedure PrepareEclipseIniFile();
+var
+    fileContent: String;
+    productsCatalogLocation: String;
+begin
+  if LoadStringFromFile(ExpandConstant('{app}\eclipse-installer\eclipse-inst.ini'), fileContent) then
+  begin
+    productsCatalogLocation := ExpandConstant('-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->file:/{app}/eclipse-installer/microideLocalSetups/microide.products.setup');
+    StringChangeEx(productsCatalogLocation, '\', '/', False);
+    fileContent := fileContent + #13#10 + productsCatalogLocation
+    SaveStringToFile(ExpandConstant('{app}\eclipse-installer\eclipse-inst.ini'), fileContent, False);
+  end; 
+end;
+
+procedure PrepareMicroideOomphSetupFiles();
+begin
+    CreateMicroideProductsSetupFile();
+    ReplaceMicroideProductLocationInSetupFile();
+    PrepareEclipseIniFile();
+end;
+
 

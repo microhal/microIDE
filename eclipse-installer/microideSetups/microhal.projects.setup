@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:ProjectCatalog
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    name= "microHAL"
+    label="microHAL Projects">  
+  <project
+	href="https://raw.githubusercontent.com/microHAL/microIDE/devel/eclipse-installer/microideSetups/microideProjects/microhal.examples.setup#/"/>
+  <project
+	href="https://raw.githubusercontent.com/microHAL/microIDE/devel/eclipse-installer/microideSetups/microideProjects/microhal.project.snowflake.setup#/"/>
+  <project
+	href="https://raw.githubusercontent.com/microHAL/microIDE/devel/eclipse-installer/microideSetups/microideProjects/microhal.project.propellerTester.setup#/"/>
+  <project
+	href="https://raw.githubusercontent.com/microHAL/microIDE/devel/eclipse-installer/microideSetups/microideProjects/microhal.templates.setup#/"/>
+  <description>List of microhal projects.</description>
+</setup:ProjectCatalog>
