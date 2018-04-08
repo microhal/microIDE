@@ -1,6 +1,7 @@
 ## Microide is eclipse based IDE dedicated for embedded development.
 
 ### Windows installation
+Before installing microide you should install Java Runtime Environment, you can find installer at [oracle webpage.](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)<br>
 To install microide on Windows operating system you should go to realase tab and download windows binary installer.
 
 https://github.com/microHAL/microIDE/releases/latest
