@@ -109,7 +109,32 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/doctool/workspace.default"
-          value="org.eclipse.cdt.ui.doxygen"/>
+          value="org.eclipse.cdt.ui.doxygen"/>            
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/delimiter"
+          value=";"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/operation"
+          value="replace"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          filter="(osgi.os=win32)"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/MICROIDE_MINGW_HOME/value"
+          value="##MinGWToolchainPatch##">
+        <description></description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/MINGW_HOME/operation"
+          value="replace"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/MINGW_HOME/value"
+          value="$${MICROIDE_MINGW_HOME}"/>          
       <setupTask
           xsi:type="setup:PreferenceTask"
           filter=""

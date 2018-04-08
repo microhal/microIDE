@@ -98,15 +98,27 @@ winClangToolchain_6_0_0 = {
     'installationLocation' : '{app}\\toolchains\\LLVM\\6.0.0'
 }
 
-winMinGwToolchain = {
+winMinGwToolchain_7_1_0 = {
     'filename' : 'x86_64-7.1.0-release-win32-seh-rt_v5-rev2.7z',
     'size' : '0',
-    'version' : '',
+    'version' : '7.1.0',
     'url' : 'https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.1.0/threads-win32/seh/x86_64-7.1.0-release-win32-seh-rt_v5-rev2.7z', 
     'checksum' : {'md5' : 'bd537f46793fc11b7b161f071e9ef31e'},
     'licenseUrl' : 'http://sourceforge.net/projects/mingw-w64/',
     'installationLocation' : '{app}\\toolchains\\mingw-w64'
 }
+
+winMinGwToolchain_7_3_0 = {
+    'filename' : 'x86_64-7.3.0-release-posix-seh-rt_v5-rev0.7z',
+    'size' : '0',
+    'version' : '7.3.0',
+    'url' : 'https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.3.0/threads-posix/seh/x86_64-7.3.0-release-posix-seh-rt_v5-rev0.7z', 
+    'checksum' : {'md5' : '7240f9d64a06e2c71141380a6db0cf64'},
+    'licenseUrl' : 'http://sourceforge.net/projects/mingw-w64/',
+    'installationLocation' : '{app}\\toolchains\\mingw-w64'
+}
+
+
 
 winOpenOCD = {
     'filename' : 'openocd-0.10.0.7z',
@@ -156,8 +168,9 @@ innosetup = {
 armGccToolchain = armGccToolchain_7_2017_q4
 winArmGccToolchain = winArmGccToolchain_7_2017_q4
 winClangToolchain = winClangToolchain_6_0_0
+winMinGwToolchain = winMinGwToolchain_7_3_0
 linuxFiles = [armGccToolchain, openOCD, eclipse]
-windowsFiles = [winArmGccToolchain, winClangToolchain, winOpenOCD, winDoxygen, winEclipse, winCppcheck]
+windowsFiles = [winArmGccToolchain, winClangToolchain, winOpenOCD, winDoxygen, winEclipse, winCppcheck, winMinGwToolchain]
 allFiles = linuxFiles + windowsFiles
 
 # ------------------------------------ end of file declaration
@@ -210,7 +223,7 @@ def generateWindowsProductSetup():
     content = content.replace("##clangFormatLocation##", clangFormatLocation.replace('\\', '/' ))
     content = content.replace("##clangToolchainPatch##", clangPath.replace('\\', '/' ))
 
-    mingwPath = winMinGwToolchain['installationLocation']
+    mingwPath = winMinGwToolchain['installationLocation'] + '\\' + winMinGwToolchain['version']
     mingwPath = mingwPath.replace('{app}', '${microideDir') + '|file}'
     content = content.replace("##MinGWToolchainPatch##", mingwPath.replace('\\', '/' ))
 
