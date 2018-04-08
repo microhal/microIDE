@@ -1,7 +1,7 @@
 ## Microide is eclipse based IDE dedicated for embedded development.
 
 ### Windows installation
-Before installing microide you should install Java Runtime Environment, you can find installer at [oracle webpage.](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)<br>
+Before installing microide you should install <b>Java Runtime Environment</b>, you can find installer at [oracle webpage.](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)<br>
 To install microide on Windows operating system you should go to realase tab and download windows binary installer.
 
 https://github.com/microHAL/microIDE/releases/latest
@@ -72,6 +72,11 @@ Microide is dedicated for embedded development, its integrate tools like:
 All packages are preconfigured and IDE is redy for use after installing. This installer contain script that will download and install all comptonents.
 
 ## Changelog
+
+### 0.3.3
+- updated minGW to 7.3.0
+- added cppcheck
+- added clang/LLVM eclipse plugin
 
 ### 0.3.2
 - updated ARM GCC toolchain to 7.2.0
