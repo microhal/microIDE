@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# This script was tested on ubuntu 16.04 LTS, it may require some changes to run on other versions
+# This script was tested on ubuntu 18.04 LTS, it may require some changes to run on other versions
 
 # Absolute path to this script, e.g. /home/user/bin/foo.sh
 SCRIPT=$(readlink -f "$0")
@@ -10,12 +10,12 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 #links to installation files
 
 VERSION=0.3.3
-ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2017q4/gcc-arm-none-eabi-7-2017-q4-major-linux.tar.bz2?revision=375265d4-e9b5-41c8-bf23-56cbe927e156?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,7-2017-q4-major
-ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=b8689563-35c9-4da7-b0cf-9c21f422343c
-ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-7-2017-q4-major-linux.tar.bz2
-ARM_GCC_TOOLCHAIN_VERSION=7.2.0
-ARM_GCC_TOOLCHAIN_SIZE=99857645
-ARM_GCC_TOOLCHAIN_CHECKSUM=d3b00ae09e847747ef11316a8b04989a
+ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2?revision=bc2c96c0-14b5-4bb4-9f18-bceb4050fee7?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,7-2018-q2-update
+ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=7f7f1581-ce37-49ab-972f-c4163729fa47
+ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
+ARM_GCC_TOOLCHAIN_VERSION=7.3.0
+ARM_GCC_TOOLCHAIN_SIZE=100600407
+ARM_GCC_TOOLCHAIN_CHECKSUM=299ebd3f1c2c90930d28ab82e5d8d6c0
 ARM_GCC_TOOLCHAIN_LOCATION=toolchains/gcc-arm-none-eabi/microhal
 
 OPENOCD_URL=https://sourceforge.net/projects/openocd/files/openocd/0.10.0/openocd-0.10.0.tar.gz/download
@@ -28,12 +28,12 @@ OPENOCD_LOCATION=tools/openocd/0.10.0
 ECLIPSE_URL=http://www.eclipse.org/downloads/download.php?file=/oomph/products/latest/eclipse-inst-linux64.tar.gz\&r=1
 ECLIPSE_FILENAME=eclipse-inst-linux64.tar.gz
 ECLIPSE_VERSION=oxygen
-ECLIPSE_SIZE=48063925
-ECLIPSE_CHECKSUM=c8105a0d04c8aa105e282b955cb89c98
+ECLIPSE_SIZE=50140599
+ECLIPSE_CHECKSUM=54f451ae0e5e2725d6192ac962a7a0c7
 ECLIPSE_LOCATION=eclipse
 MICROIDE_DIR=$SCRIPTPATH/microide-$VERSION
 DOWNLOAD_DIR=./downloads
-BRANCH_NAME=master
+BRANCH_NAME=devel
 APT_GET_PACKAGES_TO_INSTALL=''
 APT_GET_REPOSITORYS_TO_ADD=''
 
@@ -177,7 +177,7 @@ installEclipse() {
 
 installClangFormat() {
     if [ "$1" = "addAptToGetPackagesToInstall" ]; then
-    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL clang-format-5.0"
+    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL clang-format-6.0"
     fi 
     #sudo apt-get install clang-format
 }

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# This script was tested on ubuntu 16.04 LTS, it may require some changes to run on other versions
+# This script was tested on ubuntu 18.04 LTS, it may require some changes to run on other versions
 
 # Absolute path to this script, e.g. /home/user/bin/foo.sh
 SCRIPT=$(readlink -f "$0")
@@ -12,7 +12,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 #replace this text with instalation files information
 MICROIDE_DIR=$SCRIPTPATH/microide-$VERSION
 DOWNLOAD_DIR=./downloads
-BRANCH_NAME=master
+BRANCH_NAME=devel
 APT_GET_PACKAGES_TO_INSTALL=''
 APT_GET_REPOSITORYS_TO_ADD=''
 
@@ -156,7 +156,7 @@ installEclipse() {
 
 installClangFormat() {
     if [ "$1" = "addAptToGetPackagesToInstall" ]; then
-    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL clang-format-5.0"
+    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL clang-format-6.0"
     fi 
     #sudo apt-get install clang-format
 }

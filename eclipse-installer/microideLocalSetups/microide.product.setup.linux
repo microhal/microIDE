@@ -91,7 +91,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.path.1287942917"
-          value="${microideDir/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-7-2017-q4/bin|file}">
+          value="${microideDir/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-7-2018-q2/bin|file}">
         <description>Path to microide toolchain binary files</description>
       </setupTask>
     </setupTask>
@@ -396,7 +396,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.wangzw.cppstyle/cppstyle.clangformat.path"
-          value="${binaryDir/clang-format-5.0|file}">
+          value="${binaryDir/clang-format-6.0|file}">
         <description></description>
       </setupTask>
       <setupTask
