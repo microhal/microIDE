@@ -91,7 +91,7 @@ installOpenOCD() {
         fi 
         cd tmp/hidapi-master
         ./bootstrap >> $MICROIDE_DIR/log.log
-        ./configure >> $MICROIDE_DIR/log.log
+        ./configure CFLAGS='-Wno-implicit-fallthrough' >> $MICROIDE_DIR/log.log
         echo 'Compilling HIDAPI ----------------------------------------------------------------' >> $MICROIDE_DIR/log.log
         make -j 4 >> $MICROIDE_DIR/log.log
         echo 'Installing (make install) HIDAPI -------------------------------------------------' >> $MICROIDE_DIR/log.log
@@ -106,7 +106,7 @@ installOpenOCD() {
         echo 'Compilling OpenOCD'
         echo 'Compilling OpenOCD ---------------------------------------------------------------' >> $MICROIDE_DIR/log.log
         cd tmp/${OPENOCD_FILENAME%.tar.gz}
-        ./configure --enable-stlink --enable-ti-icdi --enable-ulink --enable-cmsis-dap --enable-jlink --enable-oocd_trace --prefix=$MICROIDE_DIR/$OPENOCD_LOCATION >> $MICROIDE_DIR/log.log
+        ./configure CFLAGS='-Wno-implicit-fallthrough -Wno-error=format-overflow=' --enable-stlink --enable-ti-icdi --enable-ulink --enable-cmsis-dap --enable-jlink --enable-oocd_trace --prefix=$MICROIDE_DIR/$OPENOCD_LOCATION >> $MICROIDE_DIR/log.log
         make -j 4 >> $MICROIDE_DIR/log.log
         echo 'Installing OpenOCD ---------------------------------------------------------------' >> $MICROIDE_DIR/log.log
         make install
@@ -124,11 +124,11 @@ installARMToolchain() {
         echo 'Installing ARM Toolchain...-------------------------------------------------------' >> log.log
         mkdir -p $ARM_GCC_TOOLCHAIN_LOCATION
         tar --extract --bzip2 --file=$DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME -C $ARM_GCC_TOOLCHAIN_LOCATION
-        mv $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2} $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-*-linux.tar.bz2}
+        mv $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2} $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2}
         #installing microhal patch to toolchain, this will allow to use standart operating system library with FreeRTOS
         echo 'Patching ARM Toolchain.'
         echo 'Patching ARM Toolchain.-----------------------------------------------------------' >> log.log
-        cp -r microIDE-$BRANCH_NAME/toolchains/gcc-arm-none-eabi-patch/${ARM_GCC_TOOLCHAIN_FILENAME%-*-linux.tar.bz2}/* $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-*-linux.tar.bz2}
+        cp -r microIDE-$BRANCH_NAME/toolchains/gcc-arm-none-eabi-patch/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2}/* $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2}
     fi    
 }
 
@@ -170,7 +170,6 @@ installEclipse() {
         echo $MICROIDE_DIR
         sed -i -e 's,value="${installation.location|uri}",value="file:'"$MICROIDE_DIR"'",g' "eclipse-installer/microideLocalSetups/microide.product.setup"
         # remove files that are no longer needed
-        rm eclipse-installer/microideLocalSetups/microide.product.setup.windows
         rm -r microIDE-$BRANCH_NAME         
     fi
 }
@@ -192,7 +191,7 @@ installGCC() {
     if ! [ -x "$(command -v gcc)" ]; then
         if ! [ -x "$(command -v gcc-7)" ]; then  
             echo "Unable to find gcc, adding to instalation list"
-            APT_GET_REPOSITORYS_TO_ADD="$APT_GET_REPOSITORYS_TO_ADD ppa:ubuntu-toolchain-r/test"
+        #    APT_GET_REPOSITORYS_TO_ADD="$APT_GET_REPOSITORYS_TO_ADD ppa:ubuntu-toolchain-r/test"
             APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL gcc-7"
         fi
     else
@@ -203,14 +202,14 @@ installGCC() {
         else
             if ! [ -x "$(command -v gcc-7)" ]; then  
                 echo "Unable to find gcc, adding to instalation list"
-                APT_GET_REPOSITORYS_TO_ADD="$APT_GET_REPOSITORYS_TO_ADD ppa:ubuntu-toolchain-r/test"
+            #    APT_GET_REPOSITORYS_TO_ADD="$APT_GET_REPOSITORYS_TO_ADD ppa:ubuntu-toolchain-r/test"
                 APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL gcc-7"
             else
                 currentver="$(gcc-7 -dumpversion)"
                 requiredver="7"
                 if ! [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]; then 
                     echo "Unable to find gcc with version 7 or abowe, adding to instalation list"
-                    APT_GET_REPOSITORYS_TO_ADD="$APT_GET_REPOSITORYS_TO_ADD ppa:ubuntu-toolchain-r/test"
+             #       APT_GET_REPOSITORYS_TO_ADD="$APT_GET_REPOSITORYS_TO_ADD ppa:ubuntu-toolchain-r/test"
                     APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL gcc-7"
                fi
             fi
