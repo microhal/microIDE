@@ -105,9 +105,9 @@ def main():
     toolchain_version = 'gcc-arm-none-eabi-7-2018-q2-update'
     toolchain = packages.toolchains['gcc-arm-none-eabi'][toolchain_version]['linux']
 
-    toolchain_download_dir = '../norepo/linux/toolchain'
+    toolchain_download_dir = '../norepo/linux/toolchains'
     toolchain_unpack_dir = '../norepo/toolchain'
- 
+
     print("Creating toolchain patch.")
     download_toolchain_if_needed(toolchain, toolchain_download_dir)
     extract_toolchain(toolchain_download_dir + '/' + toolchain['filename'], toolchain_unpack_dir)
