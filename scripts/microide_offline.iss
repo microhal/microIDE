@@ -21,12 +21,12 @@ VersionInfoProductName=microIDE
 OutputBaseFilename=microIDE_setup_{#AppVersion}_windows_offline
 OutputDir=userdocs:Inno Setup microide
 
-#include <idp.iss>
 
 [Types]
 Name: "user"; Description: "User installation"
 Name: "devel"; Description: "Developer installation"
 Name: "custom"; Description: "Custom installation"; Flags: iscustom
+
 
 [Components]
 Name: "eclipse"; Description: "Eclipse"; Types: user devel custom; Flags: fixed;
@@ -41,23 +41,22 @@ Name: "tools\doxygen"; Description: "Doxygen {#DOXYGEN_VERSION}"; Types: devel c
 Name: "tools\graphviz"; Description: "Graphviz 2.38"; Types: devel custom;
 Name: "tools\cppcheck"; Description: "Cppcheck"; Types: devel custom;
 
-[Files]
-Source: "eclipse-installer\*"; DestDir: "{app}\eclipse-installer"; Flags: recursesubdirs; BeforeInstall: CreateNoticeFile
-Source: "components\gcc_arm_none_eabi\*"; DestDir: "{#ARM_GCC_TOOLCHAIN_LOCATION}"; Flags: recursesubdirs; Components: toolchains\arm;
-Source: "components\mingw\*"; DestDir: "{#MINGW_LOCATION}"; Flags: recursesubdirs;
-Source: "components\openocd\*"; DestDir: "{#OPENOCD_LOCATION}"; Flags: recursesubdirs;
-Source: "components\doxygen\*"; DestDir: "{#DOXYGEN_LOCATION}"; Flags: recursesubdirs;
-Source: "components\graphviz\*"; DestDir: "{#GRAPHVIZ_LOCATION}"; Flags: recursesubdirs;
-Source: "components\msys\*"; DestDir: "{app}\tools\msys"; Flags: recursesubdirs;
 
-[Dirs]
-Name: "{app}\eclipse-installer\microideLocalSetups"
+[Files]
+Source: "downloads\{#CLANG_TOOLCHAIN_FILENAME}"; DestDir: "{tmp}";
+Source: "downloads\{#CPPCHECK_FILENAME}"; DestDir: "{tmp}";
+Source: "components\doxygen\*"; DestDir: "{#DOXYGEN_LOCATION}"; Flags: recursesubdirs;
+Source: "components\eclipse-installer\*"; DestDir: "{app}\eclipse-installer"; Flags: recursesubdirs; BeforeInstall: CreateNoticeFile
+Source: "components\gcc_arm_none_eabi\*"; DestDir: "{#ARM_GCC_TOOLCHAIN_LOCATION}"; Flags: recursesubdirs; Components: toolchains\arm;
+Source: "components\graphviz\release\*"; DestDir: "{#GRAPHVIZ_LOCATION}"; Flags: recursesubdirs;
+Source: "components\mingw\mingw64\*"; DestDir: "{#MINGW_LOCATION}"; Flags: recursesubdirs;
+Source: "components\msys\msys\*"; DestDir: "{app}\tools\msys"; Flags: recursesubdirs;
+Source: "components\openocd\*"; DestDir: "{#OPENOCD_LOCATION}"; Flags: recursesubdirs;
+
 
 [Run]
-;---- toolchains installer
 ;---- install clang\llvm
 Filename: "{tmp}\{#CLANG_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#CLANG_TOOLCHAIN_LOCATION}"; Components: toolchains\clang; BeforeInstall: UpdateInstallProgress('Installing Clang Toolchain.',25)
-;---- tools installer
 ;---- install cppcheck
 Filename: "msiexec.exe"; Parameters: "/i {tmp}\{#CPPCHECK_FILENAME} /qb /L*V {app}\cppcheck.log INSTALLDIR={#CPPCHECK_LOCATION} ADDLOCAL=""CppcheckCore,Complete,CLI,Translations,GUI,ConfigFiles,PlatformFiles,CRT"""; Components: tools\cppcheck; BeforeInstall: UpdateInstallProgress('Installing Cppcheck.', 97)
 ;---- eclipse installer
@@ -71,13 +70,6 @@ Filename: "{#CLANG_TOOLCHAIN_LOCATION}\Uninstall.exe"; Parameters: "/S"
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\eclipse";
-Type: filesandordirs; Name: "{#MINGW_LOCATION}"; Components: toolchains\mingw
-Type: filesandordirs; Name: "{app}\tools\graphviz"; Components: tools\graphviz
-Type: filesandordirs; Name: "{app}\tools\msys"; Components: tools\msys
-Type: filesandordirs; Name: "{app}\tools\openocd"; Components: tools\openocd
-
-Type: dirifempty; Name: "{app}\toolchains\gcc-arm-none-eabi\microhal";
-Type: dirifempty; Name: "{app}\toolchains\gcc-arm-none-eabi";
 Type: dirifempty; Name: "{app}\toolchains\LLVM";
 Type: dirifempty; Name: "{app}\toolchains";
 Type: dirifempty; Name: "{app}\tools";
@@ -355,22 +347,24 @@ end;
 
 procedure ReplaceMicroideProductLocationInSetupFile();
 var
-    data: String;
+    data: AnsiString;
+    unicodeData: String;
     microideInstalationPatch: String;
 begin
   if LoadStringFromFile(ExpandConstant('{app}\eclipse-installer\microideLocalSetups\microide.product.setup'), data) then
   begin
     microideInstalationPatch := ExpandConstant('value="file:/{app}"');
     StringChangeEx(microideInstalationPatch, '\', '/', False);
-    StringChangeEx(data, 'value="${installation.location|uri}"', microideInstalationPatch, False);
-    SaveStringToFile(ExpandConstant('{app}\eclipse-installer\microideLocalSetups\microide.product.setup'), data, False);
+    unicodeData := String(data)
+    StringChangeEx(unicodeData, 'value="${installation.location|uri}"', microideInstalationPatch, False);
+    SaveStringToFile(ExpandConstant('{app}\eclipse-installer\microideLocalSetups\microide.product.setup'), AnsiString(unicodeData), False);
   end;
 end;
 //----------------------------------------------------
 
 procedure PrepareEclipseIniFile();
 var
-    fileContent: String;
+    fileContent: AnsiString;
     productsCatalogLocation: String;
 begin
   if LoadStringFromFile(ExpandConstant('{app}\eclipse-installer\eclipse-inst.ini'), fileContent) then

@@ -3,7 +3,7 @@ import os
 import files_utils as fs
 import packages
 import re
-import distutils
+from distutils import dir_util
 
 microideVersion = '0.3.3'
 gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update']['windows']
@@ -15,6 +15,60 @@ doxygen = packages.doxygen['1.8.14']['windows']
 cppcheck = packages.cppcheck['1.84']['windows']
 graphviz = packages.graphviz['2.38']['windows']
 msys = packages.msys['13']['windows']
+
+
+def main():
+    components_dir = '../norepo/windows/components'
+    fs.make_directory_if_not_exist('../norepo/windows/downloads')
+    download_files('../norepo/windows/downloads')
+    # do some clenup
+    shutil.rmtree(components_dir, ignore_errors=True)
+    # start creating installers
+    extract_files('../norepo/windows/downloads/', components_dir)
+    generateWindowsProductSetup()  # generate oomph setup files for windows
+    patch_eclipse_installer(components_dir + '/eclipse-installer', '../eclipse-installer/microideLocalSetups/')
+    update_files_information()
+    generateInnoSetupFile(microideVersion, '../norepo/windows')
+    compile_online_installer()
+    compile_offline_installer()
+
+
+def compile_online_installer():
+    # do some clenup
+    shutil.rmtree('../norepo/windows/toolchainPatch', ignore_errors=True)
+
+    # prepare installer
+    download7zipStandaloneConsoleVersion()  # needed to unpack repositories while installing on windows
+
+    # include toolchain patch files into installer, firstly copy patch files into proper directory
+    patchDirectoryName = re.sub('-win32(-sha2)?\.(exe|zip)', '',
+                                packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update'][
+                                    'windows']['filename'])
+    shutil.copytree('../toolchains/gcc-arm-none-eabi-patch/' + patchDirectoryName,
+                    '../norepo/windows/toolchainPatch/' + patchDirectoryName)
+
+    fs.copyfile('../templates/microide_online.iss', '../norepo/windows/microide_online.iss')
+    print("Compiling online installer...")
+    parameters = './iscc.sh ../norepo/windows/microide_online.iss'
+    os.system(parameters + " >> output.log")
+    print("Online installer ready.")
+
+
+def compile_offline_installer():
+    components_dir = '../norepo/windows/components'
+
+    # include toolchain patch files into installer, firstly copy patch files into proper directory
+    patchDirectoryName = re.sub('-win32(-sha2)?\.(exe|zip)', '',
+                                packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update'][
+                                    'windows']['filename'])
+    dir_util.copy_tree('../toolchains/gcc-arm-none-eabi-patch/' + patchDirectoryName,
+                                 components_dir + '/gcc_arm_none_eabi')
+
+    fs.copyfile('microide_offline.iss', '../norepo/windows/microide_offline.iss')
+    print("Compiling offline installer...")
+    parameters = './iscc.sh ../norepo/windows/microide_offline.iss'
+    os.system(parameters + " >> output.log")
+    print("Offline installer ready.")
 
 
 def generateWindowsProductSetup():
@@ -56,7 +110,7 @@ def generateInnoSetupFile(microide_version, destination):
         file.write('#define ARM_GCC_TOOLCHAIN_VERSION "' + gcc_arm_none_eabi['version'] + '"\n')
         file.write('#define ARM_GCC_TOOLCHAIN_SIZE ' + str(gcc_arm_none_eabi['installation size']) + '\n')
         file.write('#define ARM_GCC_TOOLCHAIN_LOCATION "' + gcc_arm_none_eabi['installationLocation'] + '\\' + re.sub(
-            '-win32(-sha2)?\.exe', '', gcc_arm_none_eabi['filename']) + '"\n')
+            '-win32(-sha2)?\.(exe|zip)', '', gcc_arm_none_eabi['filename']) + '"\n')
         file.write('#define ARM_GCC_TOOLCHAIN_CHECKSUM_MD5 "' + gcc_arm_none_eabi['checksum']['md5'] + '"\n')
         file.write('\n')
 
@@ -123,95 +177,21 @@ def download7zipStandaloneConsoleVersion():
     os.system(parameters + " >> output.log")
 
 
-def compile_online_installer():
-    downloadDir = '../norepo/windows'
-    # do some clenup
-    shutil.rmtree('../norepo/windows/eclipse-installer', ignore_errors=True)
-    shutil.rmtree('../norepo/windows/toolchainPatch', ignore_errors=True)
-
-    # prepare installer
-    download7zipStandaloneConsoleVersion()  # needed to unpack repositories while installing on windows
-    # extracting eclipse files
-    command = 'unzip -q ' + downloadDir + '/eclipse/' + eclipse['filename'] + ' -d ../norepo/windows/eclipse-installer'
+def extract_eclipse_files(source, destination):
+    command = 'unzip -q ' + source + ' -d ' + destination
     os.system(command)
-    os.remove('../norepo/windows/eclipse-installer/extractor.exe')
-    # pathing eclipse installer
-    with open('../norepo/windows/eclipse-installer/eclipse-inst.ini', 'a') as iniFile:
+    os.remove(destination + '/extractor.exe')
+
+
+def patch_eclipse_installer(location, oomph_file_location):
+    with open(location + '/eclipse-inst.ini', 'a') as iniFile:
         iniFile.write(
             '-Doomph.redirection.myProjectsCatalog=index:/redirectable.projects.setup->https://raw.githubusercontent.com/microHAL/microIDE/devel/eclipse-installer/microideSetups/microhal.projects.setup\n')
         iniFile.write('-Doomph.setup.product.catalog.filter=microide')
-
-    generateWindowsProductSetup()  # generate oomph setup files for windows
     # copying oomph setup files
-    shutil.copytree('../eclipse-installer/microideLocalSetups',
-                    '../norepo/windows/eclipse-installer/microideLocalSetups')
-    os.remove('../norepo/windows/eclipse-installer/microideLocalSetups/microide.product.setup.linux')
-    os.rename('../norepo/windows/eclipse-installer/microideLocalSetups/microide.product.setup.windows',
-              '../norepo/windows/eclipse-installer/microideLocalSetups/microide.product.setup')
-    # include toolchain patch files into installer, firstly copy patch files into proper directory
-    patchDirectoryName = re.sub('-win32(-sha2)?\.(exe|zip)', '',
-                                packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update'][
-                                    'windows']['filename'])
-    shutil.copytree('../toolchains/gcc-arm-none-eabi-patch/' + patchDirectoryName,
-                    '../norepo/windows/toolchainPatch/' + patchDirectoryName)
-
-    generateInnoSetupFile(microideVersion, '../norepo/windows')
-    fs.copyfile('../templates/microide_online.iss', '../norepo/windows/microide_online.iss')
-    parameters = './iscc.sh ../norepo/windows/microide_online.iss'
-    os.system(parameters + " >> output.log")
-
-
-def compile_offline_installer():
-    download_dir = '../norepo/windows'
-    components_dir = '../norepo/windows/components'
-    fs.make_directory_if_not_exist(components_dir)
-    # do some clenup
-    shutil.rmtree(components_dir, ignore_errors=True)
-
-    # extract components
-    print("Extracting windows components files...")
-    fs.extract(download_dir + '/toolchains/' + gcc_arm_none_eabi['filename'], components_dir + '/gcc_arm_none_eabi')
-    fs.extract(download_dir + '/toolchains/' + clang['filename'], components_dir + '/clang')
-    fs.extract(download_dir + '/toolchains/' + mingw['filename'], components_dir + '/mingw')
-    fs.extract(download_dir + '/openocd/' + openOCD['filename'], components_dir + '/openocd')
-    fs.extract(download_dir + '/doxygen/' + doxygen['filename'], components_dir + '/doxygen')
-    fs.extract(download_dir + '/cppcheck/' + cppcheck['filename'], components_dir + '/cppcheck')
-    fs.extract(download_dir + '/graphviz/' + graphviz['filename'], components_dir + '/graphviz')
-    fs.extract(download_dir + '/msys/' + msys['filename'], components_dir + '/msys')
-
-    # extracting eclipse files
-    command = 'unzip -q ' + download_dir + '/eclipse/' + eclipse[
-        'filename'] + ' -d ' + components_dir + '/eclipse-installer'
-    os.system(command)
-    os.remove(components_dir + '/eclipse-installer/extractor.exe')
-
-    # prepare installer
-    # download7zipStandaloneConsoleVersion()  # needed to unpack repositories while installing on windows
-    # extracting eclipse files
-
-    # pathing eclipse installer
-    with open(components_dir + '/eclipse-installer/eclipse-inst.ini', 'a') as iniFile:
-        iniFile.write(
-            '-Doomph.redirection.myProjectsCatalog=index:/redirectable.projects.setup->https://raw.githubusercontent.com/microHAL/microIDE/devel/eclipse-installer/microideSetups/microhal.projects.setup\n')
-        iniFile.write('-Doomph.setup.product.catalog.filter=microide')
-
-    generateWindowsProductSetup()  # generate oomph setup files for windows
-    # copying oomph setup files
-    fs.make_directory_if_not_exist(components_dir + '/eclipse-installer/microideLocalSetups')
-    fs.copyfile('../eclipse-installer/microideLocalSetups/microide.product.setup.windows',
-                components_dir + '/eclipse-installer/microideLocalSetups/microide.product.setup')
-
-    # include toolchain patch files into installer, firstly copy patch files into proper directory
-    patchDirectoryName = re.sub('-win32(-sha2)?\.(exe|zip)', '',
-                                packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update'][
-                                    'windows']['filename'])
-    distutils.dir_util.copy_tree('../toolchains/gcc-arm-none-eabi-patch/' + patchDirectoryName,
-                                 components_dir + '/gcc_arm_none_eabi')
-
-    generateInnoSetupFile(microideVersion, '../norepo/windows')
-    fs.copyfile('microide_offline.iss', '../norepo/windows/microide_offline.iss')
-    parameters = './iscc.sh ../norepo/windows/microide_offline.iss'
-    os.system(parameters + " >> output.log")
+    fs.make_directory_if_not_exist(location + '/microideLocalSetups')
+    fs.copyfile(oomph_file_location + '/microide.product.setup.windows',
+                location + '/microideLocalSetups/microide.product.setup')
 
 
 def install_missing_packages():
@@ -220,37 +200,36 @@ def install_missing_packages():
 
 def download_files(destination):
     print("Generating windows instalation files...")
-    fs.getMissingFiles(destination + '/toolchains', [gcc_arm_none_eabi, clang, mingw])
-    fs.getMissingFiles(destination + '/openocd', [openOCD])
-    fs.getMissingFiles(destination + '/eclipse', [eclipse])
-    fs.getMissingFiles(destination + '/doxygen', [doxygen])
-    fs.getMissingFiles(destination + '/cppcheck', [cppcheck])
-    fs.getMissingFiles(destination + '/graphviz', [graphviz])
-    fs.getMissingFiles(destination + '/msys', [msys])
+    fs.getMissingFiles(destination,
+                       [gcc_arm_none_eabi, clang, mingw, openOCD, eclipse, doxygen, cppcheck, graphviz, msys])
 
 
-def extract_files(location):
+def extract_files(download_dir, destination):
     print("Extracting windows instalation files...")
-    fs.extract(location + '/toolchains/' + gcc_arm_none_eabi['filename'],
-               location + '/toolchains/extracted_gcc_arm_none_eabi')
-    fs.extract(location + '/toolchains/' + clang['filename'], location + '/toolchains/extracted_clang')
-    fs.extract(location + '/toolchains/' + mingw['filename'], location + '/toolchains/extracted_mingw')
-    fs.extract(location + '/openocd/' + openOCD['filename'], location + '/openocd/extracted')
-    fs.extract(location + '/eclipse/' + eclipse['filename'], location + '/eclipse/extracted')
-    fs.extract(location + '/doxygen/' + doxygen['filename'], location + '/doxygen/extracted')
-    fs.extract(location + '/cppcheck/' + cppcheck['filename'], location + '/cppcheck/extracted')
-    fs.extract(location + '/msys/' + msys['filename'], location + '/msys/extracted')
+    fs.make_directory_if_not_exist(destination)
+    # do some clenup
+    shutil.rmtree(destination, ignore_errors=True)
+
+    fs.extract(download_dir + cppcheck['filename'], destination + '/cppcheck')
+    fs.extract(download_dir + doxygen['filename'], destination + '/doxygen')
+    extract_eclipse_files(download_dir + eclipse['filename'], destination + '/eclipse-installer')
+    fs.extract(download_dir + gcc_arm_none_eabi['filename'], destination + '/gcc_arm_none_eabi')
+    fs.extract(download_dir + graphviz['filename'], destination + '/graphviz')
+    fs.extract(download_dir + clang['filename'], destination + '/clang')
+    fs.extract(download_dir + msys['filename'], destination + '/msys')
+    fs.extract(download_dir + openOCD['filename'], destination + '/openocd')
+    fs.extract(download_dir + mingw['filename'], destination + '/mingw')
 
 
 def update_files_information():
-    openOCD['installation size'] = fs.get_directory_size('../norepo/windows/openocd/extracted')
-    eclipse['installation size'] = fs.get_directory_size('../norepo/windows/eclipse/extracted')
-    doxygen['installation size'] = fs.get_directory_size('../norepo/windows/doxygen/extracted')
-    gcc_arm_none_eabi['installation size'] = fs.get_directory_size(
-        '../norepo/windows/toolchains/extracted_gcc_arm_none_eabi')
-    clang['installation size'] = fs.get_directory_size('../norepo/windows/toolchains/extracted_clang')
-    mingw['installation size'] = fs.get_directory_size('../norepo/windows/toolchains/extracted_mingw')
-    msys['installation size'] = fs.get_directory_size('../norepo/windows/msys/extracted')
+    clang['installation size'] = fs.get_directory_size('../norepo/windows/components/clang')
+    doxygen['installation size'] = fs.get_directory_size('../norepo/windows/components/doxygen')
+    eclipse['installation size'] = fs.get_directory_size('../norepo/windows/components/eclipse-installer')
+    gcc_arm_none_eabi['installation size'] = fs.get_directory_size('../norepo/windows/components/gcc_arm_none_eabi')
+    graphviz['installation size'] = fs.get_directory_size('../norepo/windows/components/graphviz')
+    mingw['installation size'] = fs.get_directory_size('../norepo/windows/components/mingw')
+    msys['installation size'] = fs.get_directory_size('../norepo/windows/components/msys')
+    openOCD['installation size'] = fs.get_directory_size('../norepo/windows/components/openocd')
 
     fs.updateFileinfo('../norepo/windows/openocd', [openOCD])
     fs.updateFileinfo('../norepo/windows/eclipse', [eclipse])
@@ -259,19 +238,6 @@ def update_files_information():
     fs.updateFileinfo('../norepo/windows/toolchains', [clang])
     fs.updateFileinfo('../norepo/windows/graphviz', [graphviz])
     fs.updateFileinfo('../norepo/windows/msys', [msys])
-
-
-def main():
-    fs.make_directory_if_not_exist('../norepo/windows/downloads')
-    fs.make_directory_if_not_exist('../norepo/windows/toolchains')
-    fs.make_directory_if_not_exist('../norepo/windows/openocd')
-    fs.make_directory_if_not_exist('../norepo/windows/eclipse')
-
-    download_files('../norepo/windows/downloads')
-    # extract_files('../norepo/windows')
-    update_files_information()
-    compile_online_installer()
-    # compile_offline_installer()
 
 
 if __name__ == "__main__":

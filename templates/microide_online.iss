@@ -15,14 +15,15 @@ AppPublisherURL=www.microhal.org
 ;AppSupportURL=www.microhal.org
 ;AppUpdatesURL=www.microhal.org
 ArchitecturesAllowed=x64
+SetupLogging=yes
 
 DefaultDirName={sd}\microIDE
 DefaultGroupName=microIDE
 DisableStartupPrompt=yes
 VersionInfoCompany=microhal
 VersionInfoProductName=microIDE
-OutputBaseFilename=microIDE_setup_{#AppVersion}_windows
-OutputDir=userdocs:Inno Setup Examples Output
+OutputBaseFilename=microIDE_setup_{#AppVersion}_windows_online
+OutputDir=userdocs:Inno Setup microide
 
 #include <idp.iss>
 
@@ -46,15 +47,15 @@ Name: "tools\cppcheck"; Description: "Cppcheck"; Types: devel custom; ExtraDiskS
 
 [Files]
 Source: "{#UNZIP_7Z_PATH}\*"; DestDir: "{tmp}\tools\7z"; Flags: recursesubdirs
-Source: "eclipse-installer\*"; DestDir: "{app}\eclipse-installer"; Flags: recursesubdirs; BeforeInstall: CreateNoticeFile
+Source: "components\eclipse-installer\*"; DestDir: "{app}\eclipse-installer"; Flags: recursesubdirs; BeforeInstall: CreateNoticeFile
 Source: "toolchainPatch\*"; DestDir: "{tmp}\toolchainPatch"; Flags: recursesubdirs;
 
 [Dirs]
 Name: "{app}\eclipse-installer\microideLocalSetups"
 
 [Run]
-;---- toolchains installer
-Filename: "{#DOWNLOAD_DIR}\{#ARM_GCC_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#ARM_GCC_TOOLCHAIN_LOCATION}"; Components: toolchains\arm; BeforeInstall: DisplayInstallProgress(True, 'Installing ARM Toolchain.')
+;---- gcc-arm-none-eabi
+Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#ARM_GCC_TOOLCHAIN_FILENAME} -o{#ARM_GCC_TOOLCHAIN_LOCATION} -y"; Components: toolchains\arm; BeforeInstall: DisplayInstallProgress(True, 'Installing ARM Toolchain.')
 ; install patch for arm toolchain
 Filename: "xcopy.exe"; Parameters: "/s /y {tmp}\toolchainPatch {#ARM_GCC_TOOLCHAIN_LOCATION}\..\"; Components: toolchains\arm; Flags: runhidden; BeforeInstall: UpdateInstallProgress('Patching ARM Toolchain.',20)
 ;---- install clang\llvm
@@ -68,10 +69,10 @@ Filename: "cmd.exe"; Parameters: "/c rename {app}\tools\openocd\openocd-0.10.0 0
 ;---- extract msys
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\msys-rev13.7z -o{app}\tools\ -y"; Components: tools\msys; BeforeInstall: UpdateInstallProgress('Installing msys.',62)
 ;---- install doxygen
-Filename: "{#DOWNLOAD_DIR}\{#DOXYGEN_FILENAME}"; Parameters: "/SILENT /DIR={#DOXYGEN_LOCATION}"; Components: tools\doxygen; BeforeInstall: UpdateInstallProgress('Installing doxygen.',75)
-;---- unpack graphiz
-Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\graphviz-2.38.zip -o{app}\tools\ -y"; Components: tools\graphiz; BeforeInstall: UpdateInstallProgress('Installing graphiz.',85)
-Filename: "cmd.exe"; Parameters: "/c rename {app}\tools\release graphiz"; Components: tools\graphiz; BeforeInstall: UpdateInstallProgress('Installing graphiz.',95)
+Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#DOXYGEN_FILENAME} -o{#DOXYGEN_LOCATION} -y"; Components: tools\doxygen; BeforeInstall: UpdateInstallProgress('Installing doxygen.',75)
+;---- unpack graphviz
+Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\graphviz-2.38.zip -o{app}\tools\ -y"; Components: tools\graphviz; BeforeInstall: UpdateInstallProgress('Installing graphviz.',85)
+Filename: "cmd.exe"; Parameters: "/c rename {app}\tools\release graphviz"; Components: tools\graphviz; BeforeInstall: UpdateInstallProgress('Installing graphviz.',95)
 ;---- install cppcheck
 Filename: "msiexec.exe"; Parameters: "/i {#DOWNLOAD_DIR}\{#CPPCHECK_FILENAME} /qb /L*V {app}\cppcheck.log INSTALLDIR={#CPPCHECK_LOCATION} ADDLOCAL=""CppcheckCore,Complete,CLI,Translations,GUI,ConfigFiles,PlatformFiles,CRT"""; Components: tools\cppcheck; BeforeInstall: UpdateInstallProgress('Installing Cppcheck.', 97)
 ;---- eclipse installer
@@ -85,9 +86,10 @@ Filename: "{#ARM_GCC_TOOLCHAIN_LOCATION}\uninstall.exe"; Parameters: "/S"
 Filename: "{#DOXYGEN_LOCATION}\system\unins000.exe"; Parameters: "/SILENT"
 
 [UninstallDelete]
+Type: filesandordirs; Name: "{app}\eclipse-installer";
 Type: filesandordirs; Name: "{app}\eclipse";
 Type: filesandordirs; Name: "{#MINGW_LOCATION}"; Components: toolchains\mingw
-Type: filesandordirs; Name: "{app}\tools\graphiz"; Components: tools\graphiz
+Type: filesandordirs; Name: "{app}\tools\graphviz"; Components: tools\graphviz
 Type: filesandordirs; Name: "{app}\tools\msys"; Components: tools\msys
 Type: filesandordirs; Name: "{app}\tools\openocd"; Components: tools\openocd
 
@@ -176,7 +178,7 @@ begin
     'minGW-w64': ShellExecAsOriginalUser('open', 'http://mingw-w64.org', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
     'openOCD': ShellExecAsOriginalUser('open', 'http://openocd.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
     'Doxygen': ShellExecAsOriginalUser('open', 'http://www.doxygen.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
-    'Graphiz': ShellExecAsOriginalUser('open', 'http://www.graphviz.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
+    'Graphviz': ShellExecAsOriginalUser('open', 'http://www.graphviz.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
     'Clang': ShellExecAsOriginalUser('open', 'http://clang.llvm.org/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
     'Cppcheck': ShellExecAsOriginalUser('open', 'http://cppcheck.sourceforge.net/', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
   end;
@@ -231,7 +233,7 @@ begin
   ComponentName[1] := 'toolchains\mingw';
   ComponentName[2] := 'tools\openocd';
   ComponentName[3] := 'tools\doxygen';
-  ComponentName[4] := 'tools\graphiz';
+  ComponentName[4] := 'tools\graphviz';
   ComponentName[5] := 'toolchains\clang';
   ComponentName[6] := 'tools\cppcheck';
 
@@ -268,7 +270,7 @@ begin
   WebAddress[1] := 'minGW-w64';
   WebAddress[2] := 'openOCD';
   WebAddress[3] := 'Doxygen';
-  WebAddress[4] := 'Graphiz';
+  WebAddress[4] := 'Graphviz';
   WebAddress[5] := 'Clang';
   WebAddress[6] := 'Cppcheck';
 
@@ -324,17 +326,19 @@ end;
 //----------------------------------------------------
 procedure AddToDownloadListIfNeeded(file, url, checksum, componentName: String);
 var
-fileContent: String;
+calculatedmd5: String;
 begin
     if not FileExists(file) then
     begin
         idpAddFileComp(url, file, componentName);
     end else
     begin
-        LoadStringFromFile(file, fileContent)
-        if GetMD5OfString(fileContent) <> checksum then
-            Log('File: ' + file + ' exist but MD5 is incorrect, expected: ' + checksum + ', calculated: ' + GetMD5OfString(fileContent));
+        calculatedmd5 := GetMD5OfFile(file);
+        if calculatedmd5 <> checksum then
+        begin
+            Log('File: ' + file + ' exist but MD5 is incorrect, expected: ' + checksum + ', calculated: ' + calculatedmd5);
             idpAddFileComp(url, file, componentName);
+        end;
   end;
 end;
 //----------------------------------------------------
@@ -374,7 +378,7 @@ begin
     file[4] := ExpandConstant('{#DOWNLOAD_DIR}\{#GRAPHVIZ_FILENAME}');
     url[4] := '{#GRAPHVIZ_URL}';
     checksum[4] := '{#GRAPHVIZ_CHECKSUM_MD5}'
-    componentName[4] := 'tools\graphiz';
+    componentName[4] := 'tools\graphviz';
 
     file[5] := ExpandConstant('{#DOWNLOAD_DIR}\{#OPENOCD_FILENAME}')
     url[5] := '{#OPENOCD_URL}'
@@ -436,22 +440,24 @@ end;
 
 procedure ReplaceMicroideProductLocationInSetupFile();
 var
-    data: String;
+    data: AnsiString;
+    unicodeData: String;
     microideInstalationPatch: String;
 begin
   if LoadStringFromFile(ExpandConstant('{app}\eclipse-installer\microideLocalSetups\microide.product.setup'), data) then
   begin
     microideInstalationPatch := ExpandConstant('value="file:/{app}"');
     StringChangeEx(microideInstalationPatch, '\', '/', False);
-    StringChangeEx(data, 'value="${installation.location|uri}"', microideInstalationPatch, False);
-    SaveStringToFile(ExpandConstant('{app}\eclipse-installer\microideLocalSetups\microide.product.setup'), data, False);
+    unicodeData := String(data)
+    StringChangeEx(unicodeData, 'value="${installation.location|uri}"', microideInstalationPatch, False);
+    SaveStringToFile(ExpandConstant('{app}\eclipse-installer\microideLocalSetups\microide.product.setup'), AnsiString(unicodeData), False);
   end;
 end;
 //----------------------------------------------------
 
 procedure PrepareEclipseIniFile();
 var
-    fileContent: String;
+    fileContent: AnsiString;
     productsCatalogLocation: String;
 begin
   if LoadStringFromFile(ExpandConstant('{app}\eclipse-installer\eclipse-inst.ini'), fileContent) then
