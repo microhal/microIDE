@@ -31,12 +31,12 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 [Components]
 Name: "eclipse"; Description: "Eclipse"; Types: user devel custom; Flags: fixed;
 Name: "toolchains"; Description: "Toolchains"; Types: user devel custom;
-Name: "toolchains\arm"; Description: "gcc-arm-none-eabi {#ARM_GCC_TOOLCHAIN_VERSION}"; Types: user devel custom;
+Name: "toolchains\arm"; Description: "gcc-arm-none-eabi {#ARM_GCC_TOOLCHAIN_VERSION}"; Types: user devel custom; Flags: fixed;
 Name: "toolchains\clang"; Description: "clang/llvm {#CLANG_TOOLCHAIN_VERSION}"; Types: user devel custom
 Name: "toolchains\mingw"; Description: "minGW-w64"; Types: user devel custom
 Name: "tools"; Description: "Programming tools"; Types: user devel custom;
-Name: "tools\openocd"; Description: "openOCD {#OPENOCD_VERSION}"; Types: user devel custom
-Name: "tools\msys"; Description: "msys"; Types: user devel custom
+Name: "tools\openocd"; Description: "openOCD {#OPENOCD_VERSION}"; Types: user devel custom; Flags: fixed;
+Name: "tools\msys"; Description: "msys"; Types: user devel custom; Flags: fixed;
 Name: "tools\doxygen"; Description: "Doxygen {#DOXYGEN_VERSION}"; Types: devel custom
 Name: "tools\graphviz"; Description: "Graphviz 2.38"; Types: devel custom;
 Name: "tools\cppcheck"; Description: "Cppcheck"; Types: devel custom;
@@ -301,13 +301,7 @@ end;
 
 
 procedure InitializeWizard();
-var
-i: Integer;
-file: Array[0..7] of String;
-url: Array[0..7] of String;
-componentName: Array[0..7] of String;
-checksum: Array[0..7] of String;
-begin    
+begin
     License_InitializeWizard();
     Progress_InitializeWizard();
 end;

@@ -35,12 +35,12 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 [Components]
 Name: "eclipse"; Description: "Eclipse"; Types: user devel custom; Flags: fixed; ExtraDiskSpaceRequired: 51720192
 Name: "toolchains"; Description: "Toolchains"; Types: user devel custom;
-Name: "toolchains\arm"; Description: "gcc-arm-none-eabi {#ARM_GCC_TOOLCHAIN_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#ARM_GCC_TOOLCHAIN_SIZE}
+Name: "toolchains\arm"; Description: "gcc-arm-none-eabi {#ARM_GCC_TOOLCHAIN_VERSION}"; Types: user devel custom; Flags: fixed; ExtraDiskSpaceRequired: {#ARM_GCC_TOOLCHAIN_SIZE}
 Name: "toolchains\clang"; Description: "clang/llvm {#CLANG_TOOLCHAIN_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#CLANG_TOOLCHAIN_SIZE}
 Name: "toolchains\mingw"; Description: "minGW-w64"; Types: user devel custom; ExtraDiskSpaceRequired: 478638080
 Name: "tools"; Description: "Programming tools"; Types: user devel custom;
 Name: "tools\openocd"; Description: "openOCD {#OPENOCD_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#OPENOCD_SIZE}
-Name: "tools\msys"; Description: "msys"; Types: user devel custom; ExtraDiskSpaceRequired: 416485376
+Name: "tools\msys"; Description: "msys"; Types: user devel custom; Flags: fixed; ExtraDiskSpaceRequired: 416485376
 Name: "tools\doxygen"; Description: "Doxygen {#DOXYGEN_VERSION}"; Types: devel custom; ExtraDiskSpaceRequired: {#DOXYGEN_SIZE}
 Name: "tools\graphviz"; Description: "Graphviz 2.38"; Types: devel custom; ExtraDiskSpaceRequired: 204574720
 Name: "tools\cppcheck"; Description: "Cppcheck"; Types: devel custom; ExtraDiskSpaceRequired: {#CPPCHECK_SIZE}
