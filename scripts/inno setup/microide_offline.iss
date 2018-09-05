@@ -43,24 +43,24 @@ Name: "tools\cppcheck"; Description: "Cppcheck"; Types: devel custom;
 
 
 [Files]
-Source: "downloads\{#CLANG_TOOLCHAIN_FILENAME}"; DestDir: "{tmp}";
-Source: "downloads\{#CPPCHECK_FILENAME}"; DestDir: "{tmp}";
-Source: "components\doxygen\*"; DestDir: "{#DOXYGEN_LOCATION}"; Flags: recursesubdirs;
-Source: "components\eclipse-installer\*"; DestDir: "{app}\eclipse-installer"; Flags: recursesubdirs; BeforeInstall: CreateNoticeFile
+Source: "downloads\{#CLANG_TOOLCHAIN_FILENAME}"; DestDir: "{tmp}"; Components: toolchains\clang;
+Source: "downloads\{#CPPCHECK_FILENAME}"; DestDir: "{tmp}"; Components: tools\cppcheck;
+Source: "components\doxygen\*"; DestDir: "{#DOXYGEN_LOCATION}"; Flags: recursesubdirs; Components: tools\doxygen;
+Source: "components\eclipse-installer\*"; DestDir: "{app}\eclipse-installer"; Flags: recursesubdirs; BeforeInstall: CreateNoticeFile;
 Source: "components\gcc_arm_none_eabi\*"; DestDir: "{#ARM_GCC_TOOLCHAIN_LOCATION}"; Flags: recursesubdirs; Components: toolchains\arm;
-Source: "components\graphviz\release\*"; DestDir: "{#GRAPHVIZ_LOCATION}"; Flags: recursesubdirs;
-Source: "components\mingw\mingw64\*"; DestDir: "{#MINGW_LOCATION}"; Flags: recursesubdirs;
-Source: "components\msys\msys\*"; DestDir: "{app}\tools\msys"; Flags: recursesubdirs;
-Source: "components\openocd\*"; DestDir: "{#OPENOCD_LOCATION}"; Flags: recursesubdirs;
+Source: "components\graphviz\release\*"; DestDir: "{#GRAPHVIZ_LOCATION}"; Flags: recursesubdirs; Components: tools\graphviz;
+Source: "components\mingw\mingw64\*"; DestDir: "{#MINGW_LOCATION}"; Flags: recursesubdirs; Components: toolchains\mingw;
+Source: "components\msys\msys\*"; DestDir: "{app}\tools\msys"; Flags: recursesubdirs; Components: tools\msys;
+Source: "components\openocd\*"; DestDir: "{#OPENOCD_LOCATION}"; Flags: recursesubdirs; Components: tools\openocd;
 
 
 [Run]
 ;---- install clang\llvm
-Filename: "{tmp}\{#CLANG_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#CLANG_TOOLCHAIN_LOCATION}"; Components: toolchains\clang; BeforeInstall: UpdateInstallProgress('Installing Clang Toolchain.',25)
+Filename: "{tmp}\{#CLANG_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#CLANG_TOOLCHAIN_LOCATION}"; Components: toolchains\clang; BeforeInstall: DisplayInstallProgress(True, 'Installing Clang Toolchain.')
 ;---- install cppcheck
-Filename: "msiexec.exe"; Parameters: "/i {tmp}\{#CPPCHECK_FILENAME} /qb /L*V {app}\cppcheck.log INSTALLDIR={#CPPCHECK_LOCATION} ADDLOCAL=""CppcheckCore,Complete,CLI,Translations,GUI,ConfigFiles,PlatformFiles,CRT"""; Components: tools\cppcheck; BeforeInstall: UpdateInstallProgress('Installing Cppcheck.', 97)
+Filename: "msiexec.exe"; Parameters: "/i {tmp}\{#CPPCHECK_FILENAME} /qb /L*V {app}\cppcheck.log INSTALLDIR={#CPPCHECK_LOCATION} ADDLOCAL=""CppcheckCore,Complete,CLI,Translations,GUI,ConfigFiles,PlatformFiles,CRT"""; Components: tools\cppcheck; BeforeInstall: UpdateInstallProgress('Installing Cppcheck.', 50)
 ;---- eclipse installer
-Filename: "notepad.exe"; Parameters: "{tmp}\eclipse-notice.txt"; Components: eclipse; BeforeInstall: UpdateInstallProgress('Preparing eclipse instalation.',99); AfterInstall: DisplayInstallProgress(False, '');
+Filename: "notepad.exe"; Parameters: "{tmp}\eclipse-notice.txt"; Components: eclipse; BeforeInstall: UpdateInstallProgress('Preparing eclipse installation.',80); AfterInstall: DisplayInstallProgress(False, '');
 Filename: "{app}\eclipse-installer\eclipse-inst.exe"; Components: eclipse; BeforeInstall: PrepareMicroideOomphSetupFiles
 
 
@@ -68,11 +68,11 @@ Filename: "{app}\eclipse-installer\eclipse-inst.exe"; Components: eclipse; Befor
 Filename: "{#CLANG_TOOLCHAIN_LOCATION}\Uninstall.exe"; Parameters: "/S"
 
 
-[UninstallDelete]
-Type: filesandordirs; Name: "{app}\eclipse";
-Type: dirifempty; Name: "{app}\toolchains\LLVM";
-Type: dirifempty; Name: "{app}\toolchains";
-Type: dirifempty; Name: "{app}\tools";
+;[UninstallDelete]
+;Type: filesandordirs; Name: "{app}\eclipse";
+;Type: dirifempty; Name: "{app}\toolchains\LLVM";
+;Type: dirifempty; Name: "{app}\toolchains";
+;Type: dirifempty; Name: "{app}\tools";
 
 
 [Registry]
