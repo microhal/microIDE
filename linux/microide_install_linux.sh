@@ -9,7 +9,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 
 #links to installation files
 
-VERSION=0.3.3
+VERSION=0.3.4
 ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2?revision=bc2c96c0-14b5-4bb4-9f18-bceb4050fee7?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,7-2018-q2-update
 ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=7f7f1581-ce37-49ab-972f-c4163729fa47
 ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
@@ -124,7 +124,7 @@ installARMToolchain() {
         echo 'Installing ARM Toolchain...-------------------------------------------------------' >> log.log
         mkdir -p $ARM_GCC_TOOLCHAIN_LOCATION
         tar --extract --bzip2 --file=$DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME -C $ARM_GCC_TOOLCHAIN_LOCATION
-        mv $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2} $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2}
+        #mv $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2} $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2}
         #installing microhal patch to toolchain, this will allow to use standart operating system library with FreeRTOS
         echo 'Patching ARM Toolchain.'
         echo 'Patching ARM Toolchain.-----------------------------------------------------------' >> log.log
