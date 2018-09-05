@@ -181,7 +181,7 @@
           xsi:type="setup:PreferenceTask"
           filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/value"
-          value="${microideDir/tools/graphiz/bin|file}"/>
+          value="${microideDir/tools/graphviz/bin|file}"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
