@@ -3,3 +3,4 @@ norepo/
 toolchainPatchFiles/
 windows/
 output.log
+workspace.xml
