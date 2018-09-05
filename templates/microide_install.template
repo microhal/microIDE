@@ -12,7 +12,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 #replace this text with instalation files information
 MICROIDE_DIR=$SCRIPTPATH/microide-$VERSION
 DOWNLOAD_DIR=./downloads
-BRANCH_NAME=devel
+BRANCH_NAME=master
 APT_GET_PACKAGES_TO_INSTALL=''
 APT_GET_REPOSITORYS_TO_ADD=''
 
