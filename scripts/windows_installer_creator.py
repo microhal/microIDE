@@ -1,11 +1,14 @@
+#!/usr/bin/env python3
+
 import shutil
 import os
 import files_utils as fs
 import packages
 import re
 from distutils import dir_util
+import subprocess
 
-microideVersion = '0.3.3'
+microideVersion = '0.3.4'
 gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update']['windows']
 clang = packages.toolchains['clang']['6.0.1']['windows']
 mingw = packages.toolchains['mingw']['8.1.0']['windows']
@@ -47,10 +50,9 @@ def compile_online_installer():
     shutil.copytree('../toolchains/gcc-arm-none-eabi-patch/' + patchDirectoryName,
                     '../norepo/windows/toolchainPatch/' + patchDirectoryName)
 
-    fs.copyfile('../templates/microide_online.iss', '../norepo/windows/microide_online.iss')
+    fs.copyfile('inno setup/microide_online.iss', '../norepo/windows/microide_online.iss')
     print("Compiling online installer...")
-    parameters = './iscc.sh ../norepo/windows/microide_online.iss'
-    os.system(parameters + " >> output.log")
+    subprocess.run(['./inno setup/iscc.sh', '../norepo/windows/microide_online.iss'])
     print("Online installer ready.")
 
 
@@ -64,10 +66,9 @@ def compile_offline_installer():
     dir_util.copy_tree('../toolchains/gcc-arm-none-eabi-patch/' + patchDirectoryName,
                                  components_dir + '/gcc_arm_none_eabi')
 
-    fs.copyfile('microide_offline.iss', '../norepo/windows/microide_offline.iss')
+    fs.copyfile('inno setup/microide_offline.iss', '../norepo/windows/microide_offline.iss')
     print("Compiling offline installer...")
-    parameters = './iscc.sh ../norepo/windows/microide_offline.iss'
-    os.system(parameters + " >> output.log")
+    subprocess.run(['./inno setup/iscc.sh', '../norepo/windows/microide_offline.iss'])
     print("Offline installer ready.")
 
 
@@ -77,7 +78,7 @@ def generateWindowsProductSetup():
 
     #  gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update']['windows']
     toolchainPatch = gcc_arm_none_eabi['installationLocation'].replace('{app}', 'microideDir') + '/' + re.sub(
-        '-.{5,6}-win32\.exe', '', gcc_arm_none_eabi['filename'])
+        '-.{5,6}-win32\.(exe|zip)', '', gcc_arm_none_eabi['filename'])
     content = content.replace("##microideToolchainPatch##", toolchainPatch.replace('\\', '/'))
 
     #    clang = packages.toolchains['clang']['6.0.1']['windows']
@@ -94,7 +95,7 @@ def generateWindowsProductSetup():
 
     #   doxygen = packages.doxygen['1.8.14']['windows']
     doxygenPath = doxygen['installationLocation']
-    doxygenPath = doxygenPath.replace('{app}', '${microideDir') + '/bin|file}'
+    doxygenPath = doxygenPath.replace('{app}', '${microideDir|file}')
     content = content.replace("##DoxygenPatch##", doxygenPath.replace('\\', '/'))
 
     with open('../eclipse-installer/microideLocalSetups/microide.product.setup.windows', 'w') as file:
