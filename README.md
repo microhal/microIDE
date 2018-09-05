@@ -73,6 +73,13 @@ All packages are preconfigured and IDE is redy for use after installing. This in
 
 ## Changelog
 
+### 0.3.4
+- updated ARM GCC toolchain to gcc-arm-none-eabi-7-2018-q2-update
+- updated cppcheck to 1.84
+- updated doxygen to 1.8.14
+- updated mingw to 8.1.0
+- updated clang/LLVM to 6.0.1
+
 ### 0.3.3
 - updated minGW to 7.3.0
 - added cppcheck
