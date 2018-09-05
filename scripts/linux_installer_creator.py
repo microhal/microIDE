@@ -2,7 +2,7 @@ import packages
 import re
 import files_utils
 
-microideVersion = '0.3.3'
+microideVersion = '0.3.4'
 gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update']['linux']
 openOCD = packages.openOCD['linux']
 eclipse = packages.eclipse['linux']
@@ -11,7 +11,7 @@ eclipse = packages.eclipse['linux']
 def generate_linux_product_setup():
     with open('../templates/microide.product.setup.template', 'r') as file:
         content = file.read()
-    toolchain_patch = gcc_arm_none_eabi['installationLocation'] + '/' + re.sub('-.{5,6}-linux\.tar\.bz2', '',
+    toolchain_patch = gcc_arm_none_eabi['installationLocation'] + '/' + re.sub('-linux\.tar\.bz2', '',
                                                                                gcc_arm_none_eabi['filename'])
     content = content.replace("##microideToolchainPatch##", toolchain_patch)
 
