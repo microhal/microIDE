@@ -3,6 +3,11 @@ import hashlib
 import shutil
 
 
+def get_file_extension(file):
+    filename, extension = os.path.splitext(file)
+    return extension
+
+
 def make_directory_if_not_exist(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -14,6 +19,13 @@ def copyfile(source, destination):
 
 def untar(source, destination):
     os.system("tar --extract --file=" + source + ' -C ' + destination)
+
+
+def extract(source, destination, fource_7za = False):
+    if get_file_extension(source) == '.exe' and fource_7za is False:
+        os.system("file-roller --force -e " + destination + ' ' + source)
+    else:
+        os.system("7za x " + source + ' -o' + destination + ' -y')
 
 
 def validate_checksum(filename, checksum):
@@ -39,6 +51,14 @@ def download(destynation, filename, url, checksum):
     checksum_status = validate_checksum('./' + destynation + filename, checksum)
     return [checksum_status, os.stat('./' + destynation + filename).st_size]
 
+
+def get_directory_size(start_path):
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(start_path):
+        for f in filenames:
+            fp = os.path.join(dirpath, f)
+            total_size += os.path.getsize(fp)
+    return total_size
 
 def fileExists(path):
     try:
