@@ -44,9 +44,9 @@ def compile_online_installer():
     download7zipStandaloneConsoleVersion()  # needed to unpack repositories while installing on windows
 
     # include toolchain patch files into installer, firstly copy patch files into proper directory
-    patchDirectoryName = re.sub('-win32(-sha2)?\.(exe|zip)', '',
-                                packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update'][
-                                    'windows']['filename'])
+    patchDirectoryName = get_gcc_arm_none_eabi_name(
+        packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update'][
+            'windows']['filename'])
     shutil.copytree('../toolchains/gcc-arm-none-eabi-patch/' + patchDirectoryName,
                     '../norepo/windows/toolchainPatch/' + patchDirectoryName)
 
@@ -60,11 +60,11 @@ def compile_offline_installer():
     components_dir = '../norepo/windows/components'
 
     # include toolchain patch files into installer, firstly copy patch files into proper directory
-    patchDirectoryName = re.sub('-win32(-sha2)?\.(exe|zip)', '',
-                                packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update'][
-                                    'windows']['filename'])
+    patchDirectoryName = get_gcc_arm_none_eabi_name(
+        packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update'][
+            'windows']['filename'])
     dir_util.copy_tree('../toolchains/gcc-arm-none-eabi-patch/' + patchDirectoryName,
-                                 components_dir + '/gcc_arm_none_eabi')
+                       components_dir + '/gcc_arm_none_eabi')
 
     fs.copyfile('inno setup/microide_offline.iss', '../norepo/windows/microide_offline.iss')
     print("Compiling offline installer...")
@@ -77,8 +77,8 @@ def generateWindowsProductSetup():
         content = file.read()
 
     #  gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update']['windows']
-    toolchainPatch = gcc_arm_none_eabi['installationLocation'].replace('{app}', 'microideDir') + '/' + re.sub(
-        '-.{5,6}-win32\.(exe|zip)', '', gcc_arm_none_eabi['filename'])
+    toolchainPatch = gcc_arm_none_eabi['installationLocation'].replace('{app}', 'microideDir') + '/' + \
+                     get_gcc_arm_none_eabi_name(gcc_arm_none_eabi['filename'])
     content = content.replace("##microideToolchainPatch##", toolchainPatch.replace('\\', '/'))
 
     #    clang = packages.toolchains['clang']['6.0.1']['windows']
@@ -110,8 +110,8 @@ def generateInnoSetupFile(microide_version, destination):
         file.write('#define ARM_GCC_TOOLCHAIN_FILENAME "' + gcc_arm_none_eabi['filename'] + '"\n')
         file.write('#define ARM_GCC_TOOLCHAIN_VERSION "' + gcc_arm_none_eabi['version'] + '"\n')
         file.write('#define ARM_GCC_TOOLCHAIN_SIZE ' + str(gcc_arm_none_eabi['installation size']) + '\n')
-        file.write('#define ARM_GCC_TOOLCHAIN_LOCATION "' + gcc_arm_none_eabi['installationLocation'] + '\\' + re.sub(
-            '-win32(-sha2)?\.(exe|zip)', '', gcc_arm_none_eabi['filename']) + '"\n')
+        file.write('#define ARM_GCC_TOOLCHAIN_LOCATION "' + gcc_arm_none_eabi[
+            'installationLocation'] + '\\' + get_gcc_arm_none_eabi_name(gcc_arm_none_eabi['filename']) + '"\n')
         file.write('#define ARM_GCC_TOOLCHAIN_CHECKSUM_MD5 "' + gcc_arm_none_eabi['checksum']['md5'] + '"\n')
         file.write('\n')
 
@@ -166,6 +166,10 @@ def generateInnoSetupFile(microide_version, destination):
         file.write('#define GRAPHVIZ_LOCATION "' + graphviz['installationLocation'] + '"\n')
         file.write('#define GRAPHVIZ_CHECKSUM_MD5 "' + graphviz['checksum']['md5'] + '"\n')
         file.write('\n')
+
+
+def get_gcc_arm_none_eabi_name(filename):
+    return re.sub('-win32(-sha2)?\.(exe|zip)', '', filename)
 
 
 def download7zipStandaloneConsoleVersion():
