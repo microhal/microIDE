@@ -314,6 +314,9 @@
       <predicate
           xsi:type="predicates:NamePredicate"
           pattern="ticToc"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="i2c"/>
     </workingSet>
     <workingSet
         name="microhal.devices.examples">
@@ -398,6 +401,15 @@
       <predicate
           xsi:type="predicates:NamePredicate"
           pattern="mcp9800"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="mcp23014"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="lis2dh"/>
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="lis331hh"/>
     </workingSet>
     <workingSet
         name="microhal.components.examples"
@@ -521,30 +533,6 @@
       label="Master"/>
   <stream name="devel"
       label="Devel"/>
-  <stream name="port-stm32l4xx"
-      label="Port-stm32l4xx"/>
-  <stream name="port-stm32f3xx"
-      label="Port-stm32f3xx">
-    <description></description>
-  </stream>
-  <stream name="port-stm32f4xx"
-      label="Port-stm32f4xx">
-    <description></description>
-  </stream>
-  <stream name="port-nrf51"
-      label="Port-nrf51"/>
-  <stream name="crc"
-      label="CRC">
-    <description></description>
-  </stream>
-  <stream name="api-i2cDevice"
-      label="api-I2CDevice">
-    <description></description>
-  </stream>
-  <stream name="1-Wire"
-      label="1-Wire">
-    <description></description>
-  </stream>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
       href="index:/org.eclipse.setup#//@projectCatalogs[name='com.github']"/>
