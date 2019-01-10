@@ -138,6 +138,7 @@ installEclipse() {
         echo '-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->file:'"$MICROIDE_DIR"'/eclipse-installer/microideLocalSetups/microide.products.setup' >> eclipse-inst.ini
         echo '-Doomph.redirection.myProjectsCatalog=index:/redirectable.projects.setup->https://raw.githubusercontent.com/microHAL/microIDE/devel/eclipse-installer/microideSetups/microhal.projects.setup' >> eclipse-inst.ini
         echo '-Doomph.setup.product.catalog.filter=microide' >> eclipse-inst.ini
+        echo '-Doomph.setup.install.root=$MICROIDE_DIR'
         # prepare directory for micride product setup files
         mkdir -p microideLocalSetups
         cd microideLocalSetups

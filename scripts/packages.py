@@ -78,6 +78,28 @@ toolchains = {
                 'licenseUrl': 'https://developer.arm.com/GetEula?Id=7f7f1581-ce37-49ab-972f-c4163729fa47',
                 'installationLocation': '{app}\\toolchains\\gcc-arm-none-eabi\\microhal'
             }
+        },
+        'gcc-arm-none-eabi-8-2018-q4-major': {
+            'linux': {
+                'filename': 'gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2',
+                'download size': '0',
+                'installation size': '0',
+                'version': '8.0.0',
+                'url': 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/8-2018q4/gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2?revision=d830f9dd-cd4f-406d-8672-cca9210dd220?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,8-2018-q4-major',
+                'checksum': {'md5': 'f55f90d483ddb3bcf4dae5882c2094cd'},
+                'licenseUrl': 'https://developer.arm.com/GetEula?Id=3703e685-a548-462c-bd0e-2e139db7ab35',
+                'installationLocation': 'microideDir/toolchains/gcc-arm-none-eabi/microhal'
+            },
+            'windows': {
+                'filename': 'gcc-arm-none-eabi-8-2018-q4-major-win32.zip',
+                'download size': '0',
+                'installation size': '0',
+                'version': '8.0.0',
+                'url': 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/8-2018q4/gcc-arm-none-eabi-8-2018-q4-major-win32.zip?revision=ab9cb8f8-6a9d-4a6e-818a-295f5d1ca982?product=GNU%20Arm%20Embedded%20Toolchain,ZIP,,Windows,8-2018-q4-major',
+                'checksum': {'md5': '9b1cfb7539af11b0badfaa960679ea6f'},
+                'licenseUrl': 'https://developer.arm.com/GetEula?Id=3703e685-a548-462c-bd0e-2e139db7ab35',
+                'installationLocation': '{app}\\toolchains\\gcc-arm-none-eabi\\microhal'
+            }
         }
     },
     'clang': {
@@ -118,6 +140,19 @@ toolchains = {
                 'checksum': {'': ''},
                 'licenseUrl': 'http://releases.llvm.org/6.0.1/LICENSE.TXT',
                 'installationLocation': '{app}\\toolchains\\LLVM\\6.0.1'
+            }
+        },
+        '7.0.1': {
+            'linux': {},
+            'windows': {
+                'filename': 'LLVM-7.0.1-win64.exe',
+                'download size': '0',
+                'installation size': '0',
+                'version': '7.0.1',
+                'url': 'http://releases.llvm.org/7.0.1/LLVM-7.0.1-win64.exe',
+                'checksum': {'': ''},
+                'licenseUrl': 'http://releases.llvm.org/7.0.1/LICENSE.TXT',
+                'installationLocation': '{app}\\toolchains\\LLVM\\7.0.1'
             }
         }
     },
@@ -231,6 +266,19 @@ doxygen = {
             'licenseUrl': 'http://www.stack.nl/~dimitri/doxygen/index.html',
             'installationLocation': "{app}\\tools\\doxygen\\1.8.14"
         }
+    },
+    '1.8.15': {
+        'linux': {},
+        'windows': {
+            'filename': 'doxygen-1.8.15.windows.x64.bin.zip',
+            'download size': '0',
+            'installation size': '0',
+            'version': '1.8.15',
+            'url': 'http://doxygen.nl/files/doxygen-1.8.15.windows.x64.bin.zip',
+            'checksum': {'': ''},
+            'licenseUrl': 'http://www.stack.nl/~dimitri/doxygen/index.html',
+            'installationLocation': "{app}\\tools\\doxygen\\1.8.15"
+        }
     }
 }
 
@@ -259,6 +307,19 @@ cppcheck = {
             'checksum': {'': ''},
             'licenseUrl': 'https://github.com/danmar/cppcheck/blob/master/COPYING',
             'installationLocation': '{app}\\tools\\cppcheck\\1.84'
+        }
+    },
+    '1.86': {
+        'linux': {},
+        'windows': {
+            'filename': 'cppcheck-1.86-x64-Setup.msi',
+            'download size': '0',
+            'installation size': '0',
+            'version': '1.84',
+            'url': 'http://github.com/danmar/cppcheck/releases/download/1.86/cppcheck-1.86-x64-Setup.msi',
+            'checksum': {'': ''},
+            'licenseUrl': 'https://github.com/danmar/cppcheck/blob/master/COPYING',
+            'installationLocation': '{app}\\tools\\cppcheck\\1.86'
         }
     }
 }

@@ -13,6 +13,13 @@
     <description></description>
   </setupTask>
   <setupTask
+      xsi:type="setup:VariableTask"
+      id="installation.id.default"
+      name=""
+      value="eclipse">
+    <description>default installation name</description>
+  </setupTask>
+  <setupTask
       xsi:type="setup:CompoundTask"
       id="configuration"
       name="Configuration">
@@ -91,7 +98,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.path.1287942917"
-          value="${microideDir/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-7-2018-q2-update/bin|file}">
+          value="${microideDir/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-8-2018-q4-major/bin|file}">
         <description>Path to microide toolchain binary files</description>
       </setupTask>
     </setupTask>
@@ -504,20 +511,24 @@
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse IDE for C/C++ Developers (Oxygen)">
+        label="Eclipse IDE for C/C++ Developers (Photon)">
       <requirement
           name="epp.package.cpp"
-          versionRange="[4.7.0,4.8.0)"/>
+          versionRange="[4.8.0,5.0.0)"/>
       <requirement
           name="org.eclipse.platform.feature.group"
-          versionRange="[4.7.0,4.8.0)"/>
+          versionRange="[4.8.0,5.0.0)"/>
       <requirement
           name="org.eclipse.rcp.feature.group"
-          versionRange="[4.7.0,4.8.0)"/>
+          versionRange="[4.8.0,5.0.0)"/>
       <requirement
           name="org.eclipse.cdt.autotools.feature.group"/>
       <requirement
           name="org.eclipse.cdt.build.crossgcc.feature.group"/>
+      <requirement
+            name="org.eclipse.cdt.cmake.feature.group"/>
+      <requirement
+            name="org.eclipse.cdt.debug.gdbjtag.feature.group"/>
       <requirement
           name="org.eclipse.cdt.debug.standalone.feature.group"/>
       <requirement
@@ -561,9 +572,9 @@
           name="org.eclipse.tracecompass.lttng2.ust.feature.group"
           filter="(osgi.os=linux)"/>
       <repository
-          url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
+          url="http://download.eclipse.org/technology/epp/packages/photon"/>
       <repository
-          url="http://download.eclipse.org/releases/oxygen"/>
+          url="http://download.eclipse.org/releases/photon"/>
     </setupTask>
     <description></description>
   </version>

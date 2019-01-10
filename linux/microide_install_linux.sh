@@ -9,13 +9,13 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 
 #links to installation files
 
-VERSION=0.3.4
-ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2?revision=bc2c96c0-14b5-4bb4-9f18-bceb4050fee7?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,7-2018-q2-update
-ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=7f7f1581-ce37-49ab-972f-c4163729fa47
-ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
-ARM_GCC_TOOLCHAIN_VERSION=7.3.0
-ARM_GCC_TOOLCHAIN_SIZE=100600407
-ARM_GCC_TOOLCHAIN_CHECKSUM=299ebd3f1c2c90930d28ab82e5d8d6c0
+VERSION=0.3.5
+ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/8-2018q4/gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2?revision=d830f9dd-cd4f-406d-8672-cca9210dd220?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,8-2018-q4-major
+ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=3703e685-a548-462c-bd0e-2e139db7ab35
+ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2
+ARM_GCC_TOOLCHAIN_VERSION=8.0.0
+ARM_GCC_TOOLCHAIN_SIZE=107253352
+ARM_GCC_TOOLCHAIN_CHECKSUM=f55f90d483ddb3bcf4dae5882c2094cd
 ARM_GCC_TOOLCHAIN_LOCATION=toolchains/gcc-arm-none-eabi/microhal
 
 OPENOCD_URL=https://sourceforge.net/projects/openocd/files/openocd/0.10.0/openocd-0.10.0.tar.gz/download
@@ -159,6 +159,7 @@ installEclipse() {
         echo '-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->file:'"$MICROIDE_DIR"'/eclipse-installer/microideLocalSetups/microide.products.setup' >> eclipse-inst.ini
         echo '-Doomph.redirection.myProjectsCatalog=index:/redirectable.projects.setup->https://raw.githubusercontent.com/microHAL/microIDE/devel/eclipse-installer/microideSetups/microhal.projects.setup' >> eclipse-inst.ini
         echo '-Doomph.setup.product.catalog.filter=microide' >> eclipse-inst.ini
+        echo '-Doomph.setup.install.root=$MICROIDE_DIR'
         # prepare directory for micride product setup files
         mkdir -p microideLocalSetups
         cd microideLocalSetups

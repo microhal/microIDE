@@ -2,8 +2,10 @@ import packages
 import re
 import files_utils
 
-microideVersion = '0.3.4'
-gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update']['linux']
+# oomph repository: https://git.eclipse.org/r/oomph/org.eclipse.oomph.git
+
+microideVersion = '0.3.5'
+gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-8-2018-q4-major']['linux']
 openOCD = packages.openOCD['linux']
 eclipse = packages.eclipse['linux']
 
