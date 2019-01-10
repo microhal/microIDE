@@ -102,6 +102,30 @@ toolchains = {
             }
         }
     },
+    'gcc-arm-linux-gnueabihf': {
+         'gcc-linaro-7.3.1-2018.05-arm-linux-gnueabihf': {
+            'linux': {
+                'filename': 'gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz',
+                'download size': '0',
+                'installation size': '0',
+                'version': '7.3.1',
+                'url': 'https://releases.linaro.org/components/toolchain/binaries/latest-7/arm-linux-gnueabihf/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz',
+                'checksum': {},
+                'licenseUrl': '',
+                'installationLocation': 'microideDir/toolchains/gcc-arm-linux-gnueabihf'
+            },
+            'windows': {
+                'filename': 'gcc-linaro-7.3.1-2018.05-i686-mingw32_arm-linux-gnueabihf.tar.xz',
+                'download size': '0',
+                'installation size': '0',
+                'version': '7.3.1',
+                'url': 'https://releases.linaro.org/components/toolchain/binaries/latest-7/arm-linux-gnueabihf/gcc-linaro-7.3.1-2018.05-i686-mingw32_arm-linux-gnueabihf.tar.xz',
+                'checksum': {},
+                'licenseUrl': '',
+                'installationLocation': '{app}\\toolchains\\gcc-arm-linux-gnueabihf'
+            }
+        }
+    },
     'clang': {
         '3.8.0': {
             'linux': {},

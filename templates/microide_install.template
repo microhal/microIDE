@@ -111,6 +111,16 @@ installARMToolchain() {
     fi    
 }
 
+installARM_LINUX_GNUEABIHF_Toolchain() {
+    if [ "$1" = "addAptToGetPackagesToInstall" ]; then
+    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL"
+    else
+        echo 'Installing gcc-arm-linux-gnueabihf Toolchain...-------------------------------------------------------' >> log.log
+        mkdir -p $GCC_ARM_LINUX_GNUEABIHF_TOOLCHAIN_URL
+        tar --extract --bzip2 --file=$DOWNLOAD_DIR/$GCC_ARM_LINUX_GNUEABIHF_FILENAME -C $GCC_ARM_LINUX_GNUEABIHF_LOCATION
+    fi
+}
+
 installEclipse() {
     MICROIDE_PRODUCTS_SETUP_FILE_CONTENT='<?xml version="1.0" encoding="UTF-8"?>
 <setup:ProductCatalog

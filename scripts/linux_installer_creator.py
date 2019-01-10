@@ -6,6 +6,7 @@ import files_utils
 
 microideVersion = '0.3.5'
 gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-8-2018-q4-major']['linux']
+gcc_arm_linux_gnueabihf = packages.toolchains['gcc-arm-linux-gnueabihf']['gcc-linaro-7.3.1-2018.05-arm-linux-gnueabihf']['linux']
 openOCD = packages.openOCD['linux']
 eclipse = packages.eclipse['linux']
 
@@ -37,6 +38,13 @@ def generate_linux_installer():
     text = text + 'ARM_GCC_TOOLCHAIN_SIZE=' + str(gcc_arm_none_eabi['size']) + '\n'
     text = text + 'ARM_GCC_TOOLCHAIN_CHECKSUM=' + gcc_arm_none_eabi['checksum']['md5'] + '\n'
     text = text + 'ARM_GCC_TOOLCHAIN_LOCATION=' + gcc_arm_none_eabi['installationLocation'].replace('microideDir/', '')
+    text = text + '\n\nGCC_ARM_LINUX_GNUEABIHF_TOOLCHAIN_URL=' + gcc_arm_linux_gnueabihf['url'] + '\n'
+    text = text + 'GCC_ARM_LINUX_GNUEABIHF_LICENSE_URL=' + gcc_arm_linux_gnueabihf['licenseUrl'] + '\n'
+    text = text + 'GCC_ARM_LINUX_GNUEABIHF_FILENAME=' + gcc_arm_linux_gnueabihf['filename'] + '\n'
+    text = text + 'GCC_ARM_LINUX_GNUEABIHF_VERSION=' + gcc_arm_linux_gnueabihf['version'] + '\n'
+    text = text + 'GCC_ARM_LINUX_GNUEABIHF_SIZE=' + str(gcc_arm_linux_gnueabihf['size']) + '\n'
+    text = text + 'GCC_ARM_LINUX_GNUEABIHF_CHECKSUM=' + gcc_arm_linux_gnueabihf['checksum']['md5'] + '\n'
+    text = text + 'GCC_ARM_LINUX_GNUEABIHF_LOCATION=' + gcc_arm_linux_gnueabihf['installationLocation'].replace('microideDir/', '')
     text = text + '\n\nOPENOCD_URL=' + openOCD['url']
     text = text + '\nOPENOCD_FILENAME=' + openOCD['filename']
     text = text + '\nOPENOCD_VERSION=' + openOCD['version']
@@ -60,10 +68,10 @@ def main():
     files_utils.make_directory_if_not_exist('../norepo/linux/eclipse')
 
     print("Generating instalation files...")
-    files_utils.getMissingFiles('../norepo/linux/toolchains', [gcc_arm_none_eabi])
+    files_utils.getMissingFiles('../norepo/linux/toolchains', [gcc_arm_none_eabi, gcc_arm_linux_gnueabihf])
     files_utils.getMissingFiles('../norepo/linux/openocd', [openOCD])
     files_utils.getMissingFiles('../norepo/linux/eclipse', [eclipse])
-    files_utils.updateFileinfo('../norepo/linux/toolchains', [gcc_arm_none_eabi])
+    files_utils.updateFileinfo('../norepo/linux/toolchains', [gcc_arm_none_eabi, gcc_arm_linux_gnueabihf])
     files_utils.updateFileinfo('../norepo/linux/openocd', [openOCD])
     files_utils.updateFileinfo('../norepo/linux/eclipse', [eclipse])
 

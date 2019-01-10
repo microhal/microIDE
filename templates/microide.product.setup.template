@@ -46,6 +46,14 @@
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
+        excludedTriggers="BOOTSTRAP MANUAL"        
+        type="URI"
+        name="GCC_ARM_LINUX_GNUEABIHF_LOCATION"
+        value="${microideDir/toolchains/gcc-arm-linux-gnueabihf|file}">
+      <description></description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
         id="isUserInstalation"
         name="isUserInstalation"
         value="false"
@@ -499,14 +507,14 @@
       option="-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->${microideDir}/eclipse-installer/microideLocalSetups/microide.products.setup"
       value=""
       vm="true"/>
-  <version name="oxygen"
-      label="Oxygen"
+  <version name="photon"
+      label="Photon"
       requiredJavaVersion="1.8">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/oxygen2</value>
+        <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-cc-developers</value>
       </detail>
     </annotation>
     <setupTask
