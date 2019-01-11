@@ -8,6 +8,7 @@ microideVersion = '0.3.5'
 gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-8-2018-q4-major']['linux']
 gcc_arm_linux_gnueabihf = \
     packages.toolchains['gcc-arm-linux-gnueabihf']['gcc-linaro-7.3.1-2018.05-arm-linux-gnueabihf']['linux']
+xtensa_esp32_elf = packages.toolchains['xtensa-esp32-elf']['xtensa-esp32-elf-1.22.0-80-g6c4433a-5.2.0']['linux']
 openOCD = packages.openOCD['linux']
 eclipse = packages.eclipse['linux']
 
@@ -23,6 +24,9 @@ def generate_linux_product_setup():
     content = content.replace("##microideToolchainPatch##", toolchain_patch)
 
     content = content.replace("##gccArmLunuxGnueabihfLatestToolchainPatch##", gcc_arm_linux_gnueabihf_toolchain_patch)
+
+    content = content.replace("##xtensaEsp32ElfLatestToolchainPatch##", gcc_arm_none_eabi['installationLocation'] + '/xtensa-esp32-elf')
+
 
     content = content.replace("##clangFormatLocation##", "${binaryDir/clang-format-6.0|file}")
     content = content.replace("##clangToolchainPatch##", "${binaryDir|file}")
@@ -52,6 +56,16 @@ def generate_linux_installer():
     text = text + 'GCC_ARM_LINUX_GNUEABIHF_CHECKSUM=' + gcc_arm_linux_gnueabihf['checksum']['md5'] + '\n'
     text = text + 'GCC_ARM_LINUX_GNUEABIHF_LOCATION=' + gcc_arm_linux_gnueabihf['installationLocation'].replace(
         'microideDir/', '')
+
+    text = text + '\n\nXTENSA_ESP32_ELF_TOOLCHAIN_URL=' + xtensa_esp32_elf['url'] + '\n'
+    text = text + 'XTENSA_ESP32_ELF_LICENSE_URL=' + xtensa_esp32_elf['licenseUrl'] + '\n'
+    text = text + 'XTENSA_ESP32_ELF_FILENAME=' + xtensa_esp32_elf['filename'] + '\n'
+    text = text + 'XTENSA_ESP32_ELF_VERSION=' + xtensa_esp32_elf['version'] + '\n'
+    text = text + 'XTENSA_ESP32_ELF_SIZE=' + str(xtensa_esp32_elf['size']) + '\n'
+    text = text + 'XTENSA_ESP32_ELF_CHECKSUM=' + xtensa_esp32_elf['checksum']['md5'] + '\n'
+    text = text + 'XTENSA_ESP32_ELF_LOCATION=' + xtensa_esp32_elf['installationLocation'].replace(
+        'microideDir/', '')
+
     text = text + '\n\nOPENOCD_URL=' + openOCD['url']
     text = text + '\nOPENOCD_FILENAME=' + openOCD['filename']
     text = text + '\nOPENOCD_VERSION=' + openOCD['version']
@@ -75,10 +89,12 @@ def main():
     files_utils.make_directory_if_not_exist('../norepo/linux/eclipse')
 
     print("Generating instalation files...")
-    files_utils.getMissingFiles('../norepo/linux/toolchains', [gcc_arm_none_eabi, gcc_arm_linux_gnueabihf])
+    files_utils.getMissingFiles('../norepo/linux/toolchains',
+                                [gcc_arm_none_eabi, gcc_arm_linux_gnueabihf, xtensa_esp32_elf])
     files_utils.getMissingFiles('../norepo/linux/openocd', [openOCD])
     files_utils.getMissingFiles('../norepo/linux/eclipse', [eclipse])
-    files_utils.updateFileinfo('../norepo/linux/toolchains', [gcc_arm_none_eabi, gcc_arm_linux_gnueabihf])
+    files_utils.updateFileinfo('../norepo/linux/toolchains',
+                               [gcc_arm_none_eabi, gcc_arm_linux_gnueabihf, xtensa_esp32_elf])
     files_utils.updateFileinfo('../norepo/linux/openocd', [openOCD])
     files_utils.updateFileinfo('../norepo/linux/eclipse', [eclipse])
 

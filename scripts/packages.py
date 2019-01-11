@@ -126,6 +126,30 @@ toolchains = {
             }
         }
     },
+    'xtensa-esp32-elf': {
+         'xtensa-esp32-elf-1.22.0-80-g6c4433a-5.2.0': {
+            'linux': {
+                'filename': 'xtensa-esp32-elf-linux64-1.22.0-80-g6c4433a-5.2.0.tar.gz',
+                'download size': '0',
+                'installation size': '0',
+                'version': '5.2.0',
+                'url': 'https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-80-g6c4433a-5.2.0.tar.gz',
+                'checksum': {},
+                'licenseUrl': '',
+                'installationLocation': 'microideDir/toolchains/xtensa-esp32-elf'
+            },
+            'windows': {
+                'filename': 'xtensa-esp32-elf-win32-1.22.0-80-g6c4433a-5.2.0.zip',
+                'download size': '0',
+                'installation size': '0',
+                'version': '5.2.0',
+                'url': 'https://dl.espressif.com/dl/xtensa-esp32-elf-win32-1.22.0-80-g6c4433a-5.2.0.zip',
+                'checksum': {},
+                'licenseUrl': '',
+                'installationLocation': '{app}\\toolchains\\xtensa-esp32-elf'
+            }
+        }
+    },
     'clang': {
         '3.8.0': {
             'linux': {},

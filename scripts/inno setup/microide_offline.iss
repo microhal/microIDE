@@ -32,6 +32,7 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 Name: "eclipse"; Description: "Eclipse"; Types: user devel custom; Flags: fixed;
 Name: "toolchains"; Description: "Toolchains"; Types: user devel custom;
 Name: "toolchains\arm"; Description: "gcc-arm-none-eabi {#ARM_GCC_TOOLCHAIN_VERSION}"; Types: user devel custom; Flags: fixed;
+Name: "toolchains\arm_linux_gnueabihf"; Description: "gcc-arm-linux-gnueabihf {#GCC_ARM_LINUX_GNUEABIHF_VERSION}"; Types: user devel custom;
 Name: "toolchains\clang"; Description: "clang/llvm {#CLANG_TOOLCHAIN_VERSION}"; Types: user devel custom
 Name: "toolchains\mingw"; Description: "minGW-w64"; Types: user devel custom
 Name: "tools"; Description: "Programming tools"; Types: user devel custom;
@@ -48,6 +49,7 @@ Source: "downloads\{#CPPCHECK_FILENAME}"; DestDir: "{tmp}"; Components: tools\cp
 Source: "components\doxygen\*"; DestDir: "{#DOXYGEN_LOCATION}"; Flags: recursesubdirs; Components: tools\doxygen;
 Source: "components\eclipse-installer\*"; DestDir: "{app}\eclipse-installer"; Flags: recursesubdirs; BeforeInstall: CreateNoticeFile;
 Source: "components\gcc_arm_none_eabi\*"; DestDir: "{#ARM_GCC_TOOLCHAIN_LOCATION}"; Flags: recursesubdirs; Components: toolchains\arm;
+Source: "components\gcc-linaro-7.3.1-2018.05-i686-mingw32_arm-linux-gnueabihf\*"; DestDir: "{#GCC_ARM_LINUX_GNUEABIHF_LOCATION}"; Flags: recursesubdirs; Components: toolchains\arm_linux_gnueabihf;
 Source: "components\graphviz\release\*"; DestDir: "{#GRAPHVIZ_LOCATION}"; Flags: recursesubdirs; Components: tools\graphviz;
 Source: "components\mingw\mingw64\*"; DestDir: "{#MINGW_LOCATION}"; Flags: recursesubdirs; Components: toolchains\mingw;
 Source: "components\msys\msys\*"; DestDir: "{app}\tools\msys"; Flags: recursesubdirs; Components: tools\msys;

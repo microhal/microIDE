@@ -191,12 +191,28 @@
           value="${microideDir/tools/graphviz/bin|file}"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/GCC_ARM_LINUX_GNUEABIHF_LATEST_LOCATION/operation"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/GCC_ARM_LINUX_GNUEABIHF_LATEST_PATH/operation"
           value="replace"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/org.eclipse.cdt.core/environment/workspace/GCC_ARM_LINUX_GNUEABIHF_LATEST_LOCATION/value"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/GCC_ARM_LINUX_GNUEABIHF_LATEST_PATH/value"
           value="${##gccArmLunuxGnueabihfLatestToolchainPatch##}"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/XTENSA_ESP32_ELF_LATEST_PATH/operation"
+          value="replace"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/XTENSA_ESP32_ELF_LATEST_PATH/value"
+          value="${##xtensaEsp32ElfLatestToolchainPatch##}"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/IDF_PATH/operation"
+          value="replace"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/IDF_PATH/value"
+          value="${microideDir/esp-idf}"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"

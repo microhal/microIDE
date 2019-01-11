@@ -24,6 +24,8 @@ def untar(source, destination):
 def extract(source, destination, fource_7za = False):
     if get_file_extension(source) == '.exe' and fource_7za is False:
         os.system("file-roller --force -e " + destination + ' ' + source)
+    if get_file_extension(source) == '.xz' and fource_7za is False:
+        os.system("tar xf " + source + ' -C ' + destination)
     else:
         os.system("7za x " + source + ' -o' + destination + ' -y')
 

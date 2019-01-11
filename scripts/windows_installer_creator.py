@@ -8,14 +8,16 @@ import re
 from distutils import dir_util
 import subprocess
 
-microideVersion = '0.3.4'
-gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update']['windows']
-clang = packages.toolchains['clang']['6.0.1']['windows']
+microideVersion = '0.3.5'
+gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-8-2018-q4-major']['windows']
+gcc_arm_linux_gnueabihf = \
+    packages.toolchains['gcc-arm-linux-gnueabihf']['gcc-linaro-7.3.1-2018.05-arm-linux-gnueabihf']['windows']
+clang = packages.toolchains['clang']['7.0.1']['windows']
 mingw = packages.toolchains['mingw']['8.1.0']['windows']
 openOCD = packages.openOCD['windows']
 eclipse = packages.eclipse['windows']
-doxygen = packages.doxygen['1.8.14']['windows']
-cppcheck = packages.cppcheck['1.84']['windows']
+doxygen = packages.doxygen['1.8.15']['windows']
+cppcheck = packages.cppcheck['1.86']['windows']
 graphviz = packages.graphviz['2.38']['windows']
 msys = packages.msys['13']['windows']
 
@@ -45,7 +47,7 @@ def compile_online_installer():
 
     # include toolchain patch files into installer, firstly copy patch files into proper directory
     patchDirectoryName = re.sub('-win32(-sha2)?\.(exe|zip)', '',
-                                packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update'][
+                                packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-8-2018-q4-major'][
                                     'windows']['filename'])
     shutil.copytree('../toolchains/gcc-arm-none-eabi-patch/' + patchDirectoryName,
                     '../norepo/windows/toolchainPatch/' + patchDirectoryName)
@@ -61,10 +63,10 @@ def compile_offline_installer():
 
     # include toolchain patch files into installer, firstly copy patch files into proper directory
     patchDirectoryName = re.sub('-win32(-sha2)?\.(exe|zip)', '',
-                                packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-7-2018-q2-update'][
+                                packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-8-2018-q4-major'][
                                     'windows']['filename'])
     dir_util.copy_tree('../toolchains/gcc-arm-none-eabi-patch/' + patchDirectoryName,
-                                 components_dir + '/gcc_arm_none_eabi')
+                       components_dir + '/gcc_arm_none_eabi')
 
     fs.copyfile('inno setup/microide_offline.iss', '../norepo/windows/microide_offline.iss')
     print("Compiling offline installer...")
@@ -80,6 +82,15 @@ def generateWindowsProductSetup():
     toolchainPatch = gcc_arm_none_eabi['installationLocation'].replace('{app}', 'microideDir') + '/' + re.sub(
         '-.{5,6}-win32\.(exe|zip)', '', gcc_arm_none_eabi['filename'])
     content = content.replace("##microideToolchainPatch##", toolchainPatch.replace('\\', '/'))
+
+    # gcc-arm-linux-gnueabihf
+    gcc_arm_linux_gnueabihf_toolchain_patch = gcc_arm_linux_gnueabihf['installationLocation'] + '/' + re.sub(
+        '\.zip', '', gcc_arm_linux_gnueabihf['filename'])
+    content = content.replace("##gccArmLunuxGnueabihfLatestToolchainPatch##", gcc_arm_linux_gnueabihf_toolchain_patch)
+
+    # xtensa-esp32-elf
+    content = content.replace("##xtensaEsp32ElfLatestToolchainPatch##",
+                              gcc_arm_none_eabi['installationLocation'] + '/xtensa-esp32-elf')
 
     #    clang = packages.toolchains['clang']['6.0.1']['windows']
     clangPath = clang['installationLocation']
@@ -113,6 +124,17 @@ def generateInnoSetupFile(microide_version, destination):
         file.write('#define ARM_GCC_TOOLCHAIN_LOCATION "' + gcc_arm_none_eabi['installationLocation'] + '\\' + re.sub(
             '-win32(-sha2)?\.(exe|zip)', '', gcc_arm_none_eabi['filename']) + '"\n')
         file.write('#define ARM_GCC_TOOLCHAIN_CHECKSUM_MD5 "' + gcc_arm_none_eabi['checksum']['md5'] + '"\n')
+        file.write('\n')
+
+        file.write('#define GCC_ARM_LINUX_GNUEABIHF_TOOLCHAIN_URL "' + gcc_arm_linux_gnueabihf['url'] + '"\n')
+        file.write('#define GCC_ARM_LINUX_GNUEABIHF_LICENSE_URL "' + gcc_arm_linux_gnueabihf['licenseUrl'] + '"\n')
+        file.write('#define GCC_ARM_LINUX_GNUEABIHF_FILENAME "' + gcc_arm_linux_gnueabihf['filename'] + '"\n')
+        file.write('#define GCC_ARM_LINUX_GNUEABIHF_VERSION "' + gcc_arm_linux_gnueabihf['version'] + '"\n')
+        file.write('#define GCC_ARM_LINUX_GNUEABIHF_SIZE ' + str(gcc_arm_linux_gnueabihf['installation size']) + '\n')
+        file.write('#define GCC_ARM_LINUX_GNUEABIHF_CHECKSUM_MD5 "' + gcc_arm_linux_gnueabihf['checksum']['md5'] + '"\n')
+        file.write(
+            '#define GCC_ARM_LINUX_GNUEABIHF_LOCATION "' + gcc_arm_linux_gnueabihf['installationLocation'].replace(
+                'microideDir/', '') + '"\n')
         file.write('\n')
 
         file.write('#define CLANG_TOOLCHAIN_URL "' + clang['url'] + '"\n')
@@ -202,7 +224,8 @@ def install_missing_packages():
 def download_files(destination):
     print("Generating windows instalation files...")
     fs.getMissingFiles(destination,
-                       [gcc_arm_none_eabi, clang, mingw, openOCD, eclipse, doxygen, cppcheck, graphviz, msys])
+                       [gcc_arm_none_eabi, gcc_arm_linux_gnueabihf, clang, mingw, openOCD, eclipse, doxygen, cppcheck,
+                        graphviz, msys])
 
 
 def extract_files(download_dir, destination):
@@ -215,6 +238,7 @@ def extract_files(download_dir, destination):
     fs.extract(download_dir + doxygen['filename'], destination + '/doxygen')
     extract_eclipse_files(download_dir + eclipse['filename'], destination + '/eclipse-installer')
     fs.extract(download_dir + gcc_arm_none_eabi['filename'], destination + '/gcc_arm_none_eabi')
+    fs.extract(download_dir + gcc_arm_linux_gnueabihf['filename'], destination)
     fs.extract(download_dir + graphviz['filename'], destination + '/graphviz')
     fs.extract(download_dir + clang['filename'], destination + '/clang')
     fs.extract(download_dir + msys['filename'], destination + '/msys')
@@ -227,18 +251,21 @@ def update_files_information():
     doxygen['installation size'] = fs.get_directory_size('../norepo/windows/components/doxygen')
     eclipse['installation size'] = fs.get_directory_size('../norepo/windows/components/eclipse-installer')
     gcc_arm_none_eabi['installation size'] = fs.get_directory_size('../norepo/windows/components/gcc_arm_none_eabi')
+    gcc_arm_linux_gnueabihf['installation size'] = fs.get_directory_size('../norepo/windows/components/' + re.sub(
+        '\.tar\.xz', '', gcc_arm_linux_gnueabihf['filename']))
     graphviz['installation size'] = fs.get_directory_size('../norepo/windows/components/graphviz')
     mingw['installation size'] = fs.get_directory_size('../norepo/windows/components/mingw')
     msys['installation size'] = fs.get_directory_size('../norepo/windows/components/msys')
     openOCD['installation size'] = fs.get_directory_size('../norepo/windows/components/openocd')
 
-    fs.updateFileinfo('../norepo/windows/openocd', [openOCD])
-    fs.updateFileinfo('../norepo/windows/eclipse', [eclipse])
-    fs.updateFileinfo('../norepo/windows/doxygen', [doxygen])
-    fs.updateFileinfo('../norepo/windows/cppcheck', [cppcheck])
-    fs.updateFileinfo('../norepo/windows/toolchains', [clang])
-    fs.updateFileinfo('../norepo/windows/graphviz', [graphviz])
-    fs.updateFileinfo('../norepo/windows/msys', [msys])
+    fs.updateFileinfo('../norepo/windows/downloads', [openOCD])
+    fs.updateFileinfo('../norepo/windows/downloads', [eclipse])
+    fs.updateFileinfo('../norepo/windows/downloads', [doxygen])
+    fs.updateFileinfo('../norepo/windows/downloads', [cppcheck])
+    fs.updateFileinfo('../norepo/windows/downloads', [clang])
+    fs.updateFileinfo('../norepo/windows/downloads', [gcc_arm_linux_gnueabihf])
+    fs.updateFileinfo('../norepo/windows/downloads', [graphviz])
+    fs.updateFileinfo('../norepo/windows/downloads', [msys])
 
 
 if __name__ == "__main__":

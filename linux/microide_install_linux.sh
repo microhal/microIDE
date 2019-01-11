@@ -26,6 +26,14 @@ GCC_ARM_LINUX_GNUEABIHF_SIZE=107031352
 GCC_ARM_LINUX_GNUEABIHF_CHECKSUM=e414dc2bbd2bbd2f3b10edad0792fdb3
 GCC_ARM_LINUX_GNUEABIHF_LOCATION=toolchains/gcc-arm-linux-gnueabihf
 
+XTENSA_ESP32_ELF_TOOLCHAIN_URL=https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-80-g6c4433a-5.2.0.tar.gz
+XTENSA_ESP32_ELF_LICENSE_URL=
+XTENSA_ESP32_ELF_FILENAME=xtensa-esp32-elf-linux64-1.22.0-80-g6c4433a-5.2.0.tar.gz
+XTENSA_ESP32_ELF_VERSION=5.2.0
+XTENSA_ESP32_ELF_SIZE=44219107
+XTENSA_ESP32_ELF_CHECKSUM=3e00f8faa7360ebfc39971d2d2f3522d
+XTENSA_ESP32_ELF_LOCATION=toolchains/xtensa-esp32-elf
+
 OPENOCD_URL=https://sourceforge.net/projects/openocd/files/openocd/0.10.0/openocd-0.10.0.tar.gz/download
 OPENOCD_FILENAME=openocd-0.10.0.tar.gz
 OPENOCD_VERSION=0.10.0
@@ -47,7 +55,7 @@ APT_GET_REPOSITORYS_TO_ADD=''
 
 download() {
 wget --directory-prefix=$DOWNLOAD_DIR https://github.com/microHAL/microIDE/archive/$BRANCH_NAME.zip
-echo 'Downloading ARM toolchain ...'
+echo '--- Downloading gcc-arm-none-eabi toolchain ...'
 wget -O $DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME $ARM_GCC_TOOLCHAIN_URL
 md5_local=$(md5sum "$DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME" | awk '{print $1}')
 if [ "$md5_local" != "$ARM_GCC_TOOLCHAIN_CHECKSUM" ]
@@ -58,7 +66,7 @@ then
     echo Aborting...
     exit 1
 fi
-echo 'Downloading gcc_arm_linux_gnueabihf toolchain ...'
+echo '--- Downloading gcc-arm-linux-gnueabihf toolchain ...'
 wget -O $DOWNLOAD_DIR/$GCC_ARM_LINUX_GNUEABIHF_FILENAME $GCC_ARM_LINUX_GNUEABIHF_TOOLCHAIN_URL
 md5_local=$(md5sum "$DOWNLOAD_DIR/$GCC_ARM_LINUX_GNUEABIHF_FILENAME" | awk '{print $1}')
 if [ "$md5_local" != "$GCC_ARM_LINUX_GNUEABIHF_CHECKSUM" ]
@@ -69,7 +77,18 @@ then
     echo Aborting...
     exit 1
 fi
-echo 'Downloading openOCD...'
+echo '--- Downloading xtensa-esp32-elf toolchain ...'
+wget -O $DOWNLOAD_DIR/$XTENSA_ESP32_ELF_FILENAME $XTENSA_ESP32_ELF_TOOLCHAIN_URL
+md5_local=$(md5sum "$DOWNLOAD_DIR/$XTENSA_ESP32_ELF_FILENAME" | awk '{print $1}')
+if [ "$md5_local" != "$XTENSA_ESP32_ELF_CHECKSUM" ]
+then
+    echo $XTENSA_ESP32_ELF_FILENAME checksum missmatch.
+    echo Calculated $md5_local
+    echo Expected $XTENSA_ESP32_ELF_CHECKSUM
+    echo Aborting...
+    exit 1
+fi
+echo '--- Downloading openOCD...'
 wget -O $DOWNLOAD_DIR/$OPENOCD_FILENAME $OPENOCD_URL
 md5_local=$(md5sum "$DOWNLOAD_DIR/$OPENOCD_FILENAME" | awk '{print $1}')
 if [ "$md5_local" != "$OPENOCD_CHECKSUM" ]
@@ -80,7 +99,7 @@ then
     echo Aborting...
     exit 1
 fi
-echo 'Downloading HIDAPI (OpenOCD component)...'
+echo '--- Downloading HIDAPI (OpenOCD component)...'
 wget -O $DOWNLOAD_DIR/hidapi.zip https://github.com/signal11/hidapi/archive/master.zip
 echo 'Downloading Eclipse...'
 wget -O $DOWNLOAD_DIR/$ECLIPSE_FILENAME $ECLIPSE_URL
@@ -161,6 +180,25 @@ installARM_LINUX_GNUEABIHF_Toolchain() {
     fi
 }
 
+installXTENSA_ESP32_ELF_Toolchain() {
+    if [ "$1" = "addAptToGetPackagesToInstall" ]; then
+    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL libncurses-dev flex bison gperf python python-serial"
+    else
+        echo 'Installing xtensa-esp32-elf Toolchain...-------------------------------------------------------' >> log.log
+        mkdir -p $XTENSA_ESP32_ELF_LOCATION
+        tar xf $DOWNLOAD_DIR/$XTENSA_ESP32_ELF_FILENAME -C $XTENSA_ESP32_ELF_LOCATION
+    fi
+}
+
+install_esp_idf() {
+    if [ "$1" = "addAptToGetPackagesToInstall" ]; then
+    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL"
+    else
+        echo 'Installing ESP-IDF ...-------------------------------------------------------' >> log.log
+        git clone -b v3.1.2 --recursive https://github.com/espressif/esp-idf.git
+    fi
+}
+
 installEclipse() {
     MICROIDE_PRODUCTS_SETUP_FILE_CONTENT='<?xml version="1.0" encoding="UTF-8"?>
 <setup:ProductCatalog
@@ -207,8 +245,7 @@ installEclipse() {
 installClangFormat() {
     if [ "$1" = "addAptToGetPackagesToInstall" ]; then
     	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL clang-format-6.0"
-    fi 
-    #sudo apt-get install clang-format
+    fi
 }
 
 installCppcheck() {
@@ -265,6 +302,7 @@ instal() {
     echo 'Installing required packages:'
     installARMToolchain 'addAptToGetPackagesToInstall'
     installARM_LINUX_GNUEABIHF_Toolchain 'addAptToGetPackagesToInstall'
+    installXTENSA_ESP32_ELF_Toolchain 'addAptToGetPackagesToInstall'
     installOpenOCD 'addAptToGetPackagesToInstall'
     installEclipse 'addAptToGetPackagesToInstall'
     installClangFormat 'addAptToGetPackagesToInstall'
@@ -294,6 +332,11 @@ instal() {
 
     echo '**************** Installing gcc-arm-linux-gnueabihf Toolchain...'
     installARM_LINUX_GNUEABIHF_Toolchain
+
+    echo '**************** Installing xtensa-esp32-elf Toolchain...'
+    installXTENSA_ESP32_ELF_Toolchain
+    echo '------ Installing ESP-IDF...'
+    install_esp_idf
     # ------------------------------------ tools ---------------------------------
     echo 'Installing tools'
     installOpenOCD

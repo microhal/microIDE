@@ -36,6 +36,7 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 Name: "eclipse"; Description: "Eclipse"; Types: user devel custom; Flags: fixed; ExtraDiskSpaceRequired: 51720192
 Name: "toolchains"; Description: "Toolchains"; Types: user devel custom;
 Name: "toolchains\arm"; Description: "gcc-arm-none-eabi {#ARM_GCC_TOOLCHAIN_VERSION}"; Types: user devel custom; Flags: fixed; ExtraDiskSpaceRequired: {#ARM_GCC_TOOLCHAIN_SIZE}
+Name: "toolchains\arm_linux_gnueabihf"; Description: "gcc-arm-linux-gnueabihf {#GCC_ARM_LINUX_GNUEABIHF_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#GCC_ARM_LINUX_GNUEABIHF_SIZE}
 Name: "toolchains\clang"; Description: "clang/llvm {#CLANG_TOOLCHAIN_VERSION}"; Types: user devel custom; ExtraDiskSpaceRequired: {#CLANG_TOOLCHAIN_SIZE}
 Name: "toolchains\mingw"; Description: "minGW-w64"; Types: user devel custom; ExtraDiskSpaceRequired: 478638080
 Name: "tools"; Description: "Programming tools"; Types: user devel custom;
@@ -58,8 +59,10 @@ Name: "{app}\eclipse-installer\microideLocalSetups"
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#ARM_GCC_TOOLCHAIN_FILENAME} -o{#ARM_GCC_TOOLCHAIN_LOCATION} -y"; Components: toolchains\arm; BeforeInstall: DisplayInstallProgress(True, 'Installing ARM Toolchain.')
 ; install patch for arm toolchain
 Filename: "xcopy.exe"; Parameters: "/s /y {tmp}\toolchainPatch {#ARM_GCC_TOOLCHAIN_LOCATION}\..\"; Components: toolchains\arm; Flags: runhidden; BeforeInstall: UpdateInstallProgress('Patching ARM Toolchain.',20)
+;---- gcc-arm-liux-gnueabihg
+Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#GCC_ARM_LINUX_GNUEABIHF_FILENAME} -o{#GCC_ARM_LINUX_GNUEABIHF_LOCATION} -y"; Components: toolchains\arm_linux_gnueabihf; BeforeInstall: UpdateInstallProgress('Installing gcc-arm-linux-gnueabihf Toolchain.', 25)
 ;---- install clang\llvm
-Filename: "{#DOWNLOAD_DIR}\{#CLANG_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#CLANG_TOOLCHAIN_LOCATION}"; Components: toolchains\clang; BeforeInstall: UpdateInstallProgress('Installing Clang Toolchain.',25)
+Filename: "{#DOWNLOAD_DIR}\{#CLANG_TOOLCHAIN_FILENAME}"; Parameters: "/S /D={#CLANG_TOOLCHAIN_LOCATION}"; Components: toolchains\clang; BeforeInstall: UpdateInstallProgress('Installing Clang Toolchain.',30)
 ;---- mingw
 Filename: "{tmp}\tools\7z\7za.exe"; Parameters: "x {#DOWNLOAD_DIR}\{#MINGW_FILENAME} -o{#MINGW_LOCATION} -y"; Components: toolchains\mingw; BeforeInstall: UpdateInstallProgress('Installing mingw toolchain.', 40)
 Filename: "cmd.exe"; Parameters: "/c rename {app}\toolchains\mingw-w64\mingw64 {#MINGW_VERSION}"; Components: toolchains\mingw ; BeforeInstall: UpdateInstallProgress('Installing mingw toolchain.', 55)
@@ -346,10 +349,10 @@ end;
 procedure InitializeWizard();
 var
 i: Integer;
-file: Array[0..7] of String;
-url: Array[0..7] of String;
-componentName: Array[0..7] of String;
-checksum: Array[0..7] of String;
+file: Array[0..8] of String;
+url: Array[0..8] of String;
+componentName: Array[0..8] of String;
+checksum: Array[0..8] of String;
 begin
     // create directory where downloaded files will be stored
     if not DirExists(ExpandConstant('{#DOWNLOAD_DIR}')) then
@@ -395,7 +398,12 @@ begin
     checksum[7] := '4c79f989eb6353a0d81bc39b6f7176ea'
     componentName[7] := 'tools\msys'
 
-    for i:=0 to 7 do
+    file[8] := ExpandConstant('{#DOWNLOAD_DIR}\{#GCC_ARM_LINUX_GNUEABIHF_FILENAME}')
+    url[8] := '{#GCC_ARM_LINUX_GNUEABIHF_TOOLCHAIN_URL}'
+    checksum[8] := '{#GCC_ARM_LINUX_GNUEABIHF_CHECKSUM_MD5}'
+    componentName[8] := 'toolchains\arm_linux_gnueabihf'
+
+    for i:=0 to 8 do
     begin
         AddToDownloadListIfNeeded(file[i], url[i], checksum[i], componentName[i]);
     end;
@@ -463,8 +471,10 @@ begin
   if LoadStringFromFile(ExpandConstant('{app}\eclipse-installer\eclipse-inst.ini'), fileContent) then
   begin
     productsCatalogLocation := ExpandConstant('-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->file:/{app}/eclipse-installer/microideLocalSetups/microide.products.setup');
+
     StringChangeEx(productsCatalogLocation, '\', '/', False);
     fileContent := fileContent + #13#10 + productsCatalogLocation
+    fileContent := fileContent + #13#10 + StringChangeEx(ExpandConstant('-Doomph.setup.install.root={app}'), '\', '/', False);
     SaveStringToFile(ExpandConstant('{app}\eclipse-installer\eclipse-inst.ini'), fileContent, False);
   end;
 end;
