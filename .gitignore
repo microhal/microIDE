@@ -4,3 +4,6 @@ toolchainPatchFiles/
 windows/
 output.log
 workspace.xml
+eclipse-installer/microideLocalSetups/microide.product.setup
+eclipse-installer/microideLocalSetups/microide.product.setup.windows
+scripts/__pycache__/
