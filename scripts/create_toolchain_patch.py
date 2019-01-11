@@ -101,8 +101,8 @@ def copy_files_from_last_patch(last_patch_location, tmp_patch_dir):
 
 
 def main():
-    last_patch_location = '../toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-7-2017-q4'
-    toolchain_version = 'gcc-arm-none-eabi-7-2018-q2-update'
+    last_patch_location = '../toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-7-2018-q2-update'
+    toolchain_version = 'gcc-arm-none-eabi-8-2018-q4-major'
     toolchain = packages.toolchains['gcc-arm-none-eabi'][toolchain_version]['linux']
 
     toolchain_download_dir = '../norepo/linux/toolchains'
