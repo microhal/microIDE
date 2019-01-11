@@ -18,6 +18,14 @@ ARM_GCC_TOOLCHAIN_SIZE=107253352
 ARM_GCC_TOOLCHAIN_CHECKSUM=f55f90d483ddb3bcf4dae5882c2094cd
 ARM_GCC_TOOLCHAIN_LOCATION=toolchains/gcc-arm-none-eabi/microhal
 
+GCC_ARM_LINUX_GNUEABIHF_TOOLCHAIN_URL=https://releases.linaro.org/components/toolchain/binaries/latest-7/arm-linux-gnueabihf/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz
+GCC_ARM_LINUX_GNUEABIHF_LICENSE_URL=
+GCC_ARM_LINUX_GNUEABIHF_FILENAME=gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz
+GCC_ARM_LINUX_GNUEABIHF_VERSION=7.3.1
+GCC_ARM_LINUX_GNUEABIHF_SIZE=107031352
+GCC_ARM_LINUX_GNUEABIHF_CHECKSUM=e414dc2bbd2bbd2f3b10edad0792fdb3
+GCC_ARM_LINUX_GNUEABIHF_LOCATION=toolchains/gcc-arm-linux-gnueabihf
+
 OPENOCD_URL=https://sourceforge.net/projects/openocd/files/openocd/0.10.0/openocd-0.10.0.tar.gz/download
 OPENOCD_FILENAME=openocd-0.10.0.tar.gz
 OPENOCD_VERSION=0.10.0
@@ -47,6 +55,17 @@ then
     echo $ARM_GCC_TOOLCHAIN_FILENAME checksum missmatch.
     echo Calculated $md5_local
     echo Expected $ARM_GCC_TOOLCHAIN_CHECKSUM
+    echo Aborting...
+    exit 1
+fi
+echo 'Downloading gcc_arm_linux_gnueabihf toolchain ...'
+wget -O $DOWNLOAD_DIR/$GCC_ARM_LINUX_GNUEABIHF_FILENAME $GCC_ARM_LINUX_GNUEABIHF_TOOLCHAIN_URL
+md5_local=$(md5sum "$DOWNLOAD_DIR/$GCC_ARM_LINUX_GNUEABIHF_FILENAME" | awk '{print $1}')
+if [ "$md5_local" != "$GCC_ARM_LINUX_GNUEABIHF_CHECKSUM" ]
+then
+    echo $GCC_ARM_LINUX_GNUEABIHF_FILENAME checksum missmatch.
+    echo Calculated $md5_local
+    echo Expected $GCC_ARM_LINUX_GNUEABIHF_CHECKSUM
     echo Aborting...
     exit 1
 fi
@@ -132,6 +151,16 @@ installARMToolchain() {
     fi    
 }
 
+installARM_LINUX_GNUEABIHF_Toolchain() {
+    if [ "$1" = "addAptToGetPackagesToInstall" ]; then
+    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL"
+    else
+        echo 'Installing gcc-arm-linux-gnueabihf Toolchain...-------------------------------------------------------' >> log.log
+        mkdir -p $GCC_ARM_LINUX_GNUEABIHF_LOCATION
+        tar xf $DOWNLOAD_DIR/$GCC_ARM_LINUX_GNUEABIHF_FILENAME -C $GCC_ARM_LINUX_GNUEABIHF_LOCATION
+    fi
+}
+
 installEclipse() {
     MICROIDE_PRODUCTS_SETUP_FILE_CONTENT='<?xml version="1.0" encoding="UTF-8"?>
 <setup:ProductCatalog
@@ -159,7 +188,7 @@ installEclipse() {
         echo '-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->file:'"$MICROIDE_DIR"'/eclipse-installer/microideLocalSetups/microide.products.setup' >> eclipse-inst.ini
         echo '-Doomph.redirection.myProjectsCatalog=index:/redirectable.projects.setup->https://raw.githubusercontent.com/microHAL/microIDE/devel/eclipse-installer/microideSetups/microhal.projects.setup' >> eclipse-inst.ini
         echo '-Doomph.setup.product.catalog.filter=microide' >> eclipse-inst.ini
-        echo '-Doomph.setup.install.root=$MICROIDE_DIR'
+        echo "-Doomph.setup.install.root=$MICROIDE_DIR" >> eclipse-inst.ini
         # prepare directory for micride product setup files
         mkdir -p microideLocalSetups
         cd microideLocalSetups
@@ -235,6 +264,7 @@ instal() {
     checkArchitecture
     echo 'Installing required packages:'
     installARMToolchain 'addAptToGetPackagesToInstall'
+    installARM_LINUX_GNUEABIHF_Toolchain 'addAptToGetPackagesToInstall'
     installOpenOCD 'addAptToGetPackagesToInstall'
     installEclipse 'addAptToGetPackagesToInstall'
     installClangFormat 'addAptToGetPackagesToInstall'
@@ -259,13 +289,16 @@ instal() {
         echo 'Aborting...'
         exit 1
     fi 
-    echo 'Installing ARM Toolchain...'
+    echo '**************** Installing ARM Toolchain...'
     installARMToolchain
+
+    echo '**************** Installing gcc-arm-linux-gnueabihf Toolchain...'
+    installARM_LINUX_GNUEABIHF_Toolchain
     # ------------------------------------ tools ---------------------------------
     echo 'Installing tools'
     installOpenOCD
     # ---------------------------------- eclipse ---------------------------------
-    echo 'Installing Eclipse'
+    echo '**************** Installing Eclipse'
     installEclipse
     #install clang-format
     installClangFormat

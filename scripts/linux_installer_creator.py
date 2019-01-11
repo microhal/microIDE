@@ -18,11 +18,11 @@ def generate_linux_product_setup():
     toolchain_patch = gcc_arm_none_eabi['installationLocation'] + '/' + re.sub('-linux\.tar\.bz2', '',
                                                                                gcc_arm_none_eabi['filename'])
     gcc_arm_linux_gnueabihf_toolchain_patch = gcc_arm_linux_gnueabihf['installationLocation'] + '/' + re.sub(
-        '-linux\.tar\.bz2\.xz', '', gcc_arm_none_eabi['filename'])
+        '\.tar\.xz', '', gcc_arm_linux_gnueabihf['filename'])
 
     content = content.replace("##microideToolchainPatch##", toolchain_patch)
 
-    content = content.replace("##gccArmLunuxGnueabihfToolchainPatch##", gcc_arm_linux_gnueabihf_toolchain_patch)
+    content = content.replace("##gccArmLunuxGnueabihfLatestToolchainPatch##", gcc_arm_linux_gnueabihf_toolchain_patch)
 
     content = content.replace("##clangFormatLocation##", "${binaryDir/clang-format-6.0|file}")
     content = content.replace("##clangToolchainPatch##", "${binaryDir|file}")
