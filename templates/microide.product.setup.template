@@ -196,7 +196,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/GCC_ARM_LINUX_GNUEABIHF_LOCATION/value"
-          value="##gccArmLunuxGnueabihfToolchainPatch##"/>
+          value="${##gccArmLunuxGnueabihfToolchainPatch##}"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"

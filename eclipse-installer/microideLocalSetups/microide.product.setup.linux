@@ -196,7 +196,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/GCC_ARM_LINUX_GNUEABIHF_LOCATION/value"
-          value="microideDir/toolchains/gcc-arm-linux-gnueabihf/gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2"/>
+          value="${microideDir/toolchains/gcc-arm-linux-gnueabihf/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf}"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
