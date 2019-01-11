@@ -46,14 +46,6 @@
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
-        excludedTriggers="BOOTSTRAP MANUAL"        
-        type="URI"
-        name="GCC_ARM_LINUX_GNUEABIHF_LOCATION"
-        value="${microideDir/toolchains/gcc-arm-linux-gnueabihf|file}">
-      <description></description>
-    </setupTask>
-    <setupTask
-        xsi:type="setup:VariableTask"
         id="isUserInstalation"
         name="isUserInstalation"
         value="false"
@@ -197,6 +189,14 @@
           filter="(osgi.os=win32)"
           key="/instance/org.eclipse.cdt.core/environment/workspace/PATH/value"
           value="${microideDir/tools/graphviz/bin|file}"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/GCC_ARM_LINUX_GNUEABIHF_LOCATION/operation"
+          value="replace"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.cdt.core/environment/workspace/GCC_ARM_LINUX_GNUEABIHF_LOCATION/value"
+          value="##gccArmLunuxGnueabihfToolchainPatch##"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"

@@ -6,7 +6,8 @@ import files_utils
 
 microideVersion = '0.3.5'
 gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-8-2018-q4-major']['linux']
-gcc_arm_linux_gnueabihf = packages.toolchains['gcc-arm-linux-gnueabihf']['gcc-linaro-7.3.1-2018.05-arm-linux-gnueabihf']['linux']
+gcc_arm_linux_gnueabihf = \
+    packages.toolchains['gcc-arm-linux-gnueabihf']['gcc-linaro-7.3.1-2018.05-arm-linux-gnueabihf']['linux']
 openOCD = packages.openOCD['linux']
 eclipse = packages.eclipse['linux']
 
@@ -16,7 +17,12 @@ def generate_linux_product_setup():
         content = file.read()
     toolchain_patch = gcc_arm_none_eabi['installationLocation'] + '/' + re.sub('-linux\.tar\.bz2', '',
                                                                                gcc_arm_none_eabi['filename'])
+    gcc_arm_linux_gnueabihf_toolchain_patch = gcc_arm_linux_gnueabihf['installationLocation'] + '/' + re.sub(
+        '-linux\.tar\.bz2\.xz', '', gcc_arm_none_eabi['filename'])
+
     content = content.replace("##microideToolchainPatch##", toolchain_patch)
+
+    content = content.replace("##gccArmLunuxGnueabihfToolchainPatch##", gcc_arm_linux_gnueabihf_toolchain_patch)
 
     content = content.replace("##clangFormatLocation##", "${binaryDir/clang-format-6.0|file}")
     content = content.replace("##clangToolchainPatch##", "${binaryDir|file}")
@@ -44,7 +50,8 @@ def generate_linux_installer():
     text = text + 'GCC_ARM_LINUX_GNUEABIHF_VERSION=' + gcc_arm_linux_gnueabihf['version'] + '\n'
     text = text + 'GCC_ARM_LINUX_GNUEABIHF_SIZE=' + str(gcc_arm_linux_gnueabihf['size']) + '\n'
     text = text + 'GCC_ARM_LINUX_GNUEABIHF_CHECKSUM=' + gcc_arm_linux_gnueabihf['checksum']['md5'] + '\n'
-    text = text + 'GCC_ARM_LINUX_GNUEABIHF_LOCATION=' + gcc_arm_linux_gnueabihf['installationLocation'].replace('microideDir/', '')
+    text = text + 'GCC_ARM_LINUX_GNUEABIHF_LOCATION=' + gcc_arm_linux_gnueabihf['installationLocation'].replace(
+        'microideDir/', '')
     text = text + '\n\nOPENOCD_URL=' + openOCD['url']
     text = text + '\nOPENOCD_FILENAME=' + openOCD['filename']
     text = text + '\nOPENOCD_VERSION=' + openOCD['version']
