@@ -74,7 +74,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/install.folder"
-          value="${microideDir/tools/openocd/0.10.0/bin|file}">
+          value="${microideDir/common/tools/openocd/0.10.0/bin|file}">
         <description>Location of OpenOCD binary file</description>
       </setupTask>
     </setupTask>
@@ -212,7 +212,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/IDF_PATH/value"
-          value="${microideDir/esp-idf}"/>
+          value="${microideDir/common/esp-idf}"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -500,7 +500,7 @@
   <setupTask
       xsi:type="setup:StringSubstitutionTask"
       name="openocd_path"
-      value="${microideDir/tools/openocd/0.10.0/bin|file}">
+      value="${microideDir/common/tools/openocd/0.10.0/bin|file}">
     <description>Location of OpenOCD binary file</description>
   </setupTask>
   <setupTask
@@ -523,28 +523,42 @@
       option="-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->${microideDir}/eclipse-installer/microideLocalSetups/microide.products.setup"
       value=""
       vm="true"/>
-  <version name="photon"
-      label="Photon"
+  <version name="0.3.6"
+      label="0.3.6"
       requiredJavaVersion="1.8">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
+          key="status">
+        <value>current</value>
+      </detail>
+      <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-cc-developers</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-cc-developers-includes-incubating-components</value>
+      </detail>
+      <detail
+          key="incubating">
+        <value>true</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse IDE for C/C++ Developers - 2020-03</value>
       </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse IDE for C/C++ Developers (Photon)">
+        label="Eclipse IDE for C/C++ Developers (2020-03)">
       <requirement
           name="epp.package.cpp"
-          versionRange="[4.8.0,5.0.0)"/>
+          versionRange="[4.15.0,5.0.0)"/>
       <requirement
           name="org.eclipse.platform.feature.group"
-          versionRange="[4.8.0,5.0.0)"/>
+          versionRange="[4.15.0,5.0.0)"/>
       <requirement
           name="org.eclipse.rcp.feature.group"
-          versionRange="[4.8.0,5.0.0)"/>
+          versionRange="[4.15.0,5.0.0)"/>
+      <requirement
+          name="org.eclipse.cdt.arduino.feature.group"/>
       <requirement
           name="org.eclipse.cdt.autotools.feature.group"/>
       <requirement
@@ -558,11 +572,29 @@
       <requirement
           name="org.eclipse.cdt.debug.ui.memory.feature.group"/>
       <requirement
+          name="org.eclipse.cdt.docker.launcher.feature.group"/>
+      <requirement
           name="org.eclipse.cdt.feature.group"/>
       <requirement
           name="org.eclipse.cdt.launch.remote.feature.group"/>
       <requirement
+          name="org.eclipse.cdt.launch.serial.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.cdt.meson.feature.group"/>
+      <requirement
+          name="org.eclipse.cdt.mylyn.feature.group"/>
+      <requirement
+          name="org.eclipse.cdt.qt.feature.group"/>
+      <requirement
+          name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
+      <requirement
           name="org.eclipse.egit.feature.group"/>
+      <requirement
+          name="org.eclipse.epp.mpc.feature.group"/>
+      <requirement
+          name="org.eclipse.launchbar.feature.group"/>
+      <requirement
+          name="org.eclipse.launchbar.remote.feature.group"/>
       <requirement
           name="org.eclipse.linuxtools.cdt.libhover.devhelp.feature.feature.group"/>
       <requirement
@@ -579,7 +611,17 @@
       <requirement
           name="org.eclipse.linuxtools.valgrind.feature.group"/>
       <requirement
-          name="org.eclipse.rse.feature.group"/>
+          name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+      <requirement
+          name="org.eclipse.mylyn.context_feature.feature.group"/>
+      <requirement
+          name="org.eclipse.mylyn.ide_feature.feature.group"/>
+      <requirement
+          name="org.eclipse.mylyn.team_feature.feature.group"/>
+      <requirement
+          name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+      <requirement
+          name="org.eclipse.mylyn_feature.feature.group"/>
       <requirement
           name="org.eclipse.tm.terminal.connector.cdtserial.feature.feature.group"/>
       <requirement
@@ -587,20 +629,19 @@
       <requirement
           name="org.eclipse.tracecompass.gdbtrace.feature.group"/>
       <requirement
-          name="org.eclipse.tracecompass.lttng2.control.feature.group"
-          filter="(osgi.os=linux)"/>
+          name="org.eclipse.tracecompass.lttng2.control.feature.group"/>
       <requirement
-          name="org.eclipse.tracecompass.lttng2.kernel.feature.group"
-          filter="(osgi.os=linux)"/>
+          name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
       <requirement
-          name="org.eclipse.tracecompass.lttng2.ust.feature.group"
-          filter="(osgi.os=linux)"/>
+          name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
       <repository
-          url="http://download.eclipse.org/technology/epp/packages/photon"/>
+          url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
       <repository
-          url="http://download.eclipse.org/releases/photon"/>
-    </setupTask>
-    <description></description>
+          url="http://download.eclipse.org/releases/2020-03/202003181000">
+        <annotation
+            source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+      </repository>
+    </setupTask>    
   </version>
   <description>An IDE for C/C++ embedded developers with microhal integration.</description>
 </setup:Product>
