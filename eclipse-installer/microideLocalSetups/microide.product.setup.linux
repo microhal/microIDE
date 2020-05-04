@@ -48,7 +48,7 @@
         xsi:type="setup:VariableTask"
         id="isUserInstalation"
         name="isUserInstalation"
-        value="false"
+        value="true"
         defaultValue="">
       <description></description>
     </setupTask>
@@ -101,6 +101,10 @@
           value="${microideDir/common/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-9-2019-q4-major/bin|file}">
         <description>Path to microide toolchain binary files</description>
       </setupTask>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.path.962691777"
+          value="${microideDir/common/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-9-2019-q4-major/bin|file}"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -116,7 +120,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/doctool/workspace.default"
-          value="org.eclipse.cdt.ui.doxygen"/>            
+          value="org.eclipse.cdt.ui.doxygen"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           filter="(osgi.os=win32)"
@@ -141,7 +145,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/MINGW_HOME/value"
-          value="$${MICROIDE_MINGW_HOME}"/>          
+          value="$${MICROIDE_MINGW_HOME}"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           filter=""
@@ -564,9 +568,9 @@
       <requirement
           name="org.eclipse.cdt.build.crossgcc.feature.group"/>
       <requirement
-            name="org.eclipse.cdt.cmake.feature.group"/>
+          name="org.eclipse.cdt.cmake.feature.group"/>
       <requirement
-            name="org.eclipse.cdt.debug.gdbjtag.feature.group"/>
+          name="org.eclipse.cdt.debug.gdbjtag.feature.group"/>
       <requirement
           name="org.eclipse.cdt.debug.standalone.feature.group"/>
       <requirement
@@ -641,7 +645,7 @@
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
-    </setupTask>    
+    </setupTask>
   </version>
   <description>An IDE for C/C++ embedded developers with microhal integration.</description>
 </setup:Product>
