@@ -51,7 +51,7 @@ def manual_merge(from_previous_patch, current_file, oryginal_file):
 
 def download_toolchain_if_needed(toolchain, download_dir):
     filesystem.make_directory_if_not_exist(download_dir)
-    filesystem.getMissingFiles(download_dir, [toolchain])
+    filesystem.get_missing_or_corrupted_files(download_dir, [toolchain])
 
 
 def extract_toolchain(source, destynation):
@@ -101,8 +101,8 @@ def copy_files_from_last_patch(last_patch_location, tmp_patch_dir):
 
 
 def main():
-    last_patch_location = '../toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-7-2018-q2-update'
-    toolchain_version = 'gcc-arm-none-eabi-8-2018-q4-major'
+    last_patch_location = '../toolchains/gcc-arm-none-eabi-patch/gcc-arm-none-eabi-8-2018-q4-major'
+    toolchain_version = 'gcc-arm-none-eabi-9-2019-q4-major'
     toolchain = packages.toolchains['gcc-arm-none-eabi'][toolchain_version]['linux']
 
     toolchain_download_dir = '../norepo/linux/toolchains'
