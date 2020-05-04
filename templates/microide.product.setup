@@ -87,7 +87,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.path.962691777"
-          value="${microideDir/common/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-9-2019-q4-major/bin|file}"/>
+          value="${##microideToolchainPatch##/bin|file}"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -111,7 +111,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/GCC_ARM_LINUX_GNUEABIHF_LATEST_PATH/value"
-          value="${microideDir/common/toolchains/gcc-arm-linux-gnueabihf/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf}"/>
+          value="${##gccArmLunuxGnueabihfLatestToolchainPatch##}"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/IDF_PATH/operation"
@@ -199,7 +199,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.core/environment/workspace/XTENSA_ESP32_ELF_LATEST_PATH/value"
-          value="${microideDir/common/toolchains/gcc-arm-none-eabi/microhal/xtensa-esp32-elf}"/>
+          value="${##xtensaEsp32ElfLatestToolchainPatch##}"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -207,7 +207,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.cdt.managedbuilder.llvm.ui/LLVM installation folder"
-          value="${binaryDir|file}">
+          value="##clangToolchainPatch##">
         <description>Path to Clang LLVM toolchain binary</description>
       </setupTask>
     </setupTask>
@@ -217,11 +217,11 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.gna.eclox.core/doxygen.default"
-          value="eclox.core.doxygen.CustomDoxygen ${binaryDir|file}"/>
+          value="eclox.core.doxygen.CustomDoxygen ##DoxygenPatch##"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.gna.eclox.core/doxygen.customs"
-          value="eclox.core.doxygen.CustomDoxygen ${binaryDir|file}&#xA;"/>
+          value="eclox.core.doxygen.CustomDoxygen ##DoxygenPatch##&#xA;"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -229,7 +229,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.wangzw.cppstyle/cppstyle.clangformat.path"
-          value="${binaryDir/clang-format-9|file}">
+          value="##clangFormatLocation##">
         <description></description>
       </setupTask>
       <setupTask
@@ -368,7 +368,7 @@
       vm="true"/>
   <setupTask
       xsi:type="setup:EclipseIniTask"
-      option="-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->${microideDir}/eclipse-installer-0.3.6/microideLocalSetups/microide.products.setup"
+      option="-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->${microideDir}/eclipse-installer-##microideVersion##/microideLocalSetups/microide.products.setup"
       value=""
       vm="true"/>
   <version name="0.3.6"
