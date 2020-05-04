@@ -4,8 +4,8 @@ import files_utils
 
 # oomph repository: https://git.eclipse.org/r/oomph/org.eclipse.oomph.git
 
-microideVersion = '0.3.5'
-gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-8-2018-q4-major']['linux']
+microideVersion = '0.3.6'
+gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-9-2019-q4-major']['linux']
 gcc_arm_linux_gnueabihf = \
     packages.toolchains['gcc-arm-linux-gnueabihf']['gcc-linaro-7.3.1-2018.05-arm-linux-gnueabihf']['linux']
 xtensa_esp32_elf = packages.toolchains['xtensa-esp32-elf']['xtensa-esp32-elf-1.22.0-80-g6c4433a-5.2.0']['linux']
@@ -28,10 +28,11 @@ def generate_linux_product_setup():
     content = content.replace("##xtensaEsp32ElfLatestToolchainPatch##", gcc_arm_none_eabi['installationLocation'] + '/xtensa-esp32-elf')
 
 
-    content = content.replace("##clangFormatLocation##", "${binaryDir/clang-format-6.0|file}")
+    content = content.replace("##clangFormatLocation##", "${binaryDir/clang-format-9|file}")
     content = content.replace("##clangToolchainPatch##", "${binaryDir|file}")
 
     content = content.replace("##DoxygenPatch##", "${binaryDir|file}")
+    content = content.replace('##microideVersion##', microideVersion)
 
     with open('../eclipse-installer/microideLocalSetups/microide.product.setup.linux', 'w') as file:
         file.write(content)
@@ -84,19 +85,13 @@ def generate_linux_installer():
 
 
 def main():
-    files_utils.make_directory_if_not_exist('../norepo/linux/toolchains')
-    files_utils.make_directory_if_not_exist('../norepo/linux/openocd')
-    files_utils.make_directory_if_not_exist('../norepo/linux/eclipse')
+    file_list = [gcc_arm_none_eabi, gcc_arm_linux_gnueabihf, xtensa_esp32_elf, openOCD, eclipse]
 
+    files_utils.make_directory_if_not_exist('../norepo/linux/downloads')
     print("Generating instalation files...")
-    files_utils.getMissingFiles('../norepo/linux/toolchains',
-                                [gcc_arm_none_eabi, gcc_arm_linux_gnueabihf, xtensa_esp32_elf])
-    files_utils.getMissingFiles('../norepo/linux/openocd', [openOCD])
-    files_utils.getMissingFiles('../norepo/linux/eclipse', [eclipse])
-    files_utils.updateFileinfo('../norepo/linux/toolchains',
-                               [gcc_arm_none_eabi, gcc_arm_linux_gnueabihf, xtensa_esp32_elf])
-    files_utils.updateFileinfo('../norepo/linux/openocd', [openOCD])
-    files_utils.updateFileinfo('../norepo/linux/eclipse', [eclipse])
+    files_utils.get_missing_or_corrupted_files('../norepo/linux/downloads', file_list)
+    files_utils.updateFileinfo('../norepo/linux/downloads', file_list)
+    print(file_list)
 
     generate_linux_product_setup()
     generate_linux_installer()

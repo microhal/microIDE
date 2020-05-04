@@ -9,22 +9,22 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 
 #links to installation files
 
-VERSION=0.3.5
-ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/8-2018q4/gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2?revision=d830f9dd-cd4f-406d-8672-cca9210dd220?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,8-2018-q4-major
-ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=3703e685-a548-462c-bd0e-2e139db7ab35
-ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2
-ARM_GCC_TOOLCHAIN_VERSION=8.0.0
-ARM_GCC_TOOLCHAIN_SIZE=107253352
-ARM_GCC_TOOLCHAIN_CHECKSUM=f55f90d483ddb3bcf4dae5882c2094cd
-ARM_GCC_TOOLCHAIN_LOCATION=toolchains/gcc-arm-none-eabi/microhal
+VERSION=0.3.6
+ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2019q4/gcc-arm-none-eabi-9-2019-q4-major-x86_64-linux.tar.bz2
+ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=c7f2905b-bb90-4f58-8d92-29c57529e789
+ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-9-2019-q4-major-linux.tar.bz2
+ARM_GCC_TOOLCHAIN_VERSION=9.2.0
+ARM_GCC_TOOLCHAIN_SIZE=116802378
+ARM_GCC_TOOLCHAIN_CHECKSUM=fe0029de4f4ec43cf7008944e34ff8cc
+ARM_GCC_TOOLCHAIN_LOCATION=common/toolchains/gcc-arm-none-eabi/microhal
 
-GCC_ARM_LINUX_GNUEABIHF_TOOLCHAIN_URL=https://releases.linaro.org/components/toolchain/binaries/latest-7/arm-linux-gnueabihf/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz
+GCC_ARM_LINUX_GNUEABIHF_TOOLCHAIN_URL=https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05/arm-linux-gnueabihf/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz
 GCC_ARM_LINUX_GNUEABIHF_LICENSE_URL=
 GCC_ARM_LINUX_GNUEABIHF_FILENAME=gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz
 GCC_ARM_LINUX_GNUEABIHF_VERSION=7.3.1
 GCC_ARM_LINUX_GNUEABIHF_SIZE=107031352
 GCC_ARM_LINUX_GNUEABIHF_CHECKSUM=e414dc2bbd2bbd2f3b10edad0792fdb3
-GCC_ARM_LINUX_GNUEABIHF_LOCATION=toolchains/gcc-arm-linux-gnueabihf
+GCC_ARM_LINUX_GNUEABIHF_LOCATION=common/toolchains/gcc-arm-linux-gnueabihf
 
 XTENSA_ESP32_ELF_TOOLCHAIN_URL=https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-80-g6c4433a-5.2.0.tar.gz
 XTENSA_ESP32_ELF_LICENSE_URL=
@@ -32,22 +32,22 @@ XTENSA_ESP32_ELF_FILENAME=xtensa-esp32-elf-linux64-1.22.0-80-g6c4433a-5.2.0.tar.
 XTENSA_ESP32_ELF_VERSION=5.2.0
 XTENSA_ESP32_ELF_SIZE=44219107
 XTENSA_ESP32_ELF_CHECKSUM=3e00f8faa7360ebfc39971d2d2f3522d
-XTENSA_ESP32_ELF_LOCATION=toolchains/xtensa-esp32-elf
+XTENSA_ESP32_ELF_LOCATION=common/toolchains/xtensa-esp32-elf
 
 OPENOCD_URL=https://sourceforge.net/projects/openocd/files/openocd/0.10.0/openocd-0.10.0.tar.gz/download
 OPENOCD_FILENAME=openocd-0.10.0.tar.gz
 OPENOCD_VERSION=0.10.0
 OPENOCD_SIZE=6124274
 OPENOCD_CHECKSUM=8971d16aee5c2642b33ee55fc6c86239
-OPENOCD_LOCATION=tools/openocd/0.10.0
+OPENOCD_LOCATION=common/tools/openocd/0.10.0
 
 ECLIPSE_URL=http://www.eclipse.org/downloads/download.php?file=/oomph/products/latest/eclipse-inst-linux64.tar.gz\&r=1
 ECLIPSE_FILENAME=eclipse-inst-linux64.tar.gz
 ECLIPSE_VERSION=oxygen
-ECLIPSE_SIZE=50140599
-ECLIPSE_CHECKSUM=54f451ae0e5e2725d6192ac962a7a0c7
+ECLIPSE_SIZE=51327535
+ECLIPSE_CHECKSUM=93eafba07b5e9422da993ee18c7df429
 ECLIPSE_LOCATION=eclipse
-MICROIDE_DIR=$SCRIPTPATH/microide-$VERSION
+MICROIDE_DIR=$SCRIPTPATH/microide
 DOWNLOAD_DIR=./downloads
 BRANCH_NAME=devel
 APT_GET_PACKAGES_TO_INSTALL=''
@@ -118,36 +118,37 @@ wget -O $DOWNLOAD_DIR/$ECLIPSE_FILENAME $ECLIPSE_URL
 installOpenOCD() {
     if [ "$1" = "addAptToGetPackagesToInstall" ]; then
     	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL autoconf libudev-dev libusb-1.0-0-dev libtool pkg-config"
-    else         
-        echo 'Installing HIDAPI ----------------------------------------------------------------' >> $MICROIDE_DIR/log.log  
+    else
+        logfile=$MICROIDE_DIR/openocd-install.log
+        echo 'Installing HIDAPI ----------------------------------------------------------------' >> $logfile
         mkdir -p tmp
-        if ! unzip $DOWNLOAD_DIR/hidapi.zip -d tmp >> $MICROIDE_DIR/log.log; then
-            echo 'Unable to install HIDAPI, aborting -----------------------------------------------' >> $MICROIDE_DIR/log.log
+        if ! unzip $DOWNLOAD_DIR/hidapi.zip -d tmp >> $logfile; then
+            echo 'Unable to install HIDAPI, aborting -----------------------------------------------' >> $logfile
             echo 'Unable to unzip repozitory files'
             echo 'Aborting...'
             exit 1
         fi 
         cd tmp/hidapi-master
-        ./bootstrap >> $MICROIDE_DIR/log.log
-        ./configure CFLAGS='-Wno-implicit-fallthrough' >> $MICROIDE_DIR/log.log
-        echo 'Compilling HIDAPI ----------------------------------------------------------------' >> $MICROIDE_DIR/log.log
-        make -j 4 >> $MICROIDE_DIR/log.log
-        echo 'Installing (make install) HIDAPI -------------------------------------------------' >> $MICROIDE_DIR/log.log
-        sudo make install 
-        sudo ldconfig
+        ./bootstrap >> $logfile
+        ./configure CFLAGS='-Wno-implicit-fallthrough' >> $logfile
+        echo 'Compilling HIDAPI ----------------------------------------------------------------' >> $logfile
+        make -j 4 >> $logfile
+        echo 'Installing (make install) HIDAPI -------------------------------------------------' >> $logfile
+        sudo make install >> $logfile
+        sudo ldconfig >> $logfile
         cd ../../
         
         echo 'Installing openOCD'    
-        mkdir -p tools/openocd
-        echo 'Extracting OpenOCD... ------------------------------------------------------------' >> $MICROIDE_DIR/log.log
-        tar --extract --file=$DOWNLOAD_DIR/$OPENOCD_FILENAME -C tmp >> $MICROIDE_DIR/log.log
+        #mkdir -p tools/openocd
+        echo 'Extracting OpenOCD... ------------------------------------------------------------' >> $logfile
+        tar --extract --file=$DOWNLOAD_DIR/$OPENOCD_FILENAME -C tmp >> $logfile
         echo 'Compilling OpenOCD'
-        echo 'Compilling OpenOCD ---------------------------------------------------------------' >> $MICROIDE_DIR/log.log
+        echo 'Compilling OpenOCD ---------------------------------------------------------------' >> $logfile
         cd tmp/${OPENOCD_FILENAME%.tar.gz}
-        ./configure CFLAGS='-Wno-implicit-fallthrough -Wno-error=format-overflow=' --enable-stlink --enable-ti-icdi --enable-ulink --enable-cmsis-dap --enable-jlink --enable-oocd_trace --prefix=$MICROIDE_DIR/$OPENOCD_LOCATION >> $MICROIDE_DIR/log.log
-        make -j 4 >> $MICROIDE_DIR/log.log
-        echo 'Installing OpenOCD ---------------------------------------------------------------' >> $MICROIDE_DIR/log.log
-        make install
+        ./configure CFLAGS='-Wno-implicit-fallthrough -Wno-error=format-overflow=' --enable-stlink --enable-ti-icdi --enable-ulink --enable-cmsis-dap --enable-jlink --enable-oocd_trace --prefix=$MICROIDE_DIR/$OPENOCD_LOCATION >> $logfile
+        make -j 4 >> $logfile
+        echo 'Installing OpenOCD ---------------------------------------------------------------' >> $logfile
+        make install >> $logfile
         sudo cp contrib/60-openocd.rules /etc/udev/rules.d/
         sudo usermod -aG plugdev $USER
         cd ../../
@@ -195,7 +196,9 @@ install_esp_idf() {
     	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL"
     else
         echo 'Installing ESP-IDF ...-------------------------------------------------------' >> log.log
+        cd common
         git clone -b v3.1.2 --recursive https://github.com/espressif/esp-idf.git
+        cd ../
     fi
 }
 
@@ -210,7 +213,7 @@ installEclipse() {
     name="microide"
     label="microide Products">   
   <product
-	href="file:'"$MICROIDE_DIR"'/eclipse-installer/microideLocalSetups/microide.product.setup#/"/>  
+	href="file:'"$MICROIDE_DIR"'/eclipse-installer-'"$VERSION"'/microideLocalSetups/microide.product.setup#/"/>
   <description>Default IDE for microhal project</description>
 </setup:ProductCatalog>'
 
@@ -218,12 +221,13 @@ installEclipse() {
     	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL default-jre"
     else 
         echo 'Installing Eclipse ---------------------------------------------------------------' >> log.log
-        mkdir -p eclipse-installer
+        #mkdir -p eclipse-installer-$VERSION
         # extract eclipse installer files:
         tar --extract --file=$DOWNLOAD_DIR/$ECLIPSE_FILENAME
+        mv eclipse-installer eclipse-installer-$VERSION
         # redirect eclipse installer product index:
-        cd eclipse-installer       
-        echo '-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->file:'"$MICROIDE_DIR"'/eclipse-installer/microideLocalSetups/microide.products.setup' >> eclipse-inst.ini
+        cd eclipse-installer-$VERSION
+        echo '-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->file:'"$MICROIDE_DIR"'/eclipse-installer-'"$VERSION"'/microideLocalSetups/microide.products.setup' >> eclipse-inst.ini
         echo '-Doomph.redirection.myProjectsCatalog=index:/redirectable.projects.setup->https://raw.githubusercontent.com/microHAL/microIDE/devel/eclipse-installer/microideSetups/microhal.projects.setup' >> eclipse-inst.ini
         echo '-Doomph.setup.product.catalog.filter=microide' >> eclipse-inst.ini
         echo "-Doomph.setup.install.root=$MICROIDE_DIR" >> eclipse-inst.ini
@@ -232,11 +236,11 @@ installEclipse() {
         cd microideLocalSetups
         echo "$MICROIDE_PRODUCTS_SETUP_FILE_CONTENT" > microide.products.setup
         cd ../../
-        cp -r microIDE-$BRANCH_NAME/eclipse-installer/microideLocalSetups/* eclipse-installer/microideLocalSetups
-        mv eclipse-installer/microideLocalSetups/microide.product.setup.linux eclipse-installer/microideLocalSetups/microide.product.setup
+        cp -r microIDE-$BRANCH_NAME/eclipse-installer/microideLocalSetups/* eclipse-installer-$VERSION/microideLocalSetups
+        mv eclipse-installer-$VERSION/microideLocalSetups/microide.product.setup.linux eclipse-installer-$VERSION/microideLocalSetups/microide.product.setup
         # set path to microide
         echo $MICROIDE_DIR
-        sed -i -e 's,value="${installation.location|uri}",value="file:'"$MICROIDE_DIR"'",g' "eclipse-installer/microideLocalSetups/microide.product.setup"
+        sed -i -e 's,value="${installation.location|uri}",value="file:'"$MICROIDE_DIR"'",g' "eclipse-installer-$VERSION/microideLocalSetups/microide.product.setup"
         # remove files that are no longer needed
         rm -r microIDE-$BRANCH_NAME         
     fi
@@ -244,7 +248,7 @@ installEclipse() {
 
 installClangFormat() {
     if [ "$1" = "addAptToGetPackagesToInstall" ]; then
-    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL clang-format-6.0"
+    	APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL clang-format-9"
     fi
 }
 
@@ -326,7 +330,7 @@ instal() {
         echo 'Unable to unzip repozitory files'
         echo 'Aborting...'
         exit 1
-    fi 
+    fi
     echo '**************** Installing ARM Toolchain...'
     installARMToolchain
 
@@ -340,9 +344,11 @@ instal() {
     # ------------------------------------ tools ---------------------------------
     echo 'Installing tools'
     installOpenOCD
+
     # ---------------------------------- eclipse ---------------------------------
     echo '**************** Installing Eclipse'
     installEclipse
+
     #install clang-format
     installClangFormat
 
@@ -354,16 +360,29 @@ instal() {
     echo $MICROIDE_DIR
 
     #starting eclipse installer
-    ./eclipse-installer/eclipse-inst
+    ./eclipse-installer-$VERSION/eclipse-inst
 }
 
 # script starting point
-mkdir -p microide-$VERSION
-cd microide-$VERSION
+if cd microide; then
+  echo "Entering microhal directory"
+else
+  mkdir microide && cd microide
+fi
+mkdir -p common
+#mkdir -p microide-$VERSION
+MICROIDE_DIR=$SCRIPTPATH/microide
+DOWNLOAD_DIR=$SCRIPTPATH/microide/downloads
+COMMON_DIR=$SCRIPTPATH/microide/common
 
 if [ "$1" = "--checkDownload" ]; then
 	echo "Selected download checking mode."
 	download
+elif [ "$1" = "--eclipseOnly" ]; then
+    echo "Installing eclipse only"
+    installEclipse
+    #starting eclipse installer
+    ./eclipse-installer-$VERSION/eclipse-inst
 else
 	echo "Starting normal install."
 	download

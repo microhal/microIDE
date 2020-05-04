@@ -9,7 +9,7 @@ toolchains = {
                 'url': 'https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q1-update/+download/gcc-arm-none-eabi-5_3-2016q1-20160330-linux.tar.bz2',
                 'checksum': {'md5': '5a261cac18c62d8b7e8c70beba2004bd'},
                 'licenseUrl': 'https://launchpadlibrarian.net/251686212/license.txt',
-                'installationLocation': 'microideDir/toolchains/gcc-arm-none-eabi/microhal'
+                'installationLocation': 'microideDir/common/toolchains/gcc-arm-none-eabi/microhal'
             },
             'windows': {
                 'filename': 'gcc-arm-none-eabi-5_3-2016q1-20160330-win32.exe',
@@ -31,7 +31,7 @@ toolchains = {
                 'url': 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/6-2017q2/gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2?revision=2cc92fb5-3e0e-402d-9197-bdfc8224d8a5?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,6-2017-q2-update',
                 'checksum': {'md5': '13747255194398ee08b3ba42e40e9465'},
                 'licenseUrl': 'https://developer.arm.com/GetEula?Id=2d916619-954e-4adb-895d-b1ec657ae305',
-                'installationLocation': 'microideDir/toolchains/gcc-arm-none-eabi/microhal'
+                'installationLocation': 'microideDir/common/toolchains/gcc-arm-none-eabi/microhal'
             },
             'windows': {}
         },
@@ -44,7 +44,7 @@ toolchains = {
                 'url': 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2017q4/gcc-arm-none-eabi-7-2017-q4-major-linux.tar.bz2?revision=375265d4-e9b5-41c8-bf23-56cbe927e156?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,7-2017-q4-major',
                 'checksum': {'md5': 'd3b00ae09e847747ef11316a8b04989a'},
                 'licenseUrl': 'https://developer.arm.com/GetEula?Id=b8689563-35c9-4da7-b0cf-9c21f422343c',
-                'installationLocation': 'microideDir/toolchains/gcc-arm-none-eabi/microhal'
+                'installationLocation': 'microideDir/common/toolchains/gcc-arm-none-eabi/microhal'
             },
             'windows': {
                 'filename': 'gcc-arm-none-eabi-7-2017-q4-major-win32.exe',
@@ -66,7 +66,7 @@ toolchains = {
                 'url': 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2?revision=bc2c96c0-14b5-4bb4-9f18-bceb4050fee7?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,7-2018-q2-update',
                 'checksum': {'md5': '299ebd3f1c2c90930d28ab82e5d8d6c0'},
                 'licenseUrl': 'https://developer.arm.com/GetEula?Id=7f7f1581-ce37-49ab-972f-c4163729fa47',
-                'installationLocation': 'microideDir/toolchains/gcc-arm-none-eabi/microhal'
+                'installationLocation': 'microideDir/common/toolchains/gcc-arm-none-eabi/microhal'
             },
             'windows': {
                 'filename': 'gcc-arm-none-eabi-7-2018-q2-update-win32.zip',
@@ -88,7 +88,7 @@ toolchains = {
                 'url': 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/8-2018q4/gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2?revision=d830f9dd-cd4f-406d-8672-cca9210dd220?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,8-2018-q4-major',
                 'checksum': {'md5': 'f55f90d483ddb3bcf4dae5882c2094cd'},
                 'licenseUrl': 'https://developer.arm.com/GetEula?Id=3703e685-a548-462c-bd0e-2e139db7ab35',
-                'installationLocation': 'microideDir/toolchains/gcc-arm-none-eabi/microhal'
+                'installationLocation': 'microideDir/common/toolchains/gcc-arm-none-eabi/microhal'
             },
             'windows': {
                 'filename': 'gcc-arm-none-eabi-8-2018-q4-major-win32.zip',
@@ -100,19 +100,41 @@ toolchains = {
                 'licenseUrl': 'https://developer.arm.com/GetEula?Id=3703e685-a548-462c-bd0e-2e139db7ab35',
                 'installationLocation': '{app}\\toolchains\\gcc-arm-none-eabi\\microhal'
             }
+        },
+        'gcc-arm-none-eabi-9-2019-q4-major': {
+            'linux': {
+                'filename': 'gcc-arm-none-eabi-9-2019-q4-major-linux.tar.bz2',
+                'download size': '0',
+                'installation size': '0',
+                'version': '9.2.0',
+                'url': 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2019q4/gcc-arm-none-eabi-9-2019-q4-major-x86_64-linux.tar.bz2',
+                'checksum': {'md5': 'fe0029de4f4ec43cf7008944e34ff8cc'},
+                'licenseUrl': 'https://developer.arm.com/GetEula?Id=c7f2905b-bb90-4f58-8d92-29c57529e789',
+                'installationLocation': 'microideDir/common/toolchains/gcc-arm-none-eabi/microhal'
+            },
+            'windows': {
+                'filename': 'gcc-arm-none-eabi-9-2019-q4-major-win32.zip',
+                'download size': '0',
+                'installation size': '0',
+                'version': '9.2.0',
+                'url': 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2019q4/gcc-arm-none-eabi-9-2019-q4-major-win32.zip?revision=20c5df9c-9870-47e2-b994-2a652fb99075&la=en&hash=347C07EEEB848CC8944F943D8E1EAAB55A6CA0BC',
+                'checksum': {'md5': '82525522fefbde0b7811263ee8172b10'},
+                'licenseUrl': 'https://developer.arm.com/GetEula?Id=c7f2905b-bb90-4f58-8d92-29c57529e789',
+                'installationLocation': '{app}\\toolchains\\gcc-arm-none-eabi\\microhal'
+            }
         }
     },
     'gcc-arm-linux-gnueabihf': {
-         'gcc-linaro-7.3.1-2018.05-arm-linux-gnueabihf': {
+        'gcc-linaro-7.3.1-2018.05-arm-linux-gnueabihf': {
             'linux': {
                 'filename': 'gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz',
                 'download size': '0',
                 'installation size': '0',
                 'version': '7.3.1',
-                'url': 'https://releases.linaro.org/components/toolchain/binaries/latest-7/arm-linux-gnueabihf/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz',
-                'checksum': {},
+                'url': 'https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05/arm-linux-gnueabihf/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz',
+                'checksum': {'md5': 'e414dc2bbd2bbd2f3b10edad0792fdb3'},
                 'licenseUrl': '',
-                'installationLocation': 'microideDir/toolchains/gcc-arm-linux-gnueabihf'
+                'installationLocation': 'microideDir/common/toolchains/gcc-arm-linux-gnueabihf'
             },
             'windows': {
                 'filename': 'gcc-linaro-7.3.1-2018.05-i686-mingw32_arm-linux-gnueabihf.tar.xz',
@@ -124,10 +146,34 @@ toolchains = {
                 'licenseUrl': '',
                 'installationLocation': '{app}\\toolchains\\gcc-arm-linux-gnueabihf'
             }
-        }
+        },
+        'gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf': {
+            'linux': {
+                'filename': 'gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz',
+                'download size': '0',
+                'installation size': '0',
+                'version': '9.2.0',
+                'url': 'https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz',
+                'checksum': {'md5': 'ae539d09dadacf7f22fcd6f54870e5ad'},
+                'licenseUrl': 'https://developer.arm.com/GetEula?Id=46b4985b-3267-433c-be90-bbfe1921a602',
+                'installationLocation': 'microideDir/common/toolchains/gcc-arm-linux-gnueabihf'
+            },
+            'windows': {
+                'filename': '',
+                'download size': '0',
+                'installation size': '0',
+                'version': '',
+                'url': '',
+                'checksum': {},
+                'licenseUrl': 'https://developer.arm.com/GetEula?Id=46b4985b-3267-433c-be90-bbfe1921a602',
+                'installationLocation': '{app}\\toolchains\\gcc-arm-linux-gnueabihf'
+            }
+        },
+
+
     },
     'xtensa-esp32-elf': {
-         'xtensa-esp32-elf-1.22.0-80-g6c4433a-5.2.0': {
+        'xtensa-esp32-elf-1.22.0-80-g6c4433a-5.2.0': {
             'linux': {
                 'filename': 'xtensa-esp32-elf-linux64-1.22.0-80-g6c4433a-5.2.0.tar.gz',
                 'download size': '0',
@@ -136,7 +182,7 @@ toolchains = {
                 'url': 'https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-80-g6c4433a-5.2.0.tar.gz',
                 'checksum': {},
                 'licenseUrl': '',
-                'installationLocation': 'microideDir/toolchains/xtensa-esp32-elf'
+                'installationLocation': 'microideDir/common/toolchains/xtensa-esp32-elf'
             },
             'windows': {
                 'filename': 'xtensa-esp32-elf-win32-1.22.0-80-g6c4433a-5.2.0.zip',
@@ -254,7 +300,7 @@ openOCD = {
         'version': '0.10.0',
         'url': 'https://sourceforge.net/projects/openocd/files/openocd/0.10.0/openocd-0.10.0.tar.gz/download',
         'checksum': {'md5': '8971d16aee5c2642b33ee55fc6c86239'},
-        'installationLocation': 'tools/openocd/0.10.0'
+        'installationLocation': 'common/tools/openocd/0.10.0'
     },
     'windows': {
         'filename': 'openocd-0.10.0.7z',

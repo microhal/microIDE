@@ -30,16 +30,20 @@ def extract(source, destination, fource_7za = False):
         os.system("7za x " + source + ' -o' + destination + ' -y')
 
 
+def calculate_checksum_md5(filename):
+    return hashlib.md5(open(filename, 'rb').read()).hexdigest()
+
+
 def validate_checksum(filename, checksum):
     if 'md5' in checksum:
         if hashlib.md5(open(filename, 'rb').read()).hexdigest() != checksum['md5']:
-            return [False, 0]
+            return False
     if 'SHA512' in checksum:
         if hashlib.sha512(open(filename, 'rb').read()).hexdigest() != checksum['SHA512']:
-            return [False, 0]
+            return False
     if 'SHA256' in checksum:
         if hashlib.sha256(open(filename, 'rb').read()).hexdigest() != checksum['SHA256']:
-            return [False, 0]
+            return False
     return True
 
 
@@ -85,15 +89,18 @@ def updateFileinfo(destdir, files):
             exit(-1)
 
 
-def getMissingFiles(destdir, files):
+def get_missing_or_corrupted_files(destdir, files):
     if not os.path.exists(destdir):
         os.makedirs(destdir)
     if destdir:
         destdir = destdir + "/"
 
     for file in files:
-        filePath = destdir + file['filename']
-        if fileExists(filePath) == False:
+        file_path = destdir + file['filename']
+        if fileExists(file_path) == False:
+            download(destdir, file['filename'], file['url'], file['checksum'])
+        elif validate_checksum('./' + destdir + file['filename'], file['checksum']) == False:
+            print("File exist, but checksum is incorrect, downloading again: " + file_path)
             download(destdir, file['filename'], file['url'], file['checksum'])
         else:
-            print("File exist, no need to download: " + filePath)
+            print("File exist, no need to download: " + file_path)
