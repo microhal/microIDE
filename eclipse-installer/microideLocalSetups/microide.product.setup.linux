@@ -333,6 +333,8 @@
         name="com.googlecode.cppcheclipse.feature.feature.group"/>
     <requirement
         name="org.eclipse.oomph.setup.feature.group"/>
+    <requirement
+        name="ilg.gnumcueclipse.templates.sifive.feature.feature.group"/>
     <repository
         url="http://anb0s.github.io/eclox"/>
     <repository
@@ -391,6 +393,8 @@
       <requirement
           name="epp.package.cpp"
           versionRange="[4.18.0,5.0.0)"/>
+      <requirement
+          name="epp.package.embedcdt"/>
       <requirement
           name="org.eclipse.platform.feature.group"
           versionRange="[4.18.0,5.0.0)"/>

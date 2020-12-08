@@ -264,6 +264,16 @@ checkArchitecture() {
     fi
 }
 
+unzipToolchainPatchAndEclipseInstallerConfig() {
+    echo 'Unpacking toolchain patch and eclipse installer setup configuration.'
+    echo 'Unpacking toolchain patch and eclipse installer setup configuration.---------------' >> log.log
+    if ! unzip $DOWNLOAD_DIR/$BRANCH_NAME.zip >> log.log; then
+        echo 'Unable to unzip repozitory files'
+        echo 'Aborting...'
+        exit 1
+    fi
+}
+
 instal() {
     checkArchitecture
     echo 'Installing required packages:'
@@ -287,13 +297,8 @@ instal() {
     sudo apt-get install $APT_GET_PACKAGES_TO_INSTALL
 
     #------------------------------------- toolchains -----------------------------
-    echo 'Unpacking toolchain patch and eclipse installer setup configuration.'
-    echo 'Unpacking toolchain patch and eclipse installer setup configuration.---------------' >> log.log
-    if ! unzip $DOWNLOAD_DIR/$BRANCH_NAME.zip >> log.log; then
-        echo 'Unable to unzip repozitory files'
-        echo 'Aborting...'
-        exit 1
-    fi
+    unzipToolchainPatchAndEclipseInstallerConfig
+
     echo '**************** Installing ARM Toolchain...'
     installARMToolchain
 
@@ -343,6 +348,7 @@ if [ "$1" = "--checkDownload" ]; then
 	download
 elif [ "$1" = "--eclipseOnly" ]; then
     echo "Installing eclipse only"
+    unzipToolchainPatchAndEclipseInstallerConfig
     installEclipse
     #starting eclipse installer
     ./eclipse-installer-$VERSION/eclipse-inst
