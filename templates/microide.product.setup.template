@@ -304,43 +304,13 @@
     <requirement
         name="org.eclipse.cdt.managedbuilder.llvm.feature.group"/>
     <requirement
-        name="ilg.gnumcueclipse.templates.ad.feature.feature.group"/>
-    <requirement
-        name="ilg.gnumcueclipse.managedbuild.cross.arm.feature.feature.group"/>
-    <requirement
-        name="ilg.gnumcueclipse.codered.feature.feature.group"/>
-    <requirement
-        name="ilg.gnumcueclipse.doc.user.feature.feature.group"/>
-    <requirement
-        name="ilg.gnumcueclipse.templates.freescale.feature.feature.group"/>
-    <requirement
-        name="ilg.gnumcueclipse.templates.cortexm.feature.feature.group"/>
-    <requirement
-        name="ilg.gnumcueclipse.debug.gdbjtag.jlink.feature.feature.group"/>
-    <requirement
-        name="ilg.gnumcueclipse.debug.gdbjtag.openocd.feature.feature.group"/>
-    <requirement
-        name="ilg.gnumcueclipse.packs.feature.feature.group"/>
-    <requirement
-        name="ilg.gnumcueclipse.debug.gdbjtag.pyocd.feature.feature.group"/>
-    <requirement
-        name="ilg.gnumcueclipse.debug.gdbjtag.qemu.feature.feature.group"/>
-    <requirement
-        name="ilg.gnumcueclipse.managedbuild.cross.riscv.feature.feature.group"/>
-    <requirement
-        name="ilg.gnumcueclipse.templates.stm.feature.feature.group"/>
-    <requirement
         name="com.googlecode.cppcheclipse.feature.feature.group"/>
     <requirement
         name="org.eclipse.oomph.setup.feature.group"/>
-    <requirement
-        name="ilg.gnumcueclipse.templates.sifive.feature.feature.group"/>
     <repository
         url="http://anb0s.github.io/eclox"/>
     <repository
         url="http://www.cppstyle.com/mars"/>
-    <repository
-        url="http://gnu-mcu-eclipse.netlify.com/v4-neon-updates"/>
     <repository
         url="https://dl.bintray.com/cppcheclipse/p2/updates/"/>
     <repository
@@ -380,21 +350,19 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-cc-developers</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-embedded-cc-developers</value>
       </detail>
       <detail
           key="shortcut">
-        <value>Eclipse IDE for C/C++ Developers - 2020-12</value>
+        <value>Eclipse IDE for Embedded C/C++ Developers - 2020-12</value>
       </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse IDE for C/C++ Developers (2020-12)">
+        label="Eclipse IDE for Embedded C/C++ Developers (2020-12)">
       <requirement
-          name="epp.package.cpp"
+          name="epp.package.embedcpp"
           versionRange="[4.18.0,5.0.0)"/>
-      <requirement
-          name="epp.package.embedcdt"/>
       <requirement
           name="org.eclipse.platform.feature.group"
           versionRange="[4.18.0,5.0.0)"/>
@@ -427,6 +395,36 @@
           name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
       <requirement
           name="org.eclipse.egit.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.codered.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.debug.gdbjtag.jlink.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.debug.gdbjtag.openocd.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.debug.gdbjtag.pyocd.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.debug.gdbjtag.qemu.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.doc.user.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.managedbuild.cross.arm.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.managedbuild.cross.riscv.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.packs.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.templates.ad.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.templates.cortexm.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.templates.freescale.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.templates.sifive.feature.group"/>
+      <requirement
+          name="org.eclipse.embedcdt.templates.stm.feature.group"/>
       <requirement
           name="org.eclipse.epp.mpc.feature.group"/>
       <requirement
