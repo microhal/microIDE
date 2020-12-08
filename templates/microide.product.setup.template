@@ -17,23 +17,23 @@
         <value>record</value>
       </detail>
       <detail
-          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.path.962691777">
+          key="/instance/org.eclipse.embedcdt.managedbuild.cross.arm/toolchain.path.962691777">
         <value>record</value>
       </detail>
       <detail
-          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.name">
+          key="/instance/org.eclipse.embedcdt.managedbuild.cross.arm/toolchain.name">
         <value>record</value>
       </detail>
       <detail
-          key="/instance/ilg.gnumcueclipse.managedbuild.cross/buildTools.path">
+          key="/instance/org.eclipse.embedcdt.managedbuild.cross/buildTools.path">
         <value>record</value>
       </detail>
       <detail
-          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/executable.name">
+          key="/instance/org.eclipse.embedcdt.debug.gdbjtag.openocd/executable.name">
         <value>record</value>
       </detail>
       <detail
-          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/install.folder">
+          key="/instance/org.eclipse.embedcdt.debug.gdbjtag.openocd/install.folder">
         <value>record</value>
       </detail>
     </annotation>
@@ -47,46 +47,46 @@
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
-        name="ilg.gnumcueclipse.debug.gdbjtag.openocd">
+        name="org.eclipse.embedcdt.debug.gdbjtag.openocd">
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/executable.name"
+          key="/instance/org.eclipse.embedcdt.debug.gdbjtag.openocd/executable.name"
           value="openocd"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/gdb.server.executable"
+          key="/instance/org.eclipse.embedcdt.debug.gdbjtag.openocd/gdb.server.executable"
           value="$${openocd_path}/$${openocd_executable}"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/ilg.gnumcueclipse.debug.gdbjtag.openocd/install.folder"
+          key="/instance/org.eclipse.embedcdt.debug.gdbjtag.openocd/install.folder"
           value="${microideDir/common/tools/openocd/0.10.0/bin|file}">
         <description>Location of OpenOCD binary file</description>
       </setupTask>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
-        name="ilg.gnumcueclipse.managedbuild.cross">
+        name="org.eclipse.embedcdt.managedbuild.cross">
       <setupTask
           xsi:type="setup:PreferenceTask"
           filter="(osgi.os=win32)"
-          key="/instance/ilg.gnumcueclipse.managedbuild.cross/buildTools.path"
+          key="/instance/org.eclipse.embedcdt.managedbuild.cross/buildTools.path"
           value="${MSYS_LOCATION/bin}"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
           filter="(osgi.os=linux)"
-          key="/instance/ilg.gnumcueclipse.managedbuild.cross/buildTools.path"
+          key="/instance/org.eclipse.embedcdt.managedbuild.cross/buildTools.path"
           value="/usr/bin"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
-        name="ilg.gnumcueclipse.managedbuild.cross.arm">
+        name="org.eclipse.embedcdt.managedbuild.cross.arm">
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.name"
+          key="/instance/org.eclipse.embedcdt.managedbuild.cross.arm/toolchain.name"
           value="GNU MCU Eclipse ARM Embedded GCC"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.path.962691777"
+          key="/instance/org.eclipse.embedcdt.managedbuild.cross.arm/toolchain.path.962691777"
           value="${##microideToolchainPatch##/bin|file}"/>
     </setupTask>
     <setupTask
