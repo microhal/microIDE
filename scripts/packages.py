@@ -125,7 +125,7 @@ toolchains = {
         },
         'gcc-arm-none-eabi-9-2020-q2-update': {
             'linux': {
-                'filename': 'gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2',
+                'filename': 'gcc-arm-none-eabi-9-2020-q2-update-linux.tar.bz2',
                 'download size': '0',
                 'installation size': '0',
                 'version': '9.3.1',

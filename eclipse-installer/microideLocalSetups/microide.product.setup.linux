@@ -87,7 +87,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.embedcdt.managedbuild.cross.arm/toolchain.path.962691777"
-          value="${microideDir/common/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-9-2020-q2-update-x86_64/bin|file}"/>
+          value="${microideDir/common/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-9-2020-q2-update/bin|file}"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"

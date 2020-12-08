@@ -12,7 +12,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 VERSION=0.3.7
 ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2020q2/gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2
 ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=8ac44eb9-6905-4ac6-8d1d-4f016a2b9f73
-ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2
+ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-9-2020-q2-update-linux.tar.bz2
 ARM_GCC_TOOLCHAIN_VERSION=9.3.1
 ARM_GCC_TOOLCHAIN_SIZE=140360119
 ARM_GCC_TOOLCHAIN_CHECKSUM=2b9eeccc33470f9d3cda26983b9d2dc6
@@ -60,7 +60,7 @@ wget -O $DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME $ARM_GCC_TOOLCHAIN_URL
 md5_local=$(md5sum "$DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME" | awk '{print $1}')
 if [ "$md5_local" != "$ARM_GCC_TOOLCHAIN_CHECKSUM" ]
 then
-    echo $ARM_GCC_TOOLCHAIN_FILENAME checksum missmatch.
+    echo $ARM_GCC_TOOLCHAIN_FILENAME checksum mismatch.
     echo Calculated $md5_local
     echo Expected $ARM_GCC_TOOLCHAIN_CHECKSUM
     echo Aborting...
@@ -71,7 +71,7 @@ wget -O $DOWNLOAD_DIR/$GCC_ARM_LINUX_GNUEABIHF_FILENAME $GCC_ARM_LINUX_GNUEABIHF
 md5_local=$(md5sum "$DOWNLOAD_DIR/$GCC_ARM_LINUX_GNUEABIHF_FILENAME" | awk '{print $1}')
 if [ "$md5_local" != "$GCC_ARM_LINUX_GNUEABIHF_CHECKSUM" ]
 then
-    echo $GCC_ARM_LINUX_GNUEABIHF_FILENAME checksum missmatch.
+    echo $GCC_ARM_LINUX_GNUEABIHF_FILENAME checksum mismatch.
     echo Calculated $md5_local
     echo Expected $GCC_ARM_LINUX_GNUEABIHF_CHECKSUM
     echo Aborting...
@@ -82,7 +82,7 @@ wget -O $DOWNLOAD_DIR/$XTENSA_ESP32_ELF_FILENAME $XTENSA_ESP32_ELF_TOOLCHAIN_URL
 md5_local=$(md5sum "$DOWNLOAD_DIR/$XTENSA_ESP32_ELF_FILENAME" | awk '{print $1}')
 if [ "$md5_local" != "$XTENSA_ESP32_ELF_CHECKSUM" ]
 then
-    echo $XTENSA_ESP32_ELF_FILENAME checksum missmatch.
+    echo $XTENSA_ESP32_ELF_FILENAME checksum mismatch.
     echo Calculated $md5_local
     echo Expected $XTENSA_ESP32_ELF_CHECKSUM
     echo Aborting...
@@ -93,7 +93,7 @@ wget -O $DOWNLOAD_DIR/$OPENOCD_FILENAME $OPENOCD_URL
 md5_local=$(md5sum "$DOWNLOAD_DIR/$OPENOCD_FILENAME" | awk '{print $1}')
 if [ "$md5_local" != "$OPENOCD_CHECKSUM" ]
 then
-    echo $OPENOCD_FILENAME checksum missmatch.
+    echo $OPENOCD_FILENAME checksum mismatch.
     echo Calculated $md5_local
     echo Expected $OPENOCD_CHECKSUM
     echo Aborting...
@@ -106,7 +106,7 @@ wget -O $DOWNLOAD_DIR/$ECLIPSE_FILENAME $ECLIPSE_URL
 #md5_local=$(md5sum "$DOWNLOAD_DIR/$ECLIPSE_FILENAME" | awk '{print $1}')
 #if [ "$md5_local" != "$ECLIPSE_CHECKSUM" ]
 #then
-#    echo $ECLIPSE_FILENAME checksum missmatch.
+#    echo $ECLIPSE_FILENAME checksum mismatch.
 #    echo Calculated $md5_local
 #    echo Expected $ECLIPSE_CHECKSUM
 #    echo Aborting...
@@ -124,14 +124,14 @@ installOpenOCD() {
         mkdir -p tmp
         if ! unzip $DOWNLOAD_DIR/hidapi.zip -d tmp >> $logfile; then
             echo 'Unable to install HIDAPI, aborting -----------------------------------------------' >> $logfile
-            echo 'Unable to unzip repozitory files'
+            echo 'Unable to unzip repository files'
             echo 'Aborting...'
             exit 1
         fi 
         cd tmp/hidapi-master
         ./bootstrap >> $logfile
         ./configure CFLAGS='-Wno-implicit-fallthrough' >> $logfile
-        echo 'Compilling HIDAPI ----------------------------------------------------------------' >> $logfile
+        echo 'Compiling HIDAPI ----------------------------------------------------------------' >> $logfile
         make -j 4 >> $logfile
         echo 'Installing (make install) HIDAPI -------------------------------------------------' >> $logfile
         sudo make install >> $logfile
@@ -142,8 +142,8 @@ installOpenOCD() {
         #mkdir -p tools/openocd
         echo 'Extracting OpenOCD... ------------------------------------------------------------' >> $logfile
         tar --extract --file=$DOWNLOAD_DIR/$OPENOCD_FILENAME -C tmp >> $logfile
-        echo 'Compilling OpenOCD'
-        echo 'Compilling OpenOCD ---------------------------------------------------------------' >> $logfile
+        echo 'Compiling OpenOCD'
+        echo 'Compiling OpenOCD ---------------------------------------------------------------' >> $logfile
         cd tmp/${OPENOCD_FILENAME%.tar.gz}
         ./configure CFLAGS='-Wno-implicit-fallthrough -Wno-error=format-overflow=' --enable-stlink --enable-ti-icdi --enable-ulink --enable-cmsis-dap --enable-jlink --enable-oocd_trace --prefix=$MICROIDE_DIR/$OPENOCD_LOCATION >> $logfile
         make -j 4 >> $logfile
@@ -164,7 +164,7 @@ installARMToolchain() {
         mkdir -p $ARM_GCC_TOOLCHAIN_LOCATION
         tar --extract --bzip2 --file=$DOWNLOAD_DIR/$ARM_GCC_TOOLCHAIN_FILENAME -C $ARM_GCC_TOOLCHAIN_LOCATION
         #mv $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2} $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2}
-        #installing microhal patch to toolchain, this will allow to use standart operating system library with FreeRTOS
+        #installing microhal patch to toolchain, this will allow to use standard operating system library with FreeRTOS
         echo 'Patching ARM Toolchain.'
         echo 'Patching ARM Toolchain.-----------------------------------------------------------' >> log.log
         cp -r microIDE-$BRANCH_NAME/toolchains/gcc-arm-none-eabi-patch/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2}/* $ARM_GCC_TOOLCHAIN_LOCATION/${ARM_GCC_TOOLCHAIN_FILENAME%-linux.tar.bz2}
@@ -261,7 +261,7 @@ installCppcheck() {
 installGCC() {
     if ! [ -x "$(command -v gcc)" ]; then
         if ! [ -x "$(command -v gcc-7)" ]; then  
-            echo "Unable to find gcc, adding to instalation list"
+            echo "Unable to find gcc, adding to installation list"
         #    APT_GET_REPOSITORYS_TO_ADD="$APT_GET_REPOSITORYS_TO_ADD ppa:ubuntu-toolchain-r/test"
             APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL gcc-7"
         fi
@@ -272,14 +272,14 @@ installGCC() {
             echo "GCC already installed"
         else
             if ! [ -x "$(command -v gcc-7)" ]; then  
-                echo "Unable to find gcc, adding to instalation list"
+                echo "Unable to find gcc, adding to installation list"
             #    APT_GET_REPOSITORYS_TO_ADD="$APT_GET_REPOSITORYS_TO_ADD ppa:ubuntu-toolchain-r/test"
                 APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL gcc-7"
             else
                 currentver="$(gcc-7 -dumpversion)"
                 requiredver="7"
                 if ! [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]; then 
-                    echo "Unable to find gcc with version 7 or abowe, adding to instalation list"
+                    echo "Unable to find gcc with version 7 or above, adding to installation list"
              #       APT_GET_REPOSITORYS_TO_ADD="$APT_GET_REPOSITORYS_TO_ADD ppa:ubuntu-toolchain-r/test"
                     APT_GET_PACKAGES_TO_INSTALL="$APT_GET_PACKAGES_TO_INSTALL gcc-7"
                fi
@@ -305,7 +305,7 @@ unzipToolchainPatchAndEclipseInstallerConfig() {
     echo 'Unpacking toolchain patch and eclipse installer setup configuration.'
     echo 'Unpacking toolchain patch and eclipse installer setup configuration.---------------' >> log.log
     if ! unzip $DOWNLOAD_DIR/$BRANCH_NAME.zip >> log.log; then
-        echo 'Unable to unzip repozitory files'
+        echo 'Unable to unzip repository files'
         echo 'Aborting...'
         exit 1
     fi
