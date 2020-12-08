@@ -9,7 +9,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 
 #links to installation files
 
-#replace this text with instalation files information
+#replace this text with installation files information
 MICROIDE_DIR=$SCRIPTPATH/microide
 DOWNLOAD_DIR=./downloads
 BRANCH_NAME=devel

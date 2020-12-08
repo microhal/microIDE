@@ -87,7 +87,7 @@
       <setupTask
           xsi:type="setup:PreferenceTask"
           key="/instance/ilg.gnumcueclipse.managedbuild.cross.arm/toolchain.path.962691777"
-          value="${microideDir/common/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-9-2019-q4-major/bin|file}"/>
+          value="${microideDir/common/toolchains/gcc-arm-none-eabi/microhal/gcc-arm-none-eabi-9-2020-q2-update-x86_64/bin|file}"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -368,45 +368,35 @@
       vm="true"/>
   <setupTask
       xsi:type="setup:EclipseIniTask"
-      option="-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->${microideDir}/eclipse-installer-0.3.6/microideLocalSetups/microide.products.setup"
+      option="-Doomph.redirection.myProductsCatalog=index:/redirectable.products.setup->${microideDir}/eclipse-installer-0.3.7/microideLocalSetups/microide.products.setup"
       value=""
       vm="true"/>
-  <version name="0.3.6"
-      label="0.3.6"
-      requiredJavaVersion="1.8">
+  <version name="0.3.7"
+      label="0.3.7"
+      requiredJavaVersion="11">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
-          key="status">
-        <value>current</value>
-      </detail>
-      <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-cc-developers-includes-incubating-components</value>
-      </detail>
-      <detail
-          key="incubating">
-        <value>true</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-cc-developers</value>
       </detail>
       <detail
           key="shortcut">
-        <value>Eclipse IDE for C/C++ Developers - 2020-03</value>
+        <value>Eclipse IDE for C/C++ Developers - 2020-12</value>
       </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse IDE for C/C++ Developers (2020-03)">
+        label="Eclipse IDE for C/C++ Developers (2020-12)">
       <requirement
           name="epp.package.cpp"
-          versionRange="[4.15.0,5.0.0)"/>
+          versionRange="[4.18.0,5.0.0)"/>
       <requirement
           name="org.eclipse.platform.feature.group"
-          versionRange="[4.15.0,5.0.0)"/>
+          versionRange="[4.18.0,5.0.0)"/>
       <requirement
           name="org.eclipse.rcp.feature.group"
-          versionRange="[4.15.0,5.0.0)"/>
-      <requirement
-          name="org.eclipse.cdt.arduino.feature.group"/>
+          versionRange="[4.18.0,5.0.0)"/>
       <requirement
           name="org.eclipse.cdt.autotools.feature.group"/>
       <requirement
@@ -430,15 +420,13 @@
       <requirement
           name="org.eclipse.cdt.meson.feature.group"/>
       <requirement
-          name="org.eclipse.cdt.mylyn.feature.group"/>
-      <requirement
-          name="org.eclipse.cdt.qt.feature.group"/>
-      <requirement
           name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
       <requirement
           name="org.eclipse.egit.feature.group"/>
       <requirement
           name="org.eclipse.epp.mpc.feature.group"/>
+      <requirement
+          name="org.eclipse.epp.package.common.feature.feature.group"/>
       <requirement
           name="org.eclipse.launchbar.feature.group"/>
       <requirement
@@ -454,22 +442,11 @@
       <requirement
           name="org.eclipse.linuxtools.gprof.feature.feature.group"/>
       <requirement
-          name="org.eclipse.linuxtools.rpm.feature.group"
-          filter="(osgi.os=linux)"/>
+          name="org.eclipse.linuxtools.rpm.feature.group"/>
       <requirement
           name="org.eclipse.linuxtools.valgrind.feature.group"/>
       <requirement
-          name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.context_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.ide_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn.team_feature.feature.group"/>
-      <requirement
           name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-      <requirement
-          name="org.eclipse.mylyn_feature.feature.group"/>
       <requirement
           name="org.eclipse.tm.terminal.connector.cdtserial.feature.feature.group"/>
       <requirement
@@ -483,9 +460,9 @@
       <requirement
           name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
       <repository
-          url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
+          url="http://download.eclipse.org/technology/epp/packages/2020-12/202012031300"/>
       <repository
-          url="http://download.eclipse.org/releases/2020-03/202003181000">
+          url="http://download.eclipse.org/releases/2020-12/202012041000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>

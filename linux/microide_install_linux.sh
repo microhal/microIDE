@@ -9,13 +9,13 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 
 #links to installation files
 
-VERSION=0.3.6
-ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2019q4/gcc-arm-none-eabi-9-2019-q4-major-x86_64-linux.tar.bz2
-ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=c7f2905b-bb90-4f58-8d92-29c57529e789
-ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-9-2019-q4-major-linux.tar.bz2
-ARM_GCC_TOOLCHAIN_VERSION=9.2.0
-ARM_GCC_TOOLCHAIN_SIZE=116802378
-ARM_GCC_TOOLCHAIN_CHECKSUM=fe0029de4f4ec43cf7008944e34ff8cc
+VERSION=0.3.7
+ARM_GCC_TOOLCHAIN_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2020q2/gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2
+ARM_GCC_TOOLCHAIN_LICENSE_URL=https://developer.arm.com/GetEula?Id=8ac44eb9-6905-4ac6-8d1d-4f016a2b9f73
+ARM_GCC_TOOLCHAIN_FILENAME=gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2
+ARM_GCC_TOOLCHAIN_VERSION=9.3.1
+ARM_GCC_TOOLCHAIN_SIZE=140360119
+ARM_GCC_TOOLCHAIN_CHECKSUM=2b9eeccc33470f9d3cda26983b9d2dc6
 ARM_GCC_TOOLCHAIN_LOCATION=common/toolchains/gcc-arm-none-eabi/microhal
 
 GCC_ARM_LINUX_GNUEABIHF_TOOLCHAIN_URL=https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05/arm-linux-gnueabihf/gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz

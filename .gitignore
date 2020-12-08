@@ -3,6 +3,7 @@ norepo/
 toolchainPatchFiles/
 windows/
 output.log
+output.err
 workspace.xml
 eclipse-installer/microideLocalSetups/microide.product.setup
 eclipse-installer/microideLocalSetups/microide.product.setup.windows

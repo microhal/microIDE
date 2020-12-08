@@ -122,6 +122,28 @@ toolchains = {
                 'licenseUrl': 'https://developer.arm.com/GetEula?Id=c7f2905b-bb90-4f58-8d92-29c57529e789',
                 'installationLocation': '{app}\\toolchains\\gcc-arm-none-eabi\\microhal'
             }
+        },
+        'gcc-arm-none-eabi-9-2020-q2-update': {
+            'linux': {
+                'filename': 'gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2',
+                'download size': '0',
+                'installation size': '0',
+                'version': '9.3.1',
+                'url': 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2020q2/gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2',
+                'checksum': {'md5': '2b9eeccc33470f9d3cda26983b9d2dc6'},
+                'licenseUrl': 'https://developer.arm.com/GetEula?Id=8ac44eb9-6905-4ac6-8d1d-4f016a2b9f73',
+                'installationLocation': 'microideDir/common/toolchains/gcc-arm-none-eabi/microhal'
+            },
+            'windows': {
+                'filename': 'gcc-arm-none-eabi-9-2020-q2-update-win32.zip',
+                'download size': '0',
+                'installation size': '0',
+                'version': '9.3.1',
+                'url': 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2020q2/gcc-arm-none-eabi-9-2020-q2-update-win32.zip',
+                'checksum': {'md5': '184b3397414485f224e7ba950989aab6'},
+                'licenseUrl': 'https://developer.arm.com/GetEula?Id=8ac44eb9-6905-4ac6-8d1d-4f016a2b9f73',
+                'installationLocation': '{app}\\toolchains\\gcc-arm-none-eabi\\microhal'
+            }
         }
     },
     'gcc-arm-linux-gnueabihf': {

@@ -4,8 +4,8 @@ import files_utils
 
 # oomph repository: https://git.eclipse.org/r/oomph/org.eclipse.oomph.git
 
-microideVersion = '0.3.6'
-gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-9-2019-q4-major']['linux']
+microideVersion = '0.3.7'
+gcc_arm_none_eabi = packages.toolchains['gcc-arm-none-eabi']['gcc-arm-none-eabi-9-2020-q2-update']['linux']
 gcc_arm_linux_gnueabihf = \
     packages.toolchains['gcc-arm-linux-gnueabihf']['gcc-linaro-7.3.1-2018.05-arm-linux-gnueabihf']['linux']
 xtensa_esp32_elf = packages.toolchains['xtensa-esp32-elf']['xtensa-esp32-elf-1.22.0-80-g6c4433a-5.2.0']['linux']
@@ -26,7 +26,6 @@ def generate_linux_product_setup():
     content = content.replace("##gccArmLunuxGnueabihfLatestToolchainPatch##", gcc_arm_linux_gnueabihf_toolchain_patch)
 
     content = content.replace("##xtensaEsp32ElfLatestToolchainPatch##", gcc_arm_none_eabi['installationLocation'] + '/xtensa-esp32-elf')
-
 
     content = content.replace("##clangFormatLocation##", "${binaryDir/clang-format-9|file}")
     content = content.replace("##clangToolchainPatch##", "${binaryDir|file}")
@@ -78,7 +77,7 @@ def generate_linux_installer():
         eclipse['size']) + '\nECLIPSE_CHECKSUM=' + eclipse['checksum']['md5'] + '\nECLIPSE_LOCATION=' + eclipse[
                'installationLocation']
 
-    content = content.replace("#replace this text with instalation files information", text)
+    content = content.replace("#replace this text with installation files information", text)
 
     with open('../linux/microide_install_linux.sh', 'w') as file:
         file.write(content)
@@ -88,7 +87,7 @@ def main():
     file_list = [gcc_arm_none_eabi, gcc_arm_linux_gnueabihf, xtensa_esp32_elf, openOCD, eclipse]
 
     files_utils.make_directory_if_not_exist('../norepo/linux/downloads')
-    print("Generating instalation files...")
+    print("Generating installation files...")
     files_utils.get_missing_or_corrupted_files('../norepo/linux/downloads', file_list)
     files_utils.updateFileinfo('../norepo/linux/downloads', file_list)
     print(file_list)
